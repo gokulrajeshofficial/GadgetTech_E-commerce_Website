@@ -1,0 +1,548 @@
+<div class="page-wrapper">
+	<main class="main">
+
+
+		<div class="login-page bg-image pt-3 pb-8 pt-md-5 pb-md-10 pt-lg-5 pb-lg-10 "
+			style="background-image: url('assets/images/backgrounds/login-bg.jpg');background-position: center;">
+			<nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+				<div class="container">
+					<ol class="breadcrumb text-light">
+						<li class="breadcrumb-item text-light"><a href="/">Home</a></li>
+						<li class="breadcrumb-item text-light"><a href="#">Accounts</a></li>
+						<li class="breadcrumb-item active text-light" aria-current="page">Login/SignUp</li>
+					</ol>
+				</div><!-- End .container -->
+			</nav><!-- End .breadcrumb-nav -->
+			<div class="container">
+				<div class="form-box col-10 col-md-8  ">
+					<div class="form-tab ">
+						<ul class="nav nav-pills nav-fill" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link  active" id="signin-tab-2" data-toggle="tab" href="#signin-2"
+									role="tab" aria-controls="signin-2" aria-selected="false">Sign In</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" id="register-tab-2" data-toggle="tab" href="#register-2" role="tab"
+									aria-controls="register-2" aria-selected="true">Register</a>
+							</li>
+						</ul>
+						<div class="tab-content ">
+							<div class="tab-pane fade px-5 mt-5 show active " id="signin-2" role="tabpanel"
+								aria-labelledby="signin-tab-2">
+								<form id="login-form">
+									{{!-- action="/login" method="post" --}}
+									<div class="form-group">
+										<label for="singin-email-2">Username or email address *</label>
+										<input type="email" class="form-control" name="email" required>
+									</div><!-- End .form-group -->
+
+									<div class="form-group">
+										<label for="singin-password-2">Password *</label>
+										<input type="password" class="form-control" id="signinpassword" name="password"
+											required>
+									</div><!-- End .form-group -->
+
+									<div class="form-footer">
+
+
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" class="custom-control-input" id="signin-remember-2">
+											<label class="custom-control-label" for="signin-remember-2">Remember
+												Me</label>
+										</div><!-- End .custom-checkbox -->
+
+										<a data-toggle="modal" data-target="#forgetPassword-modal"
+											class="forgot-link" style="cursor: pointer;">Forgot Your Password?</a>
+									</div><!-- End .form-footer -->
+
+									<p class="text-danger" id="error"></p>
+									<div>
+										<center><button type="submit" class="btn btn-outline-primary-2">
+												<span>LOG IN</span>
+												<i class="icon-long-arrow-right"></i>
+											</button></center>
+									</div>
+								</form>
+								<div class="form-choice mt-3">
+									<p class="text-center">or sign in with</p>
+									<div class="row d-flex justify-content-center ">
+										<div class="col-6 ">
+											<center><a href="/loginotp" class="btn btn-outline-primary-2 btn-lg">
+													Login With Mobile(OTP)
+												</a></center>
+										</div><!-- End .col-6 -->
+									</div><!-- End .row -->
+								</div><!-- End .form-choice -->
+							</div><!-- .End .tab-pane -->
+							<div class="tab-pane fade " id="register-2" role="tabpanel"
+								aria-labelledby="register-tab-2">
+								<form id="register-form">
+									<div class="row">
+										<div class="col-12 col-md-6 form-group">
+											<label for="register-email-2">First Name</label>
+											<input type="text" class="form-control" id="register-fname-2" name="fname">
+										</div>
+										<div class="col-12 col-md-6 form-group">
+											<label for="register-email-2">Second Name</label>
+											<input type="text" class="form-control" id="register-lname-2" name="lname">
+
+										</div>
+
+									</div>
+
+									<div class="form-group">
+										<label for="phonenumber">Mobile number to be linked *</label>
+										<input type="tel" class="form-control" id="phonenumber" name="phonenumber">
+									</div><!-- End .form-group -->
+
+									<div class="form-group">
+										<label for="register-email-2">Your email address *</label>
+										<input type="email" class="form-control" id="register-email-2" name="email">
+									</div><!-- End .form-group -->
+
+									<div class="form-group">
+										<label for="register-password-2">Password *</label>
+										<input type="password" class="form-control" id="password-form" name="password">
+									</div><!-- End .form-group -->
+									<div class="form-group">
+										<label for="register-password-2">Confirm Password *</label>
+										<input type="password" class="form-control" id="con-password-form"
+											name="confirmpassword">
+									</div><!-- End .form-group -->
+									<p class="text-danger" id="reg-error"></p>
+									<div class="mb-3">
+
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" class="custom-control-input" id="register-policy-2"
+												required>
+											<label class="custom-control-label" for="register-policy-2">I agree to the
+												<a href="#">privacy policy</a> *</label>
+										</div><!-- End .custom-checkbox -->
+
+										<center><button type="submit " class="btn btn-outline-primary-2 ">
+												<span>SIGN UP</span>
+												<i class="icon-long-arrow-right"></i>
+											</button></center>
+									</div><!-- End .form-footer -->
+								</form>
+								<div class="form-choice">
+									<p class="text-center">or sign in with</p>
+									<div class="row">
+										<div class="col-sm-6">
+											<a href="#" class="btn btn-login btn-g">
+												<i class="icon-google"></i>
+												Login With Google
+											</a>
+										</div><!-- End .col-6 -->
+										<div class="col-sm-6">
+											<a href="#" class="btn btn-login  btn-f">
+												<i class="icon-facebook-f"></i>
+												Login With Facebook
+											</a>
+										</div><!-- End .col-6 -->
+									</div><!-- End .row -->
+								</div><!-- End .form-choice -->
+							</div><!-- .End .tab-pane -->
+						</div><!-- End .tab-content -->
+
+					</div><!-- End .form-tab -->
+				</div><!-- End .form-tab -->
+			</div><!-- End .form-box -->
+		</div><!-- End .container -->
+</div><!-- End .login-page section-bg -->
+</main><!-- End .main -->
+
+<footer class="footer">
+	<div class="footer-middle">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-lg-3">
+					<div class="widget widget-about">
+						<img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
+						<p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros
+							eu erat. </p>
+
+						<div class="social-icons">
+							<a href="#" class="social-icon" target="_blank" title="Facebook"><i
+									class="icon-facebook-f"></i></a>
+							<a href="#" class="social-icon" target="_blank" title="Twitter"><i
+									class="icon-twitter"></i></a>
+							<a href="#" class="social-icon" target="_blank" title="Instagram"><i
+									class="icon-instagram"></i></a>
+							<a href="#" class="social-icon" target="_blank" title="Youtube"><i
+									class="icon-youtube"></i></a>
+							<a href="#" class="social-icon" target="_blank" title="Pinterest"><i
+									class="icon-pinterest"></i></a>
+						</div><!-- End .soial-icons -->
+					</div><!-- End .widget about-widget -->
+				</div><!-- End .col-sm-6 col-lg-3 -->
+
+				<div class="col-sm-6 col-lg-3">
+					<div class="widget">
+						<h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
+
+						<ul class="widget-list">
+							<li><a href="about.html">About Molla</a></li>
+							<li><a href="#">How to shop on Molla</a></li>
+							<li><a href="#">FAQ</a></li>
+							<li><a href="contact.html">Contact us</a></li>
+							<li><a href="login.html">Log in</a></li>
+						</ul><!-- End .widget-list -->
+					</div><!-- End .widget -->
+				</div><!-- End .col-sm-6 col-lg-3 -->
+
+				<div class="col-sm-6 col-lg-3">
+					<div class="widget">
+						<h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+
+						<ul class="widget-list">
+							<li><a href="#">Payment Methods</a></li>
+							<li><a href="#">Money-back guarantee!</a></li>
+							<li><a href="#">Returns</a></li>
+							<li><a href="#">Shipping</a></li>
+							<li><a href="#">Terms and conditions</a></li>
+							<li><a href="#">Privacy Policy</a></li>
+						</ul><!-- End .widget-list -->
+					</div><!-- End .widget -->
+				</div><!-- End .col-sm-6 col-lg-3 -->
+
+				<div class="col-sm-6 col-lg-3">
+					<div class="widget">
+						<h4 class="widget-title">My Account</h4><!-- End .widget-title -->
+
+						<ul class="widget-list">
+							<li><a href="#">Sign In</a></li>
+							<li><a href="cart.html">View Cart</a></li>
+							<li><a href="#">My Wishlist</a></li>
+							<li><a href="#">Track My Order</a></li>
+							<li><a href="#">Help</a></li>
+						</ul><!-- End .widget-list -->
+					</div><!-- End .widget -->
+				</div><!-- End .col-sm-6 col-lg-3 -->
+			</div><!-- End .row -->
+		</div><!-- End .container -->
+	</div><!-- End .footer-middle -->
+
+	<div class="footer-bottom">
+		<div class="container">
+			<p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
+			<!-- End .footer-copyright -->
+			<figure class="footer-payments">
+				<img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
+			</figure><!-- End .footer-payments -->
+		</div><!-- End .container -->
+	</div><!-- End .footer-bottom -->
+</footer><!-- End .footer -->
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container">
+	<div class="mobile-menu-wrapper">
+		<span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+		<form action="#" method="get" class="mobile-search">
+			<label for="mobile-search" class="sr-only">Search</label>
+			<input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..."
+				required>
+			<button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+		</form>
+
+		<div class="social-icons">
+			<a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+			<a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+			<a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+			<a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+		</div><!-- End .social-icons -->
+	</div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+
+
+<!-- Sign in / Register Modal -->
+<div class="modal fade" id="forgetPassword-modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+				</button>
+
+				<div class="form-box">
+					<div class="form-tab">
+						<ul class="nav nav-pills nav-fill" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab"
+									aria-controls="signin" aria-selected="true">Forget password</a>
+							</li>
+						</ul>
+						<div class="tab-content" id="tab-content-5">
+							<div class="tab-pane fade show active" id="signin" role="tabpanel"
+								aria-labelledby="signin-tab">
+								<form id="forgetPassword">
+									<div class="form-group">
+										<label for="singin-email">Username or email address *</label>
+										<input type="text" class="form-control"  name="email" required>
+									</div><!-- End .form-group -->
+
+									<div class="form-group">
+										<label for="singin-password">Enter the Mobile Number Linked to your Mobile
+											*</label>
+										<input type="tel" class="form-control"  name="phoneNumber"
+											required>
+									</div><!-- End .form-group -->
+									<p id="forgetPasswordError" class="text-danger mb-2"></p>
+									<div class="form-footer ">
+										<button type="submit" class="btn btn-outline-primary-2">
+											<span>Verify</span>
+											<i class="icon-long-arrow-right"></i>
+										</button>
+
+
+									</div><!-- End .form-footer -->
+								</form>
+
+							</div><!-- .End .tab-pane -->
+
+						</div><!-- End .tab-content -->
+					</div><!-- End .form-tab -->
+				</div><!-- End .form-box -->
+			</div><!-- End .modal-body -->
+		</div><!-- End .modal-content -->
+	</div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
+
+<div class="modal fade" id="verifyOtp-modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+				</button>
+
+				<div class="form-box">
+					<div class="form-tab">
+						<ul class="nav nav-pills nav-fill" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active" id="verifyOtp-tab" data-toggle="tab" href="#verify"
+									role="tab" aria-controls="signin" aria-selected="true">Verify OTP</a>
+							</li>
+						</ul>
+						<div class="tab-content" id="tab-content-5">
+							<div class="tab-pane fade show active" id="verify" role="tabpanel"
+								aria-labelledby="verifyOtp-tab">
+								<form id="verifyOtp">
+									<div class="form-group">
+										<label for="singin-email">Enter the OTP recieved in your linked Mobile*</label>
+										<input type="inputnumber" class="form-control"  name="otp" required>
+									</div><!-- End .form-group -->
+
+									<p id="verifyOtpError" class="text-danger mb-2"></p>
+									
+									<div class="form-footer ">
+										<button type="submit" id="verifyOtBtn" class="btn btn-outline-primary-2">
+											<span>Verify</span>
+											<i class="icon-long-arrow-right"></i>
+										</button>
+									</div><!-- End .form-footer -->
+								</form>
+
+							</div><!-- .End .tab-pane -->
+
+						</div><!-- End .tab-content -->
+					</div><!-- End .form-tab -->
+				</div><!-- End .form-box -->
+			</div><!-- End .modal-body -->
+		</div><!-- End .modal-content -->
+	</div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
+
+
+<div class="modal fade" id="changePassword-modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+				</button>
+
+				<div class="form-box">
+					<div class="form-tab">
+						<ul class="nav nav-pills nav-fill" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab"
+									aria-controls="signin" aria-selected="true">Create a New Password</a>
+							</li>
+						</ul>
+						<div class="tab-content" id="tab-content-5">
+							<div class="tab-pane fade show active" id="signin" role="tabpanel"
+								aria-labelledby="signin-tab">
+								<form id="changePassword">
+									<div class="form-group">
+										<label for="singin-email">New Password *</label>
+										<input type="password" class="form-control" id="newPassword" name="newPassword" required>
+									</div><!-- End .form-group -->
+
+									<div class="form-group">
+										<label for="singin-password">Confirm New Password *</label>
+										<input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+											required>
+									</div><!-- End .form-group -->
+									<p id="changePasswordError" class="text-danger"></p>
+									<div class="form-footer ">
+										<button type="submit" class="btn btn-outline-primary-2">
+											<span>Verify</span>
+											<i class="icon-long-arrow-right"></i>
+										</button>
+
+									</div><!-- End .form-footer -->
+								</form>
+
+							</div><!-- .End .tab-pane -->
+
+						</div><!-- End .tab-content -->
+					</div><!-- End .form-tab -->
+				</div><!-- End .form-box -->
+			</div><!-- End .modal-body -->
+		</div><!-- End .modal-content -->
+	</div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
+
+
+
+
+
+
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Plugins JS File -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/jquery.hoverIntent.min.js"></script>
+<script src="assets/js/jquery.waypoints.min.js"></script>
+<script src="assets/js/superfish.min.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<!-- Main JS File -->
+<script src="assets/js/main.js"></script>
+
+<script>
+	$('#forgetPassword').submit((e) => {
+		e.preventDefault();
+		$.ajax({
+			url: '/forgetPassword',
+			method: 'POST',
+			data: $('#forgetPassword').serialize(),
+			success: async(data) => {
+				if (data.status) {
+					let phoneNumber = data.phoneNumber
+					$('#forgetPassword-modal').modal('hide')
+					$('#verifyOtp-modal').modal('show')
+					await $('#verifyOtp').submit((e) => {
+						e.preventDefault();
+						$.ajax({
+							url: '/forgetPassword/verifyOtp/'+phoneNumber,
+							method: 'POST',
+							data: $('#verifyOtp').serialize(),
+							success:(otp) => {
+								if(otp.status)
+								{
+									$('#verifyOtp-modal').modal('hide') 
+									$('#changePassword-modal').modal('show')
+								}else{
+									document.getElementById('verifyOtpError').innerHTML = otp.message
+								}
+							}
+						})
+					})
+				} else {
+					document.getElementById('forgetPasswordError').innerHTML = data.message;
+				}
+			}
+		})
+	})
+
+$('#changePassword').submit((e) => {
+	e.preventDefault();
+	let pass = document.getElementById('newPassword').value
+	let confirm = document.getElementById('confirmPassword').value
+	if(pass == confirm)
+	{
+		$.ajax({
+			url: '/forgetPassword/changePassword',
+			type: 'PATCH',
+			data: $('#changePassword').serialize(),
+			success: (data) => {
+				console.log(data);
+				$('#changePassword-modal').modal('hide')
+				Swal.fire({
+							icon: 'success',
+							title: 'Password Has been changed',
+							text: ' Your Password for your account has been changed. !!',
+							footer: 'Please login using the new Password'
+				})
+				
+			}
+		})
+	}else{
+		document.getElementById('changePasswordError').innerHTML = "Password and Confirm Password are different"
+	}
+})
+
+</script>
+
+<script>
+
+	$('#login-form').submit((e) => {
+		e.preventDefault()
+		$.ajax({
+			url: '/login',
+			method: 'post',
+			data: $("#login-form").serialize(),
+			success: (status) => {
+				console.log(status)
+				console.log(window.history)
+				if (status == 'success') {
+					window.history.back()
+				}
+				else {
+					document.getElementById("error").innerHTML = status;
+					document.getElementById("signinpassword").value = "";
+				}
+			}
+		})
+	})
+
+	$('#register-form').submit((e) => {
+		e.preventDefault();
+		var pass = document.getElementById("password-form").value;
+		var conPass = document.getElementById("con-password-form").value;
+		if (pass == conPass) {
+			$.ajax({
+				url: '/register',
+				method: 'post',
+				data: $("#register-form").serialize(),
+				success: (response) => {
+					if (response.status) {
+						Swal.fire({
+							icon: 'success',
+							title: 'Account Created',
+							text: ' Your Account Has Been Created. Please Wait !!',
+							footer: 'Redirecting to login Page in 3 Seconds'
+						})
+						setTimeout(() => { location.reload(); }, 3000)
+					}
+					else {
+						document.getElementById("reg-error").innerHTML = response.message;
+						status = response.message;
+					}
+				}
+			})
+		}
+		else {
+			document.getElementById("reg-error").innerHTML = "* Password & Confirm Password are not the same"
+		}
+	})
+
+</script>

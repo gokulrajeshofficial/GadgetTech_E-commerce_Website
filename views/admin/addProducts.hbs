@@ -1,0 +1,266 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+  <title>Forms / Elements - NiceAdmin Bootstrap Template</title>
+  <meta content="" name="description" />
+  <meta content="" name="keywords" />
+
+  <!-- Favicons -->
+  <link href="/adminassets/img/favicon.png" rel="icon" />
+  <link href="/adminassets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet" />
+  <!-- Vendor CSS Files -->
+  <link href="/adminassets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/adminassets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+  <link href="/adminassets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+  <link href="/adminassets/vendor/quill/quill.snow.css" rel="stylesheet" />
+  <link href="/adminassets/vendor/quill/quill.bubble.css" rel="stylesheet" />
+  <link href="/adminassets/vendor/remixicon/remixicon.css" rel="stylesheet" />
+  <link href="/adminassets/vendor/simple-datatables/style.css" rel="stylesheet" />
+
+  <!-- Template Main CSS File -->
+  <link href="/adminassets/css/style.css" rel="stylesheet" />
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin - v2.4.0
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+
+      <h1><b>Products</b></h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Products</li>
+          <li class="breadcrumb-item active">Add Products</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section ">
+      <div class="row d-flex  justify-content-center">
+        <div class="col-lg-11 "> 
+
+          <div class="card">
+            <div class="card-body ">
+              <div class="row " >
+              <center>
+                <h5 class="card-title " style="">Add Products</h5>
+              </center>
+              </div>
+
+              <!-- General Form Elements -->
+              <form class="mt-5" action="/admin/product/add" method="POST" enctype="multipart/form-data">
+                <div class="row mb-3 d-flex justify-content-around px-3">
+
+                  <div class="col-md-6 ps-5">
+                    <div class="row mb-3">
+                      <label for="inputText" class="col-sm-7 col-form-label">Product Name</label>
+                      <div class="col-sm-11 ">
+                        <input type="text" name="Name" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="inputPassword" class="col-sm-7 col-form-label">Short Description</label>
+                      <div class="col-sm-11">
+                        <input type="text" name="ShortDes" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="inputPassword" class="col-sm-7 col-form-label">Description</label>
+                      <div class="col-sm-11">
+                        <textarea class="form-control" name="Des" style="height: 120px"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="inputNumber" class="col-sm-7 col-form-label">Quantity</label>
+                      <div class="col-sm-11">
+                        <input type="number" name="Qty" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="inputNumber" class="col-sm-7 col-form-label">Original Price</label>
+                      <div class="col-sm-11">
+                        <input type="number" name="PriceOg" class="form-control" required/>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="inputNumber" class="col-sm-7 col-form-label">Price</label>
+                      <div class="col-sm-11">
+                        <input type="number" name="Price" class="form-control" required/>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="inputColor" class="col-sm-7 col-form-label">Color Picker</label>
+                      <div class="col-sm-11">
+                        <input type="color" class="form-control form-control-color" id="exampleColorInput" name="color"
+                          title="Choose your color" />
+                      </div>
+                    </div>
+
+                    {{!-- <div class="row mb-3">
+                      <label class="col-sm-7 col-form-label">Multi Select</label>
+                      <div class="col-sm-11">
+                        <select class="form-select" multiple aria-label="multiple select example">
+                          <option selected>Open this to select Category</option>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                        </select>
+                      </div>
+                    </div> --}}
+
+                  </div>
+
+                  <div class="col-md-6 ">
+
+                    <div class="row mb-3">
+                      <label class="col-sm-7 col-form-label">Select the category of the product</label>
+                      <div class="col-sm-11">
+                        <select class="form-select" name="Category"  aria-label="Default select example">
+                         
+                          <option selected>Choose the category</option>
+                           {{#each categories}}
+                          <option value="{{this._id}}">{{this.category}}</option>
+                          {{/each}}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label class="col-sm-7 col-form-label"> Brand of the Product</label>
+                      <div class="col-sm-11">
+
+                        <div class="form-floating mb-3">
+                          <select class="form-select" id="floatingSelect" name="Brand" aria-label="Floating label select example">
+                            <option selected>Select the Brand</option>
+                            {{#each brands}}
+                            <option value="{{this._id}}">{{this.brand}}</option>
+                            {{/each}}
+
+
+                          </select>
+                          <label for="floatingSelect">Company / Brand</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="inputNumber" class="col-sm-7 col-form-label">File Upload</label>
+                      <div class="col-sm-11">
+                        <input class="form-control" onchange="changeImg(event)" type="file" name="Img" id="formFile" multiple />
+                      </div>
+                    </div>
+
+                     <div class="row mb-3" id="showdiv" style="display:none ;">
+                      <label for="inputText" id="strImgLabel"  class="col-sm-7 col-form-label">The Stored Emblem</label>
+                      <div class="col-sm-11 ">
+                      <img style="width: 400px;" id="strImg" src="/product-images/{{brand._id}}.png">
+                      </div>
+                    </div>
+
+
+
+                    {{!-- Picture display --}}
+
+
+                    {{!-- <section class="mt-5">
+                      <div class="row">
+                        <div class="card bg-dark text-white" style="width: 18rem;">
+                          <img src="..." class="card-img" alt="...">
+                          <div class="card-img-overlay">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                              additional content. This content is a little bit longer.</p>
+                            <p class="card-text">Last updated 3 mins ago</p>
+                          </div>
+                        </div>
+                      </div>
+
+                    </section> --}}
+
+                  </div>
+
+                  {{!-- 2nd column end --}}
+                </div>
+                <center>
+                  <div class="row mb-3">
+
+                    <div class="col-sm-11">
+                      <button type="submit" class="btn btn-lg btn-primary">Add the Product</button>
+                    </div>
+                  </div>
+                </center>
+
+              </form><!-- End General Form Elements -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright
+      <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+
+      Designed by
+      <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+<script>
+    function changeImg(event)
+    {
+      document.getElementById("showdiv").style.display = "block";
+        document.getElementById('strImg').src=URL.createObjectURL(event.target.files[0])
+        var name = "The Newly Uploaded Picture"
+        document.getElementById('strImgLabel').innerHTML  = name;
+    }
+</script>
+  <!-- Vendor JS Files -->
+  <script src="/adminassets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="/adminassets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/adminassets/vendor/chart.js/chart.min.js"></script>
+  <script src="/adminassets/vendor/echarts/echarts.min.js"></script>
+  <script src="/adminassets/vendor/quill/quill.min.js"></script>
+  <script src="/adminassets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="/adminassets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="/adminassets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="/adminassets/js/main.js"></script>
+
+</body>
+
+</html>
