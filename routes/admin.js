@@ -447,9 +447,15 @@ router.patch('/updateOrders',(req,res)=>{
   orderHelper.changeOrderStatus(orderId ,status).then(()=>{
     res.json("success");
   })
-
 })
 
+router.get('/coupons',(req,res)=>{
+ 
+})
+
+router.get('/admin/addCoupons',(req,res)=>{
+
+})
 
 
 

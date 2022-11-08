@@ -33,7 +33,7 @@ paypal.configure({
 
 //<---------------------------------------------Importing Contollers------------------------------------->
 const { userValidation } = require('../controller/validation');
-const { userHomePage, categoryPage, forgetPasswordModal, forgetPasswordModalVerify, forgetPasswordChangePasswordModal, viewProductPage, cartPage, addProductToCart, deleteProductInCart, updateProductQuantityInCart, checkoutPage, placeOrder, razorPayVerifyPayment, orderPage, orderCancel, orderRetryPayment } = require("../controller/userController");
+const { userHomePage, categoryPage, forgetPasswordModal, forgetPasswordModalVerify, forgetPasswordChangePasswordModal, viewProductPage, cartPage, addProductToCart, deleteProductInCart, updateProductQuantityInCart, checkoutPage, placeOrder, razorPayVerifyPayment, orderPage, orderCancel, orderRetryPayment, addressAddRequest, addressDeleteRequest,  addressGetRequest, addressEditRequest, paypalVerifyRequest, transcationFailurePage, transcationSuccessfulPage } = require("../controller/userController");
 const { signInSubmit, signInPage, registerSubmit, logOut, loginOtpPage, loginOtpSendCode, loginOtpVerifyCode } = require("../controller/userSigninController");
 
 
@@ -110,81 +110,22 @@ router.post('/retryPayment', orderRetryPayment)
 
 
 //______________________________________________________________ Address ___________________________________________________
-router.post('/addAddress', (req, res) => {
-  console.log(req.body)
-  let userId = req.session.user._id
-  addressHelper.addAddress(userId, req.body).then(() => {
-    res.json(req.body)
-  })
-})
-router.delete('/deleteAddress/:id', (req, res) => {
-  addressId = req.params.id
-  addressHelper.deleteAddress(addressId).then((data) => {
-    console.log(data);
-    res.json(data);
-  })
-})
+router.post('/addAddress', addressAddRequest)
 
-router.get('/getAddress/:id', async (req, res) => {
-  console.log(req.params.id);
-  let addressId = req.params.id;
-  req.session.addressId = addressId;
-  let address = await addressHelper.getUserAddress(addressId)
-  console.log(address);
-  res.json(address)
-})
+router.delete('/deleteAddress/:id', addressDeleteRequest)
 
-router.put('/editAddress', async (req, res) => {
-  let address = req.body;
-  let addressId = req.session.addressId
-  addressHelper.editUserAddress(addressId, address).then((data) => {
-    console.log(data);
-    res.json("updated")
-  })
-})
+router.get('/getAddress/:id', addressGetRequest)
+
+router.put('/editAddress', addressEditRequest)
 
 //____________________________________________paypal_____________________________________________________
 
 
-router.get('/paypal/success/:id', (req, res) => {
-  const orderId = req.params.id;
-  console.log(orderId)
-  const payerId = req.query.PayerID;
-  const paymentId = req.query.paymentId;
+router.get('/paypal/success/:id', paypalVerifyRequest);
 
-  const execute_payment_json = {
-    "payer_id": payerId,
-    "transactions": [{
-      "amount": {
-        "currency": "USD",
-        "total": "25.00"
-      }
-    }]
-  };
+router.get('/order-confirmed/:id', transcationSuccessfulPage)
 
-  paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-    if (error) {
-      console.log(error.response);
-      throw error;
-    } else {
-      console.log(JSON.stringify(payment));
-      paymentHelper.changePaymentStatus(orderId).then(() => {
-        res.redirect('/order-confirmed/' + orderId);
-      })
-
-    }
-  });
-});
-
-router.get('/order-confirmed/:id', (req, res) => {
-  orderId = req.params.id;
-  res.render('user/order-success', { signin: true, orderId })
-})
-
-router.get('/order-pending/:id', (req, res) => {
-  orderId = req.params.id;
-  res.render('user/order-failed', { signin: true, orderId })
-})
+router.get('/order-pending/:id', transcationFailurePage)
 
 
 //______________________________________________________________User ________________________________________________________________

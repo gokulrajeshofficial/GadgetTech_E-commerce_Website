@@ -375,3 +375,75 @@ module.exports.orderRetryPayment = (req, res) => {
 
   }
 }
+module.exports.addressAddRequest = (req, res) => {
+  console.log(req.body)
+  let userId = req.session.user._id
+  addressHelper.addAddress(userId, req.body).then(() => {
+    res.json(req.body)
+  })
+}
+ 
+module.exports.addressDeleteRequest = (req, res) => {
+  addressId = req.params.id
+  addressHelper.deleteAddress(addressId).then((data) => {
+    console.log(data);
+    res.json(data);
+  })
+}
+
+module.exports.addressGetRequest = async (req, res) => {
+  console.log(req.params.id);
+  let addressId = req.params.id;
+  req.session.addressId = addressId;
+  let address = await addressHelper.getUserAddress(addressId)
+  console.log(address);
+  res.json(address)
+}
+
+module.exports.addressEditRequest = async (req, res) => {
+  let address = req.body;
+  let addressId = req.session.addressId
+  addressHelper.editUserAddress(addressId, address).then((data) => {
+    console.log(data);
+    res.json("updated")
+  })
+}
+
+module.exports.paypalVerifyRequest = (req, res) => {
+  const orderId = req.params.id;
+  console.log(orderId)
+  const payerId = req.query.PayerID;
+  const paymentId = req.query.paymentId;
+
+  const execute_payment_json = {
+    "payer_id": payerId,
+    "transactions": [{
+      "amount": {
+        "currency": "USD",
+        "total": "25.00"
+      }
+    }]
+  };
+
+  paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+    if (error) {
+      console.log(error.response);
+      throw error;
+    } else {
+      console.log(JSON.stringify(payment));
+      paymentHelper.changePaymentStatus(orderId).then(() => {
+        res.redirect('/order-confirmed/' + orderId);
+      })
+
+    }
+  });
+}
+
+module.exports.transcationSuccessfulPage =(req, res) => {
+  orderId = req.params.id;
+  res.render('user/order-success', { signin: true, orderId })
+}
+module.exports.transcationFailurePage = (req, res) => {
+  orderId = req.params.id;
+  res.render('user/order-failed', { signin: true, orderId })
+}
