@@ -48,12 +48,31 @@ Handlebars.registerHelper("checkStatus", function (value, options) {
   }
 });
 
-Handlebars.registerHelper("checkDelivered", function (value, options) {
+Handlebars.registerHelper("checkDeliveredCancelled", function (value, options) {
   if (value == 'Delivered' || value == 'Cancelled') { return true; }
   else {
     return false;
   }
 });
+Handlebars.registerHelper("checkDelivered", function (value, options) {
+  if (value == 'Delivered') { return true; }
+  else {
+    return false;
+  }
+});
+Handlebars.registerHelper("checkOrdered", function (value, options) {
+  if (value == 'Preparing for Dispatch') { return true; }
+  else {
+    return false;
+  }
+});
+Handlebars.registerHelper("checkShipped", function (value, options) {
+  if (value == 'Shipped') { return true; }
+  else {
+    return false;
+  }
+});
+
 
 Handlebars.registerHelper("checkpaymentStatus", function (value, options) {
   if (value != 'Pending') { return true; }
@@ -67,8 +86,20 @@ Handlebars.registerHelper("categoryPremium", function (value, options) {
   else {
     value = false
   }
-  return (value = true);
+  return value;
 });
+
+
+Handlebars.registerHelper("checkDebit", function (value, options) {
+  if (value > 0) {
+    value = true
+  }
+  else {
+    value = false
+  }
+  return value ;
+});
+
 
 Handlebars.registerHelper("totalProduct", function (quantity, price) {
   price = parseInt(price)

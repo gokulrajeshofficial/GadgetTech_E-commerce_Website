@@ -2,6 +2,7 @@ var objectId = require('mongodb').ObjectId
 var db = require('../config/connect')
 const Razorpay = require('razorpay');
 const dotenv = require('dotenv').config()
+const CC = require('currency-converter-lt')
 
 var instance = new Razorpay({
     key_id: process.env.RAZOR_KEY_ID ,
@@ -66,8 +67,11 @@ module.exports = {
         })
     },
     generatePayPal: (orderId, total) => {
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
+            let currencyConverter = new CC({from:"INR", to:"USD", amount: total })
+            total = await currencyConverter.convert()
 
+            console.log(total)
             const create_payment_json = {
                 "intent": "sale",
                 "payer": {
@@ -87,7 +91,14 @@ module.exports = {
 
             paypal.payment.create(create_payment_json, function (error, payment) {
                 if (error) {
-                    throw error;
+                    try{
+                        throw error;
+                    }
+                    catch(e){
+                        console.log(error.response.details)
+                        reject(error.response.details[0])
+                    }
+                    
                 } else {
                     
                     console.log(payment)

@@ -51,8 +51,8 @@
 												Me</label>
 										</div><!-- End .custom-checkbox -->
 
-										<a data-toggle="modal" data-target="#forgetPassword-modal"
-											class="forgot-link" style="cursor: pointer;">Forgot Your Password?</a>
+										<a data-toggle="modal" data-target="#forgetPassword-modal" class="forgot-link"
+											style="cursor: pointer;">Forgot Your Password?</a>
 									</div><!-- End .form-footer -->
 
 									<p class="text-danger" id="error"></p>
@@ -104,11 +104,19 @@
 										<label for="register-password-2">Password *</label>
 										<input type="password" class="form-control" id="password-form" name="password">
 									</div><!-- End .form-group -->
+
 									<div class="form-group">
 										<label for="register-password-2">Confirm Password *</label>
 										<input type="password" class="form-control" id="con-password-form"
 											name="confirmpassword">
 									</div><!-- End .form-group -->
+
+									<div class="form-group">
+										<label for="register-referralCode-2">Referral Code(optional)</label>
+										<input type="text" class="form-control" id="register-referralCode-2"
+											name="referralCode">
+									</div>
+									
 									<p class="text-danger" id="reg-error"></p>
 									<div class="mb-3">
 
@@ -283,14 +291,13 @@
 								<form id="forgetPassword">
 									<div class="form-group">
 										<label for="singin-email">Username or email address *</label>
-										<input type="text" class="form-control"  name="email" required>
+										<input type="text" class="form-control" name="email" required>
 									</div><!-- End .form-group -->
 
 									<div class="form-group">
 										<label for="singin-password">Enter the Mobile Number Linked to your Mobile
 											*</label>
-										<input type="tel" class="form-control"  name="phoneNumber"
-											required>
+										<input type="tel" class="form-control" name="phoneNumber" required>
 									</div><!-- End .form-group -->
 									<p id="forgetPasswordError" class="text-danger mb-2"></p>
 									<div class="form-footer ">
@@ -335,11 +342,11 @@
 								<form id="verifyOtp">
 									<div class="form-group">
 										<label for="singin-email">Enter the OTP recieved in your linked Mobile*</label>
-										<input type="inputnumber" class="form-control"  name="otp" required>
+										<input type="inputnumber" class="form-control" name="otp" required>
 									</div><!-- End .form-group -->
 
 									<p id="verifyOtpError" class="text-danger mb-2"></p>
-									
+
 									<div class="form-footer ">
 										<button type="submit" id="verifyOtBtn" class="btn btn-outline-primary-2">
 											<span>Verify</span>
@@ -381,13 +388,14 @@
 								<form id="changePassword">
 									<div class="form-group">
 										<label for="singin-email">New Password *</label>
-										<input type="password" class="form-control" id="newPassword" name="newPassword" required>
+										<input type="password" class="form-control" id="newPassword" name="newPassword"
+											required>
 									</div><!-- End .form-group -->
 
 									<div class="form-group">
 										<label for="singin-password">Confirm New Password *</label>
-										<input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-											required>
+										<input type="password" class="form-control" id="confirmPassword"
+											name="confirmPassword" required>
 									</div><!-- End .form-group -->
 									<p id="changePasswordError" class="text-danger"></p>
 									<div class="form-footer ">
@@ -434,7 +442,7 @@
 			url: '/forgetPassword',
 			method: 'POST',
 			data: $('#forgetPassword').serialize(),
-			success: async(data) => {
+			success: async (data) => {
 				if (data.status) {
 					let phoneNumber = data.phoneNumber
 					$('#forgetPassword-modal').modal('hide')
@@ -442,15 +450,14 @@
 					await $('#verifyOtp').submit((e) => {
 						e.preventDefault();
 						$.ajax({
-							url: '/forgetPassword/verifyOtp/'+phoneNumber,
+							url: '/forgetPassword/verifyOtp/' + phoneNumber,
 							method: 'POST',
 							data: $('#verifyOtp').serialize(),
-							success:(otp) => {
-								if(otp.status)
-								{
-									$('#verifyOtp-modal').modal('hide') 
+							success: (otp) => {
+								if (otp.status) {
+									$('#verifyOtp-modal').modal('hide')
 									$('#changePassword-modal').modal('show')
-								}else{
+								} else {
 									document.getElementById('verifyOtpError').innerHTML = otp.message
 								}
 							}
@@ -463,32 +470,31 @@
 		})
 	})
 
-$('#changePassword').submit((e) => {
-	e.preventDefault();
-	let pass = document.getElementById('newPassword').value
-	let confirm = document.getElementById('confirmPassword').value
-	if(pass == confirm)
-	{
-		$.ajax({
-			url: '/forgetPassword/changePassword',
-			type: 'PATCH',
-			data: $('#changePassword').serialize(),
-			success: (data) => {
-				console.log(data);
-				$('#changePassword-modal').modal('hide')
-				Swal.fire({
-							icon: 'success',
-							title: 'Password Has been changed',
-							text: ' Your Password for your account has been changed. !!',
-							footer: 'Please login using the new Password'
-				})
-				
-			}
-		})
-	}else{
-		document.getElementById('changePasswordError').innerHTML = "Password and Confirm Password are different"
-	}
-})
+	$('#changePassword').submit((e) => {
+		e.preventDefault();
+		let pass = document.getElementById('newPassword').value
+		let confirm = document.getElementById('confirmPassword').value
+		if (pass == confirm) {
+			$.ajax({
+				url: '/forgetPassword/changePassword',
+				type: 'PATCH',
+				data: $('#changePassword').serialize(),
+				success: (data) => {
+					console.log(data);
+					$('#changePassword-modal').modal('hide')
+					Swal.fire({
+						icon: 'success',
+						title: 'Password Has been changed',
+						text: ' Your Password for your account has been changed. !!',
+						footer: 'Please login using the new Password'
+					})
+
+				}
+			})
+		} else {
+			document.getElementById('changePasswordError').innerHTML = "Password and Confirm Password are different"
+		}
+	})
 
 </script>
 
@@ -529,9 +535,9 @@ $('#changePassword').submit((e) => {
 							icon: 'success',
 							title: 'Account Created',
 							text: ' Your Account Has Been Created. Please Wait !!',
-							footer: 'Redirecting to login Page in 3 Seconds'
+							footer: 'Redirecting to login Page in 2 Seconds'
 						})
-						setTimeout(() => { location.reload(); }, 3000)
+						setTimeout(() => { location.reload(); }, 2000)
 					}
 					else {
 						document.getElementById("reg-error").innerHTML = response.message;

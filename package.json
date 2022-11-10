@@ -10,6 +10,7 @@
     "bootstrap-toggle": "^2.2.2",
     "cookie-parser": "~1.4.4",
     "crypto": "^1.0.1",
+    "currency-converter-lt": "^2.0.0-beta.0",
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
     "express": "~4.16.1",
@@ -26,6 +27,7 @@
     "paypal-rest-sdk": "^1.8.1",
     "promise": "^8.2.0",
     "razorpay": "^2.8.3",
+    "referral-codes": "^2.0.3",
     "sweetalert2": "^11.5.2",
     "twilio": "^3.82.2"
   }

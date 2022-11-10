@@ -93,7 +93,7 @@ router.get('/checkout', userValidation, checkoutPage)
 
 //<-------------------------------------Place Order Request ------------------------------------------->
 router.post('/placeOrder', userValidation, placeOrder)
-
+ 
 //<-------------------------------Verify the payment for Razorpay ---------------------------------------->
 router.post('/verify-payment', razorPayVerifyPayment)
 
@@ -149,8 +149,6 @@ router.patch('/changePassword', (req, res) => {
   userHelper.changePassword(userId, passwordData).then((data) => {
     res.json(data)
   })
-
-
 })
 
 //______________________________________________________________________Wishlist _____________________________________________________
@@ -189,6 +187,14 @@ router.delete('/wishlist/delete/:id', (req, res) => {
     res.json("deleted")
   })
 })
+
+router.get('/orders/trackOrder/:proId/:orderId',userValidation, async(req,res)=>{
+  let user = req.session.user
+  let order = await orderHelper.getProductOrder(req.params.orderId , req.params.proId)
+res.render('user/trackOrder',{user , order})
+})
+
+
 
 
 

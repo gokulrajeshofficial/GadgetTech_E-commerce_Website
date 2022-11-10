@@ -232,21 +232,41 @@ module.exports.checkoutPage = (req, res) => {
       console.log(cartProducts.length)
       cartHelper.totalCartPrice(userId).then(async (cartTotal) => {
         let addresses = await addressHelper.getAddresses(userId);
-
-        res.render('user/checkout', { user, cartProducts, cartTotal, addresses });
+        let wallet = await orderHelper.getWallet(userId)
+        res.render('user/checkout', { user, cartProducts, cartTotal, addresses, wallet });
       })
     }
     else {
-      res.redirect('/');
+      res.redirect('/orders');
     }
 
   })
 }
 
 module.exports.placeOrder = async (req, res) => {
+  console.log(req.body)
   let data = req.body;
   cartTotal = await cartHelper.totalCartPrice(data.userId);
-  data.total = cartTotal.total
+  let wallet = await orderHelper.getWallet(data.userId)
+  data.orderTotal = cartTotal.total;
+
+
+  if (data.walletCheck) {
+    data.total = parseInt(cartTotal.total) - parseInt(wallet.walletTotal)
+    if (data.total <= 0) {
+      wallet.walletTotal = wallet.walletTotal - cartTotal.total;
+      wallet.debit = -(wallet.walletTotal - cartTotal.total);
+      data.total = 0
+    } else {
+      wallet.debit = - parseInt(wallet.walletTotal)
+      wallet.walletTotal = 0
+    }
+  } else {
+    data.total = parseInt(cartTotal.total)
+  }
+
+
+  console.log(data.total);
   data.orderTime = new Date();
   let d = new Date()
   data.date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
@@ -258,20 +278,29 @@ module.exports.placeOrder = async (req, res) => {
   data.products = await cartHelper.getCart(data.userId);
   data.total = parseInt(data.total);
   if (data.payment == 'COD') {
+
     data.paymentStatus = "Placed"
-    data.status = "Preparing for Dispatch"
+    data.status = "Order Placed"
   }
   else {
     data.paymentStatus = "Pending";
     data.status = "Payment Pending"
   }
-
+  data.products.forEach((product)=>{
+    product.shippingStatus = "Preparing for Dispatch";
+  })
   console.log(data)
   orderHelper.addOrder(data).then((orderId) => {
+
     if (data.payment == 'COD') {
       cartHelper.removeAllProducts(req.session.user._id).then(async (msg) => {
         let cartCount = await cartHelper.getCartCount(req.session.user._id)
         req.session.user.cartCount = cartCount;
+
+
+        if (data.walletCheck) {
+          await orderHelper.updateWallet(data.userId, wallet.walletTotal, wallet.debit , orderId)
+        }
         res.json("success")
       })
     }
@@ -285,9 +314,12 @@ module.exports.placeOrder = async (req, res) => {
             response: response,
             payment: data.payment
           }
+
+          if (data.walletCheck) {
+            await orderHelper.updateWallet(data.userId, wallet.walletTotal, wallet.debit , orderId)
+          }
           res.json(order)
         })
-
       })
         .catch(async (err) => {
           let order = {
@@ -309,12 +341,27 @@ module.exports.placeOrder = async (req, res) => {
             response: response,
             payment: data.payment
           }
+
+          if (data.walletCheck) {
+            await orderHelper.updateWallet(data.userId, wallet.walletTotal, wallet.debit ,orderId)
+          }
           res.json(order)
         })
+      })
+      .catch(async(err)=>{
+        console.log("Catched")
+        let order = {
+          err: err,
+          payment: data.payment
+        }
+        await orderHelper.deleteOrder(orderId)
+        res.json(order); 
+
       })
     }
 
   })
+  // res.json("sucess")
 }
 
 module.exports.razorPayVerifyPayment = (req, res) => {
@@ -330,25 +377,29 @@ module.exports.razorPayVerifyPayment = (req, res) => {
 }
 
 
-module.exports.orderPage =  async (req, res) => {
+module.exports.orderPage = async (req, res) => {
   let user = req.session.user
   let userId = req.session.user._id;
   let addresses = await addressHelper.getAddresses(userId)
   let orders = await orderHelper.getOrders(userId)
+  let wallet = await orderHelper.getWallet(userId)
+  console.log(wallet)
   // await paymentHelper.createInvoice().then((invoice)=>{
   // console.log('PDF base64 string: ', invoice.pdf);
   console.log(user)
   console.log(orders);
-  res.render('user/orders', { user, addresses, orders })
+  res.render('user/orders', { user, addresses, orders, wallet })
 }
 
 module.exports.orderCancel = (req, res) => {
   console.log(req.params.id);
-  orderHelper.cancelOrder(req.params.id).then((data) => {
-    console.log(data)
-    res.json("success")
+  orderHelper.refundWallet(req.session.user._id , req.params.id).then(()=>{
+    orderHelper.cancelOrder(req.params.id).then((data) => {
+      console.log(data)
+      res.json("success") 
+    })
   })
-}
+} 
 
 module.exports.orderRetryPayment = (req, res) => {
   let payment = req.body.payment;
@@ -382,7 +433,7 @@ module.exports.addressAddRequest = (req, res) => {
     res.json(req.body)
   })
 }
- 
+
 module.exports.addressDeleteRequest = (req, res) => {
   addressId = req.params.id
   addressHelper.deleteAddress(addressId).then((data) => {
@@ -439,7 +490,7 @@ module.exports.paypalVerifyRequest = (req, res) => {
   });
 }
 
-module.exports.transcationSuccessfulPage =(req, res) => {
+module.exports.transcationSuccessfulPage = (req, res) => {
   orderId = req.params.id;
   res.render('user/order-success', { signin: true, orderId })
 }

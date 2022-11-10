@@ -442,9 +442,10 @@ res.render('admin/orderManagement',{admin : true , orders })
 
 router.patch('/updateOrders',(req,res)=>{
   let orderId = req.body.orderId;
-  let status = req.body.status;
+  let status = req.body.status; 
+  let prodId = req.body.prodId;
   console.log(req.body)
-  orderHelper.changeOrderStatus(orderId ,status).then(()=>{
+  orderHelper.changeOrderStatus(orderId ,status ,prodId).then(()=>{
     res.json("success");
   })
 })

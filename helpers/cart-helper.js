@@ -16,7 +16,7 @@ module.exports = {
                 {
                     db.get().collection('cart').updateOne(
                         {user:objectId(userId),'products.productId':objectId(productId)},
-                        { $inc : {'products.$.quantity': parseInt(qty)}
+                        { $inc : {'products.$.quantity': parseInt(qty)} 
                     }).then(()=>{
                         resolve();
                     })

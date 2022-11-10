@@ -1,4 +1,5 @@
 var objectId = require('mongodb').ObjectId
+const { resolve, reject } = require('promise')
 var db = require('../config/connect')
 
 
@@ -16,6 +17,13 @@ module.exports = {
             let orders = await db.get().collection('order').find({userId : objectId(userId)}).sort({orderTime : -1}).toArray();
             resolve(orders);
         })
+    },
+    getOrder : (orderId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let order = await db.get().collection('order').find({_id : objectId(orderId)}).sort({orderTime : -1}).toArray();
+            resolve(order);
+        })
+
     },
     cancelOrder : (orderId)=>{
         return new Promise((resolve, reject) => {
@@ -51,6 +59,9 @@ module.exports = {
                     }
                 },
                 {
+                    $unwind : '$products' ,
+                },
+                {
                     $sort: {
                       'orderTime': -1,
                     }
@@ -60,16 +71,113 @@ module.exports = {
             resolve(orders);
         })
     },
-    changeOrderStatus: (orderId , status) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection('order').updateOne({ _id: objectId(orderId) },
+    getProductOrder : (orderId , proId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let order = await db.get().collection('order').aggregate([
+
                 {
-                    $set: { status: status}
+                    $match : { _id : objectId(orderId)}
+                },
+                {
+                    $unwind : '$products' ,
+                },
+                {
+                    $match : { 'products.productId' : objectId(proId)}
+                }
+            ]).toArray()
+            console.log(order[0])
+            resolve(order[0]);
+        })
+
+    },
+    changeOrderStatus: (orderId , status , prodId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection('order').updateOne({ _id: objectId(orderId),'products.productId' : objectId(prodId) },
+                {
+                    $set: { 'products.$.shippingStatus' : status}
                 }).then((data) => {
                     console.log(data)
                     resolve();
-                })
+                })  
 
         })
+    },
+    getWallet : (userId)=>{
+        return new Promise(async(resolve,reject)=>{
+           let wallet = await db.get().collection('wallet').findOne({userId : objectId(userId)})
+           resolve(wallet)
+        })
+
+    },
+    updateWallet : (userId , walletTotal , walletTransaction , orderId)=>{
+        walletTotal = parseInt(walletTotal)
+        walletTransaction = parseInt(walletTransaction)
+        let referalData = {amount : walletTransaction , date : new Date() , transactionId : objectId(orderId)};
+
+        console.log(walletTotal , walletTransaction)
+       
+        return new Promise(async(resolve,reject)=>{
+            db.get().collection('wallet').updateOne({userId : objectId(userId)},
+                        {
+                            $set : {walletTotal : walletTotal},
+                            $push : {transaction : referalData}
+
+                        }).then((data)=>{
+                            console.log(data)
+                            resolve()
+                        })
+         })
+    },
+    refundWallet : (userId , orderId)=>{
+        
+        return new Promise(async(resolve,reject)=>{
+            let order = await db.get().collection('order').findOne({ _id : objectId(orderId)});
+
+            console.log(order)
+            console.log(userId)
+            if(order.payment != "COD")
+            {
+                let referalData = {
+                    amount : order.orderTotal , 
+                    date : new Date() , 
+                    transactionId : objectId(orderId)
+                };
+                db.get().collection('wallet').updateOne({userId : objectId(userId)},
+                            {
+                                $inc : {walletTotal : order.orderTotal},
+                                $push : {transaction : referalData}
+    
+                            }).then((data)=>{
+                                console.log(data)
+                                resolve(data)
+                            })
+            }else{
+                console.log("COD Refund")
+                codPay = order.orderTotal - order.total
+                if(codPay > 0)
+                {
+                    let referalData = {
+                        amount : codPay , 
+                        date : new Date() , 
+                        transactionId : objectId(orderId)
+                    };
+
+                    db.get().collection('wallet').updateOne({userId : objectId(userId)},
+                                {
+                                    $inc : {walletTotal : codPay},
+                                    $push : {transaction : referalData}
+        
+                                }).then((data)=>{
+                                    console.log(data)
+                                    resolve(data)
+                                })
+
+                }else{
+                    resolve()
+                }  
+            }
+
+         })
+        
     }
 }

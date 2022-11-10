@@ -24,7 +24,7 @@ module.exports={
                 },
                 {
                    
-                    $lookup:{
+                    $lookup:{ 
                         from:'category',
                         localField:'Category',
                         foreignField:'_id',
@@ -69,10 +69,6 @@ module.exports={
     getAllProducts :()=>{
         return new Promise(async(resolve,reject)=>{
 
-            // let products = await db.get().collection('product').find().toArray();
-            // console.log(products);
-            // resolve(products);
-            
                 let products = await db.get().collection('product').aggregate([
                     {
                         $lookup:{

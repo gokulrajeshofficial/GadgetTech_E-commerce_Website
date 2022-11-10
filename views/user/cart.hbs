@@ -20,6 +20,8 @@
             <div class="cart">
                 <div class="container">
                     <div class="row">
+                        {{#if cartProducts}}
+
                         <div class="col-lg-9">
                             <table class="table table-cart table-mobile">
                                 <thead>
@@ -110,6 +112,14 @@
                             <a href="/" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE
                                     SHOPPING</span><i class="icon-refresh"></i></a>
                         </aside><!-- End .col-lg-3 -->
+                        {{else}}
+                        <div class="col-12 ">
+                            <h2 class="text-center" style="color: #ffffff; font-size: 4rem ;">Cart is Empty</h2>
+                            <center><img class="align-center " src="/images/cart.webp"></center>
+
+                        </div>
+                        {{/if}}
+
                     </div><!-- End .row -->
                 </div><!-- End .container -->
             </div><!-- End .cart -->

@@ -66,7 +66,7 @@
 
                                 <div class="row">
                                     <a href="#signin-modal" data-toggle="modal"
-                                        class="btn btn-outline-primary btn-round">Add a new Delivery Address</a>
+                                        class="btn btn-outline-primary-2 btn-round">Add a new Delivery Address</a>
                                 </div>
 
                             </div>
@@ -98,88 +98,36 @@
                                                 <td>Shipping:</td>
                                                 <td>Free shipping</td>
                                             </tr>
-                                            <tr class="summary-total">
+                                            <tr id="actualTotal" class="summary-total">
                                                 <td>Total:</td>
                                                 <td>₹ {{cartTotal.total}}</td>
                                             </tr><!-- End .summary-total -->
                                         </tbody>
                                     </table><!-- End .table table-summary -->
+                                    {{#if wallet.walletTotal}}
+
+                                    <h3 class="summary-title mt-3"><span class="mr-3"> <input name="walletCheck" type="checkbox" onchange="walletCheckFunction(event,'{{wallet.walletTotal}}','{{cartTotal.total}}')" ></span>Use Wallet Balance </h3><!-- End .summary-title -->
+                                   
+
+                                    <table class="table table-summary" id="walletCheckId" style="display: none;">
+
+                                        <tbody >
+                                            <tr class="summary-subtotal">
+                                                <td>Available Balance</td>
+                                                <td >₹ {{wallet.walletTotal}}</td>
+                                            </tr><!-- End .summary-subtotal -->
+                                            <tr class="summary-total" >
+                                                <td>Total Amount :</td>
+                                                <td id="walletCartTotal">₹ {{cartTotal.total}}</td>
+                                            </tr><!-- End .summary-total -->
+                                        </tbody>
+                                    </table><!-- End .table table-summary -->
+                                    {{/if}}
+
                                 </div>
                                 <div class="summary mt-5">
                                     <div class="accordion-summary" id="accordion-payment">
                                         <h3 class="summary-title">Payment Methods</h3><!-- End .summary-title -->
-
-                                        {{!-- <div class="card">
-                                            <div class="card-header" id="heading-1">
-                                                <h2 class="card-title">
-
-                                                </h2>
-                                            </div><!-- End .card-header -->
-                                        </div><!-- End .card -->
-
-                                        <div class="card">
-                                            <div class="card-header" id="heading-2">
-                                                <h2 class="card-title">
-                                                    <a class="collapsed" role="button" data-toggle="collapse"
-                                                        href="#collapse-2" aria-expanded="false"
-                                                        aria-controls="collapse-2">
-                                                        Check payments
-                                                    </a>
-                                                </h2>
-                                            </div><!-- End .card-header -->
-                                        </div><!-- End .card -->
-
-                                        <div class="card">
-                                            <div class="card-header" id="heading-3">
-                                                <h2 class="card-title">
-                                                    <input type="radio" class="form-check-input" id="radio1"
-                                                        name="optradio" value="COD" checked>Cash On Delivery(COD)
-                                                    <label class="form-check-label" for="radio1"></label>
-                                                </h2>
-                                            </div><!-- End .card-header -->
-                                        </div><!-- End .card -->
-
-                                        <div class="card">
-                                            <div class="card-header" id="heading-4">
-                                                <h2 class="card-title">
-                                                    <a class="collapsed" role="button" data-toggle="collapse"
-                                                        href="#collapse-4" aria-expanded="false"
-                                                        aria-controls="collapse-4">
-                                                        PayPal <small class="float-right paypal-link">What is
-                                                            PayPal?</small>
-                                                    </a>
-                                                </h2>
-                                            </div><!-- End .card-header -->
-                                            <div id="collapse-4" class="collapse" aria-labelledby="heading-4"
-                                                data-parent="#accordion-payment">
-                                                <div class="card-body">
-                                                    Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non,
-                                                    semper suscipit, posuere a, pede. Donec nec justo eget felis
-                                                    facilisis fermentum.
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .collapse -->
-                                        </div><!-- End .card -->
-
-                                        <div class="card">
-                                            <div class="card-header" id="heading-5">
-                                                <h2 class="card-title">
-                                                    <a class="collapsed" role="button" data-toggle="collapse"
-                                                        href="#collapse-5" aria-expanded="false"
-                                                        aria-controls="collapse-5">
-                                                        Credit Card (Stripe)
-                                                        <img src="assets/images/payments-summary.png"
-                                                            alt="payments cards">
-                                                    </a>
-                                                </h2>
-                                            </div><!-- End .card-header -->
-                                            <div id="collapse-5" class="collapse" aria-labelledby="heading-5"
-                                                data-parent="#accordion-payment">
-                                                <div class="card-body"> Donec nec justo eget felis facilisis
-                                                    fermentum.Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                                                    Donec odio. Quisque volutpat mattis eros. Lorem ipsum dolor sit ame.
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .collapse -->
-                                        </div><!-- End .card --> --}}
 
                                         <div class="form-check ">
                                             <input type="radio" class="form-check-input" value="COD" id="radio1"
@@ -638,19 +586,56 @@
                             title: order.err.error.description,
                             text: 'Your Order payment is pending! Please choose another medium for payment',
                             footer: 'Razorpay has a payment Limit'
-                        }).then((data)=>{
+                        }).then((data) => {
                             location.reload();
                         })
                     }
 
                 }
                 else if (order.payment == 'payPal') {
-                    location.href = order.response;
+                    console.log(order.response)
+            
+                     if (order.response) {
+                        location.href = order.response;
+                    }
+                    else {
+                        console.log(order.err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: order.err.issue ,
+                            text: 'Your Order payment is pending! Please choose COD for payment',
+                            footer: 'Razorpay has a payment Limit'
+                        }).then((data) => {
+                            location.reload();
+                        })
+                    }
                 }
 
 
             }
         })
     })
+
+    function walletCheckFunction(event,walletTotal,cartTotal)
+    {
+        if(event.target.checked)
+        {
+            document.getElementById('walletCheckId').style.display = 'block'
+            if(parseInt(cartTotal) - parseInt(walletTotal) > 0)
+            {
+                 document.getElementById('walletCartTotal').innerText = '₹ ' + (parseInt(cartTotal) - parseInt(walletTotal))  ;
+            }else{
+                document.getElementById('walletCartTotal').innerText = '₹ ' + 0;
+            }
+          
+          document.getElementById('actualTotal').style.visibility = 'hidden'
+       
+        }else
+        {
+             document.getElementById('walletCheckId').style.display = 'none'
+              document.getElementById('actualTotal').style.visibility = 'visible'
+        }
+
+    }
 
 </script>

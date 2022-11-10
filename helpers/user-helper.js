@@ -2,6 +2,7 @@ var db = require('../config/connect')
 const bcrypt = require('bcrypt')
 const { resolve, reject } = require('promise')
 var objectId = require('mongodb').ObjectId
+const referralCodes = require('referral-codes')
 module.exports = {
     addUser: (userData) => {
 
@@ -32,7 +33,38 @@ module.exports = {
 
                 } else {
                     userData.password = await bcrypt.hash(userData.password, 10)
-                    db.get().collection('userdetails').insertOne(userData).then((data) => {
+                    try {
+                         let refferal =referralCodes.generate({
+                         prefix: 'ref-'+userData.fname+'-',
+                         length: 10,
+                         })
+                         userData.refferal = refferal[0];
+                     }
+                     catch (e) {
+                         console.log(e)
+                         console.log("Sorry, not possible.");
+                     }
+                     console.log("***********************************************************************************")
+                     console.log(userData.referralCode)
+                     let referralUser = await db.get().collection('userdetails').findOne({refferal : userData.referralCode})
+                     console.log(referralUser);
+                     if(referralUser)
+                     {
+                        let referalData = {
+                            amount : 100 , 
+                            date : new Date(),
+                            transactionId : objectId(referralUser._id)
+                        };
+                       await db.get().collection('wallet').updateOne({userId : objectId(referralUser._id)},
+                        {
+                            $inc : {walletTotal : 100},
+                            $push : {transaction : referalData}
+
+                        }).then((data)=>{delete userData.referralCode;})
+                     }
+                     
+                    db.get().collection('userdetails').insertOne(userData).then(async(data) => {
+                        await db.get().collection('wallet').insertOne({userId : objectId(data.insertedId)})
                         let response =
                         {
                             status: true,

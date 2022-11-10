@@ -391,12 +391,13 @@
         success: (response) => {
             console.log(response);
 
-            if (response == 'directed') {
+            if (response.status == 'directed') {
                 Swal.fire(
                     'Added to Cart!',
                     'The product' + proName + ' Has been Added to your Cart!',
                     'success'
-                ).then(()=>{
+                )
+                .then(()=>{
                     $.ajax({
                         url: '/wishlist/delete/'+proId,
                         type: "delete",

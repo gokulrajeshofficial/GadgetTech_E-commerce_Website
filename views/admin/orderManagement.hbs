@@ -66,10 +66,10 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Order Id</th>
+                                <th scope="col">Order </th>
                                 <th scope="col">Address</th>
                                 <th scope="col">Payment Method</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">Date</th>
                                 <th scope="col">Amount Payed</th>
                                 <th scope="col">Order Status</th>
                             </tr>
@@ -81,12 +81,15 @@
                             <tr>
                                 <td scope="row">{{inc @index}}</td>
 
-                                {{#each this.user}}
+
                                 <td>
-                                    <p>Order Id : {{this._id}}</p><br>
-                                    User orderd: {{this.fname}} {{this.lname}}
+                                    {{#each this.user}}
+                                    Order Id : {{this._id}}<br>
+                                    User: {{this.fname}} {{this.lname}}
+                                    {{/each}}<br>
+                                    Product :   {{ this.products.product.Name}}
                                 </td>
-                                {{/each}}
+
 
                                 <td class="">
                                     <p style="color: #1d1c1c;">Name : {{this.address.fname}}
@@ -104,16 +107,19 @@
                                 <td>{{this.payment}}
                                     {{this.paymentStatus}}
                                 </td>
+                                 
                                 <td>
-                                    Date : {{this.date}}
+                                  
+                                 <p>Date : {{this.date}}</p>
                                     <br>
-                                    Time : {{this.time}}
+                                Time : {{this.time}}
                                 </td>
+                                
                                 <td>₹ <span style="color: green;">{{this.total}}</span></td>
                                 {{#if (checkpaymentStatus this.paymentStatus)}}
-                                <td><select class="form-select text-success" onchange="changeStatus(event,'{{this._id}}')"
-                                        style="width: 220px ;">
-                                        <option selected hidden>{{this.status}}</option>
+                                <td><select class="form-select text-success"
+                                        onchange="changeStatus(event,'{{this._id}}','{{ this.products.productId }}')" style="width: 220px ;">
+                                        <option selected hidden>{{this.products.shippingStatus}}</option>
                                         <option>Shipped</option>
                                         <option>Delivered</option>
                                         <option>Cancelled</option>
@@ -125,8 +131,6 @@
                                         <option selected>{{this.status}}</option>
 
                                 </td>
-
-
                                 {{/if}}
                             </tr>
 
@@ -176,18 +180,19 @@
 
     <script src="/adminassets/js/main.js"></script>
     <script>
-       function changeStatus(event,orderId)
-       {
-         let status = event.target.value
-         console.log(status);
-         console.log(orderId);
-         $.ajax({
-            url:'/admin/updateOrders',
-            type : 'PATCH',
-            data : {status , orderId},
-            success : (response)=>{
-                console.log(response)
-            }
-         })
-       }
+        function changeStatus(event, orderId , prodId ) {
+            let status = event.target.value
+            console.log(status);
+            console.log(orderId);
+            console.log("//////////////")
+            console.log(prodId);
+            $.ajax({
+                url: '/admin/updateOrders',
+                type: 'PATCH',
+                data: { status, orderId , prodId },
+                success: (response) => {
+                    console.log(response)
+                }
+            })
+        }
     </script>

@@ -93,10 +93,21 @@
                                                         </table>
                                                     </div>
                                                     <div class="col-sm-12">
-                                                        <h5 class="form-text">About </h5>
-                                                        <textarea class="form-control" name="about"
+                                                        {{#if user.about}}
+                                                        <h5 class="form-text mt-3">About </h5>
+                                                        {{!-- <textarea class="form-control" name="about"
                                                             style="height: auto ; background-color: #b0adad; color: #ffffff;"
-                                                            disabled>{{user.about}}</textarea>
+                                                            disabled>{{user.about}}</textarea> --}}
+                                                        <p>{{user.about}}</p>
+                                                        {{/if}}
+
+                                                        <h5 class="form-text mt-3">Referral Code </h5>
+
+                                                        <center><input type="text" value={{user.refferal}} id="myInput"
+                                                                disabled>
+                                                            <button class="btn btn-outline-success"
+                                                                onclick="myFunction()">Copy Referral Code</button>
+                                                        </center>
 
 
                                                         <p class="text-white">Hello ,
@@ -123,6 +134,7 @@
 
                                 <div class="tab-pane fade show active" id="tab-orders" role="tabpanel"
                                     aria-labelledby="tab-orders-link">
+                           
                                     {{#each orders}}
                                     <div class="row mb-3">
                                         <div class="container ">
@@ -133,9 +145,10 @@
                                                         <li class="list-group-item row d-flex align-items-center"
                                                             style="background-color: rgb(18, 18, 18);">
                                                             <div class="col-3 ">
-                                                                <p style="color: #a6c76c;">Order Placed : <br><span
+                                                                <p style="color: #a6c76c;">Order Placed : <span
                                                                         style="color: #ffffff;">{{this.time}}
                                                                         {{this.date}}</span></p>
+                                                                         <p style="color: #a6c76c;">through {{this.payment}} : <span style="color: #ffffff;">₹ {{this.total}}</span></p>
                                                             </div>
                                                             <div class="col-5 ">
                                                                 <center>
@@ -156,7 +169,8 @@
                                                                 </p>
                                                             </div>
                                                         </li>
-                                                        <li class="list-group-item row d-flex align-items-cente pl-5 pt-3">
+                                                        <li
+                                                            class="list-group-item row d-flex align-items-cente pl-5 pt-3">
 
                                                             <div class="col-lg-3 col-5">
                                                                 <h6 style="color: #a6c76c;">Address :</h6>
@@ -175,10 +189,13 @@
                                                             <div class="col-lg-2 col-3 text-center ">
                                                                 <h6 style="color: #a6c76c;">Payment Method</h6>
                                                                 <p style="color: #1d1c1c;">{{this.payment}}</p>
+
                                                             </div>
                                                             <div class="col-lg-2 col-3 text-center ">
                                                                 <h6 style="color: #a6c76c;">Total Purchase</h6>
-                                                                <p style="color: #1d1c1c;">₹ {{this.total}}</p>
+                                                                <p style="color: #1d1c1c;">₹ {{this.orderTotal}}</p>
+                                                                
+                                                                
                                                             </div>
 
                                                             <div class="col-lg-4 col-12 text-center  ">
@@ -189,22 +206,34 @@
                                                                     onclick="retryPayment('{{this._id}}','{{this.payment}}',{{this.total}})"
                                                                     class="btn btn-outline-dark">Retry Payment</button>
                                                                 {{else }}
-                                                                    {{#if (checkDelivered this.status) }}
+                                                                {{!-- {{#if (checkDeliveredCancelled this.status) }} 
 
-                                                                    {{else}}
+                                                                {{#if (checkDelivered this.status)}}
                                                                 <button onclick="cancelOrder('{{this._id}}')"
-                                                                    class="btn btn-outline-dark"  id="cancel{{this._id}}">
-                                                                    Cancel</button>
-                                                                    {{/if}}
+                                                                    class="btn btn-outline-dark"
+                                                                    id="cancel{{this._id}}">
+                                                                    Request return</button>
                                                                 {{/if}}
+
+                                                                {{else}} --}}
+                                                                <button onclick="cancelOrder('{{this._id}}')"
+                                                                    class="btn btn-outline-dark"
+                                                                    id="cancel{{this._id}}">
+                                                                    Cancel</button>
+                                                                {{!-- {{/if}} --}}
+                                                                {{/if}}
+                                                               
                                                             </div>
 
                                                         </li>
 
                                                         <li class="list-group-item row d-flex justify-content-center"
                                                             style="background-color: rgb(68, 68, 68);">
-                                                            <center><button class="btn" style="color:#84a54c;" onclick="showProducts('{{this._id}}')">Click to show Products</button></center>
-                                                            <div class="col-11" style="display: none;" id="product{{this._id}}">
+                                                            <center><button class="btn" style="color:#84a54c;"
+                                                                    onclick="showProducts('{{this._id}}')">Click to show
+                                                                    Products</button></center>
+                                                            <div class="col-11" style="display: none;"
+                                                                id="product{{this._id}}">
                                                                 <table class="table table-cart table-mobile">
                                                                     <thead>
                                                                         <tr>
@@ -212,7 +241,7 @@
                                                                             <th>Price</th>
                                                                             <th>Quantity</th>
                                                                             <th>Total</th>
-                                                                            {{!-- <th></th> --}}
+                                                                            <th class="text-center">Status</th>
                                                                         </tr>
                                                                     </thead>
 
@@ -239,17 +268,15 @@
                                                                             <td class="price-col">
                                                                                 ₹{{this.product.Price}}</td>
 
-                                                                            <td class="price-col ml-3">{{this.quantity}}</td>
+                                                                            <td class="price-col text-center">{{this.quantity}}
+                                                                            </td>
 
 
                                                                             <td class="total-col" id="">₹{{this.total}}
                                                                             </td>
-                                                                            {{!-- <td class="remove-col"><button
-                                                                                    id="deleteProduct"
-                                                                                    onclick="deleteCart('{{this.productId}}') "
-                                                                                    class="btn-remove text-danger">
-                                                                                    <i class="icon-close"></i></button>
-                                                                            </td> --}}
+                                                                            <td ><a href="/orders/trackOrder/{{this.productId}}/{{../this._id}}"><button
+                                                                                    class="btn btn-outline-primary-2">Track Package</button></a>
+                                                                            </td>
                                                                         </tr>
                                                                         {{/each}}
 
@@ -265,7 +292,8 @@
                                     </div>
                                     {{/each}}
 
-                                    <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i
+
+                                    <a href="/" class="btn btn-outline-primary-2"><span>GO SHOP</span><i
                                             class="icon-long-arrow-right"></i></a>
                                 </div><!-- .End .tab-pane -->
 
@@ -273,13 +301,90 @@
                                 <div class="tab-pane fade" id="tab-wallet" role="tabpanel"
                                     aria-labelledby="tab-downloads-link">
                                     <h3 class="text-white text-center">My Wallet</h3>
-                                    <div class="row justify-content-center">
-                                        <div class="card col-10 mt-3 p-3" style="background-color: #fff;border-radius: 1rem;">
-                                            <h4>Balance : </h4>
+                                    <div class="row justify-content-center mb-5">
+                                        <div class="card col-md-9 col-11 mt-3 p-5 ps-3"
+                                            style="background-color: rgb(96, 96, 96);border-radius: 1rem;">
+                                            <h6 class="text-white">Wallet Balance : </h6>
+                                            <hr style="height: 0.15rem;" class="bg-dark mt-0 border-3 ">
+                                            <h2 class="text-success">₹ <span
+                                                    style="color: #ffffff;">{{wallet.walletTotal}}</span>
+                                            </h2>
+                                            <p>If any product is cancelled , its refund will be reflected here.</p>
                                         </div>
+                                        <div class="col-md-9 col-11 mt-3 ">
+                                            <div class="row mb-0 align-items-center px-5  py-2 pt-1"
+                                                style="background-color: rgb(0, 0, 0);border-radius: 1rem 2rem;cursor: pointer;"
+                                                onclick="showTransaction()">
+                                                <h6 class="text-white">Transcations</h6>
+                                                <h5 class="ml-auto text-white"><span class="glyphicon"
+                                                        style="">&#x2b;</span></h5>
+                                            </div>
+                                            <div class="row card mb-0 align-items-center px-5  py-2 pt-1"
+                                                id="transactions"
+                                                style="background-color: rgb(71, 71, 71);display: none; border-radius: 0.5rem;">
+
+                                                <div class="col-12" id="product{{this._id}}">
+                                                    <table class="table table-cart table-mobile">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Index</th>
+                                                                <th scope="col">Date</th>
+                                                                <th scope="col">Type</th>
+                                                                <th scope="col">Amount</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody>
+
+                                                            {{#each wallet.transaction}}
+                                                            <tr id="">
+
+                                                                <td class=" text-white">
+                                                                    {{inc @index}}
+                                                                </td>
+                                                                <td class="text-white">
+                                                                    {{this.date}}</td>
+                                                                {{#if (checkDebit this.amount)}}
+                                                                <td class="text-success ml-3">Credit
+                                                                </td>
+                                                                <td class="text-success" id="">₹ {{this.amount}}
+                                                                </td>
+                                                                {{else}}
+                                                                 <td class="text-danger ml-3 ">Debit
+                                                                </td>
+                                                                <td class="text-danger" id="">₹ {{this.amount}}
+                                                                </td>
+                                                                {{/if}}
+     
+                                                            </tr>
+                                                            {{/each}}
+
+                                                        </tbody>
+                                                    </table><!-- End .table table-wishlist -->
+                                                </div>
+
+
+
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination justify-content-center">
+                                                        <li class="page-item disabled">
+                                                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                                        </li>
+                                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="#">Next</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+
+
+                                        </div>
+
                                     </div>
-                                    <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i
-                                            class="icon-long-arrow-right"></i></a>
+
                                 </div><!-- .End .tab-pane -->
 
                                 <div class="tab-pane fade" id="tab-address" role="tabpanel"
@@ -421,110 +526,113 @@
                                     </div><!-- End .row -->
                                 </div><!-- .End .tab-pane -->
 
-                                <div class="tab-pane fade row d-flex justify-content-center" id="tab-account" role="tabpanel"
-                                    aria-labelledby="tab-account-link">
+                                <div class="tab-pane fade row d-flex justify-content-center" id="tab-account"
+                                    role="tabpanel" aria-labelledby="tab-account-link">
                                     <div class="col-10">
                                         <nav>
-                                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab"
-                                                href="#nav-details" role="tab" aria-controls="nav-home"
-                                                aria-selected="true">Change Details</a>
-                                            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab"
-                                                href="#nav-password" role="tab" aria-controls="nav-password"
-                                                aria-selected="false">Change Password</a>
+                                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab"
+                                                    href="#nav-details" role="tab" aria-controls="nav-home"
+                                                    aria-selected="true">Change Details</a>
+                                                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab"
+                                                    href="#nav-password" role="tab" aria-controls="nav-password"
+                                                    aria-selected="false">Change Password</a>
 
-                                        </div>
-                                    </nav>
-                                    <div class="tab-content" id="nav-tabContent">
-                                        <div class="tab-pane fade show active" id="nav-details" role="tabpanel"
-                                            aria-labelledby="nav-details-tab">
+                                            </div>
+                                        </nav>
+                                        <div class="tab-content" id="nav-tabContent">
+                                            <div class="tab-pane fade show active" id="nav-details" role="tabpanel"
+                                                aria-labelledby="nav-details-tab">
 
-                                            <form id="accountDetails">
-                                                <div class="row mt-3">
-                                                    <div class="col-sm-6">
-                                                        <label>First Name *</label>
-                                                        <input type="text" class="form-control" id="fnameShow"
-                                                            name="fname" value="{{user.fname}}" onchange="changeName()"
-                                                            required>
-                                                    </div><!-- End .col-sm-6 -->
+                                                <form id="accountDetails">
+                                                    <div class="row mt-3">
+                                                        <div class="col-sm-6">
+                                                            <label>First Name *</label>
+                                                            <input type="text" class="form-control" id="fnameShow"
+                                                                name="fname" value="{{user.fname}}"
+                                                                onchange="changeName()" required>
+                                                        </div><!-- End .col-sm-6 -->
 
-                                                    <div class="col-sm-6">
-                                                        <label>Last Name *</label>
-                                                        <input type="text" class="form-control" id="lnameShow"
-                                                            name="lname" value="{{user.lname}}" onchange="changeName()"
-                                                            required>
-                                                    </div><!-- End .col-sm-6 -->
-                                                </div><!-- End .row -->
+                                                        <div class="col-sm-6">
+                                                            <label>Last Name *</label>
+                                                            <input type="text" class="form-control" id="lnameShow"
+                                                                name="lname" value="{{user.lname}}"
+                                                                onchange="changeName()" required>
+                                                        </div><!-- End .col-sm-6 -->
+                                                    </div><!-- End .row -->
 
-                                                <label>Display Name *</label>
-                                                <small class="form-text">This will be how your name will be displayed in
-                                                    the
-                                                    account section and in reviews</small>
-                                                <input type="text" class="form-control" id="nameShow"
-                                                    value="{{user.fname}} {{user.lname}}" disabled>
+                                                    <label>Display Name *</label>
+                                                    <small class="form-text">This will be how your name will be
+                                                        displayed in
+                                                        the
+                                                        account section and in reviews</small>
+                                                    <input type="text" class="form-control" id="nameShow"
+                                                        value="{{user.fname}} {{user.lname}}" disabled>
 
 
 
-                                                <div class="row mb-3">
-                                                    <label for="inputPassword"
-                                                        class="col-sm-7 col-form-label">Description</label>
+                                                    <div class="row mb-3">
+                                                        <label for="inputPassword"
+                                                            class="col-sm-7 col-form-label">Description</label>
 
-                                                    <div class="col-sm-12">
-                                                        <small class="form-text">Tell us something about yourself
-                                                        </small>
-                                                        <textarea class="form-control" name="about"
-                                                            style="height: 120px">{{user.about}}</textarea>
+                                                        <div class="col-sm-12">
+                                                            <small class="form-text">Tell us something about yourself
+                                                            </small>
+                                                            <textarea class="form-control" name="about"
+                                                                style="height: 120px">{{user.about}}</textarea>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="row mb-3">
-                                                    <div class="col-sm-6">
-                                                        <label>Contact details *</label>
-                                                        <input type="inputnumber" class="form-control"
-                                                            name="phonenumber" value="{{user.phonenumber}}" disabled>
-                                                    </div><!-- End .col-sm-6 -->
-                                                </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-sm-6">
+                                                            <label>Contact details *</label>
+                                                            <input type="inputnumber" class="form-control"
+                                                                name="phonenumber" value="{{user.phonenumber}}"
+                                                                disabled>
+                                                        </div><!-- End .col-sm-6 -->
+                                                    </div>
 
 
-                                                <button type="submit" class="btn btn-outline-primary-2">
-                                                    <span>SAVE CHANGES</span>
-                                                    <i class="icon-long-arrow-right"></i>
-                                                </button>
-                                            </form>
+                                                    <button type="submit" class="btn btn-outline-primary-2">
+                                                        <span>SAVE CHANGES</span>
+                                                        <i class="icon-long-arrow-right"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+
+
+
+                                            <div class="tab-pane fade" id="nav-password" role="tabpanel"
+                                                aria-labelledby="nav-password-tab">
+                                                <h6 class="text-center">Change the Password</h6>
+                                                <form id="changePassword">
+                                                    <label>Email address *</label>
+                                                    <input type="email" class="form-control" value="{{user.email}}"
+                                                        disabled>
+
+                                                    <label>Current password (leave blank to leave unchanged)</label>
+                                                    <input type="password" name="oldPassword" class="form-control">
+
+                                                    <label>New password (leave blank to leave unchanged)</label>
+                                                    <input type="password" id="password-form" name="newPassword"
+                                                        class="form-control">
+
+                                                    <label>Confirm new password</label>
+                                                    <input type="password" id="con-password-form"
+                                                        class="form-control mb-3">
+                                                    <p id="reg-error"></p>
+
+                                                    <button type="submit" class="btn btn-outline-primary-2">
+                                                        <span>SAVE CHANGES</span>
+                                                        <i class="icon-long-arrow-right"></i>
+                                                    </button>
+
+                                                </form>
+                                            </div>
                                         </div>
 
-
-
-                                        <div class="tab-pane fade" id="nav-password" role="tabpanel"
-                                            aria-labelledby="nav-password-tab">
-                                            <h6 class="text-center">Change the Password</h6>
-                                            <form id="changePassword">
-                                                <label>Email address *</label>
-                                                <input type="email" class="form-control" value="{{user.email}}"
-                                                    disabled>
-
-                                                <label>Current password (leave blank to leave unchanged)</label>
-                                                <input type="password" name="oldPassword" class="form-control">
-
-                                                <label>New password (leave blank to leave unchanged)</label>
-                                                <input type="password" id="password-form" name="newPassword"
-                                                    class="form-control">
-
-                                                <label>Confirm new password</label>
-                                                <input type="password" id="con-password-form" class="form-control mb-3">
-                                                <p id="reg-error"></p>
-
-                                                <button type="submit" class="btn btn-outline-primary-2">
-                                                    <span>SAVE CHANGES</span>
-                                                    <i class="icon-long-arrow-right"></i>
-                                                </button>
-
-                                            </form>
-                                        </div>
                                     </div>
 
-                                    </div>
-                                    
                                 </div><!-- .End .tab-pane -->
                             </div>
                         </div><!-- End .col-lg-9 -->
@@ -666,11 +774,11 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="category.html">Shop</a>
+                    <a href="/">Shop</a>
                     <ul>
                         <li><a href="category-list.html">Shop List</a></li>
                         <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
-                        <li><a href="category.html">Shop Grid 3 Columns</a></li>
+                        <li><a href="/">Shop Grid 3 Columns</a></li>
                         <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
                         <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span
                                         class="tip tip-hot">Hot</span></span></a></li>
@@ -771,7 +879,7 @@
                         <li><a href="elements-typography.html">Typography</a></li>
                         <li><a href="elements-titles.html">Titles</a></li>
                         <li><a href="elements-banners.html">Banners</a></li>
-                        <li><a href="elements-product-category.html">Product Category</a></li>
+                        <li><a href="elements-product-/">Product Category</a></li>
                         <li><a href="elements-video-banners.html">Video Banners</a></li>
                         <li><a href="elements-buttons.html">Buttons</a></li>
                         <li><a href="elements-accordions.html">Accordions</a></li>
@@ -910,10 +1018,10 @@
                             'The Order has been cancelled .',
                             'success',
                         ),
-                         /*    document.getElementById(orderId).style.color = "#ff0000"; */
-                        document.getElementById(orderId).innerText = "Cancelled";
-                        document.getElementById("cancel"+orderId).style.display = "none"
-                       
+                            /*    document.getElementById(orderId).style.color = "#ff0000"; */
+                            document.getElementById(orderId).innerText = "Cancelled";
+                        document.getElementById("cancel" + orderId).style.display = "none"
+
 
                     }
                 })
@@ -923,17 +1031,15 @@
 
     }
 
-    function showProducts(orderId)
-    {
-        let status = document.getElementById('product'+orderId).style.display
+    function showProducts(orderId) {
+        let status = document.getElementById('product' + orderId).style.display
         console.log(status)
-        if(status == "none")
-        {
-              document.getElementById('product'+orderId).style.display = "block";
-        }else{
-             document.getElementById('product'+orderId).style.display = "none"
+        if (status == "none") {
+            document.getElementById('product' + orderId).style.display = "block";
+        } else {
+            document.getElementById('product' + orderId).style.display = "none"
         }
-      
+
     }
 
     function retryPayment(orderId, payment, total) {
@@ -1003,7 +1109,8 @@
     }
 
 </script>
-{{!-- /* _____________________________________________Account _____________________________________________________*/ --}}
+{{!-- /* _____________________________________________Account _____________________________________________________*/
+--}}
 <script>
 
     $('#accountDetails').submit((e) => {
@@ -1045,7 +1152,7 @@
                             title: 'New password Created',
                             text: ' Your password has been changed. Please Wait !!',
                         })
-                       
+
 
                     }
                     else {
@@ -1065,4 +1172,32 @@
         }
 
     })
+</script>
+
+<script>
+    function showTransaction() {
+        let status = document.getElementById('transactions').style.display
+        console.log(status)
+        if (status == 'none') {
+            document.getElementById('transactions').style.display = 'block'
+        }
+        else {
+            document.getElementById('transactions').style.display = 'none'
+        }
+    }
+
+    function myFunction() {
+
+        var copyText = document.getElementById("myInput");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+        Swal.fire({
+            icon: 'success',
+            title: 'Copied to Clipboard',
+        })
+
+    }
 </script>

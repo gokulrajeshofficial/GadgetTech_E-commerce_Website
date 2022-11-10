@@ -1,5 +1,6 @@
 var objectId = require('mongodb').ObjectId
 var db = require('../config/connect')
+
 module.exports = {
     addBanner: (data) => {
         return new Promise(async (resolve, reject) => {
