@@ -42,20 +42,28 @@ Handlebars.registerHelper("inc", function (value, options) {
   return parseInt(value) + 1;
 });
 Handlebars.registerHelper("checkStatus", function (value, options) {
-  if (value == 'Payment Pending') { return true; }
+  if (value == 'Payment Pending') 
+  { return true; }
   else {
     return false;
   }
 });
 
 Handlebars.registerHelper("checkDeliveredCancelled", function (value, options) {
-  if (value == 'Delivered' || value == 'Cancelled') { return true; }
+  if (value == 'Delivered' || value == 'Cancelled' || value == 'Return Requested') { return true; }
   else {
     return false;
   }
 });
+
+Handlebars.registerHelper("checkDeliveredOrder", function (value, options) {
+  if (value == 'Delivered' ) { return true; }
+  else {
+    return false;
+  }
+}); 
 Handlebars.registerHelper("checkDelivered", function (value, options) {
-  if (value == 'Delivered') { return true; }
+  if (value == 'Delivered' || value == 'Return Requested') { return true; }
   else {
     return false;
   }
@@ -71,7 +79,14 @@ Handlebars.registerHelper("checkShipped", function (value, options) {
   else {
     return false;
   }
-});
+}); 
+
+Handlebars.registerHelper("checkReturned", function (value, options) {
+  if (value == 'Return Approved') { return true; }
+  else {
+    return false;
+  }
+})
 
 
 Handlebars.registerHelper("checkpaymentStatus", function (value, options) {

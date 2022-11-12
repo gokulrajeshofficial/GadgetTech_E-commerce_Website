@@ -46,7 +46,7 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Brand List</h1>
+            <h1>Orders List</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/admin">Home</a></li>
@@ -86,8 +86,9 @@
                                     {{#each this.user}}
                                     Order Id : {{this._id}}<br>
                                     User: {{this.fname}} {{this.lname}}
-                                    {{/each}}<br>
-                                    Product :   {{ this.products.product.Name}}
+                                    {{/each}}<br> <br>
+                                    Product :   {{ this.products.product.Name}} <br>
+                                    Qty : {{this.products.quantity}}
                                 </td>
 
 
@@ -115,14 +116,22 @@
                                 Time : {{this.time}}
                                 </td>
                                 
-                                <td>₹ <span style="color: green;">{{this.total}}</span></td>
+                                <td>₹ <span style="color: green;">{{this.products.total}}</span></td>
+
                                 {{#if (checkpaymentStatus this.paymentStatus)}}
                                 <td><select class="form-select text-success"
                                         onchange="changeStatus(event,'{{this._id}}','{{ this.products.productId }}')" style="width: 220px ;">
                                         <option selected hidden>{{this.products.shippingStatus}}</option>
+                                        {{#if (checkOrdered this.products.shippingStatus)}}
                                         <option>Shipped</option>
+                                        {{else if (checkShipped this.products.shippingStatus)}}
                                         <option>Delivered</option>
-                                        <option>Cancelled</option>
+                                        {{/if}}
+                                        {{#unless (checkDelivered this.products.shippingStatus)}}
+                                        <option >Cancelled</option>
+                                        {{else}}
+                                        <option>Delivered</option>
+                                        {{/unless}}
                                     </select>
                                 </td>
                                 {{else}}

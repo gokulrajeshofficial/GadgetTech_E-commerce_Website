@@ -26,7 +26,7 @@ const paypal = require('paypal-rest-sdk');
 
 paypal.configure({
   'mode': 'sandbox', //sandbox or live
-  'client_id': process.env.PAYPAL_CLIENT_ID,
+  'client_id': process.env.PAYPAL_CLIENT_ID, 
   'client_secret': process.env.PAYPAL_CLIENT_SECRET
 });
 
@@ -101,7 +101,7 @@ router.post('/verify-payment', razorPayVerifyPayment)
 router.get('/orders', userValidation, orderPage)
 
 //<------------------------------------------Order Cancel---------------------------------------------->
-router.get('/order/cancel/:id', orderCancel)
+router.get('/order/cancel', orderCancel)
 
 //<------------------------------------------Order Retry Payment---------------------------------------------->
 router.post('/retryPayment', orderRetryPayment)
@@ -192,6 +192,15 @@ router.get('/orders/trackOrder/:proId/:orderId',userValidation, async(req,res)=>
   let user = req.session.user
   let order = await orderHelper.getProductOrder(req.params.orderId , req.params.proId)
 res.render('user/trackOrder',{user , order})
+})
+
+router.post('/orders/returnOrder',userValidation , (req,res)=>{
+ console.log(req.body)
+ let status = "Return Requested"
+ orderHelper.changeOrderStatusReturn(req.body.orderId , status , req.body.msg , req.body.proId ).then(()=>{
+  res.json(status)
+ })
+ 
 })
 
 

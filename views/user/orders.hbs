@@ -63,7 +63,7 @@
 
                                                     <img src="/user-images/admin.png" style="width: 20rem ;"
                                                         alt="Profile" class="rounded-circle">
-                                                    <h2 class="mb-3" style="color:white;">{{user.fname}} {{user.lname}}
+                                                    <h2 class="my-4 " style="color:white;">{{user.fname}} {{user.lname}}
                                                     </h2>
 
                                                     <div class="social-links my-2 ">
@@ -74,9 +74,13 @@
                                                         <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
                                                     </div>
                                                     <div class="row justify-content-center">
-                                                        <h6 style="color: white;">User details:</h6>
-
-                                                        <table style="width:100% ;border: 1px solid rgb(85, 85, 85); "
+                                                        <div class="col-10">
+                                                        <h6 class="text-center" style="color: white; ">User details:</h6>
+                                                        <hr>
+                                                        </div>
+                                                        
+                                                    
+                                                        <table style="width:100%  "
                                                             class="text-center">
                                                             <tr class="col">
                                                                 <th>Name:</th>
@@ -95,9 +99,6 @@
                                                     <div class="col-sm-12">
                                                         {{#if user.about}}
                                                         <h5 class="form-text mt-3">About </h5>
-                                                        {{!-- <textarea class="form-control" name="about"
-                                                            style="height: auto ; background-color: #b0adad; color: #ffffff;"
-                                                            disabled>{{user.about}}</textarea> --}}
                                                         <p>{{user.about}}</p>
                                                         {{/if}}
 
@@ -134,7 +135,7 @@
 
                                 <div class="tab-pane fade show active" id="tab-orders" role="tabpanel"
                                     aria-labelledby="tab-orders-link">
-                           
+
                                     {{#each orders}}
                                     <div class="row mb-3">
                                         <div class="container ">
@@ -148,7 +149,9 @@
                                                                 <p style="color: #a6c76c;">Order Placed : <span
                                                                         style="color: #ffffff;">{{this.time}}
                                                                         {{this.date}}</span></p>
-                                                                         <p style="color: #a6c76c;">through {{this.payment}} : <span style="color: #ffffff;">₹ {{this.total}}</span></p>
+                                                                <p style="color: #a6c76c;">through {{this.payment}} :
+                                                                    <span style="color: #ffffff;">₹
+                                                                        {{this.total}}</span></p>
                                                             </div>
                                                             <div class="col-5 ">
                                                                 <center>
@@ -194,8 +197,8 @@
                                                             <div class="col-lg-2 col-3 text-center ">
                                                                 <h6 style="color: #a6c76c;">Total Purchase</h6>
                                                                 <p style="color: #1d1c1c;">₹ {{this.orderTotal}}</p>
-                                                                
-                                                                
+
+
                                                             </div>
 
                                                             <div class="col-lg-4 col-12 text-center  ">
@@ -205,24 +208,15 @@
                                                                 <button
                                                                     onclick="retryPayment('{{this._id}}','{{this.payment}}',{{this.total}})"
                                                                     class="btn btn-outline-dark">Retry Payment</button>
-                                                                {{else }}
-                                                                {{!-- {{#if (checkDeliveredCancelled this.status) }} 
+                                                                {{!-- {{else }}
 
-                                                                {{#if (checkDelivered this.status)}}
                                                                 <button onclick="cancelOrder('{{this._id}}')"
                                                                     class="btn btn-outline-dark"
                                                                     id="cancel{{this._id}}">
-                                                                    Request return</button>
+                                                                    Cancel</button> --}}
+                                                         
                                                                 {{/if}}
 
-                                                                {{else}} --}}
-                                                                <button onclick="cancelOrder('{{this._id}}')"
-                                                                    class="btn btn-outline-dark"
-                                                                    id="cancel{{this._id}}">
-                                                                    Cancel</button>
-                                                                {{!-- {{/if}} --}}
-                                                                {{/if}}
-                                                               
                                                             </div>
 
                                                         </li>
@@ -232,7 +226,7 @@
                                                             <center><button class="btn" style="color:#84a54c;"
                                                                     onclick="showProducts('{{this._id}}')">Click to show
                                                                     Products</button></center>
-                                                            <div class="col-11" style="display: none;"
+                                                            <div class="col-12" style="display: none;"
                                                                 id="product{{this._id}}">
                                                                 <table class="table table-cart table-mobile">
                                                                     <thead>
@@ -240,7 +234,7 @@
                                                                             <th>Product</th>
                                                                             <th>Price</th>
                                                                             <th>Quantity</th>
-                                                                            <th>Total</th>
+                                                                            <th>Status</th>
                                                                             <th class="text-center">Status</th>
                                                                         </tr>
                                                                     </thead>
@@ -266,17 +260,30 @@
                                                                                 </div><!-- End .product -->
                                                                             </td>
                                                                             <td class="price-col">
-                                                                                ₹{{this.product.Price}}</td>
+                                                                                ₹ {{this.product.Price}}</td>
 
-                                                                            <td class="price-col text-center">{{this.quantity}}
+                                                                            <td class="price-col text-center">
+                                                                                {{this.quantity}}
                                                                             </td>
 
 
-                                                                            <td class="total-col" id="">₹{{this.total}}
+                                                                          
+                                                                            {{#if (checkStatus ../this.status) }}
+                                                                              <td class="text-danger" >{{../this.status}}
                                                                             </td>
-                                                                            <td ><a href="/orders/trackOrder/{{this.productId}}/{{../this._id}}"><button
-                                                                                    class="btn btn-outline-primary-2">Track Package</button></a>
+                                                                            <td>
+                                                                                <button class="btn btn-outline-primary-2" disabled>Track
+                                                                                        Order</button>
                                                                             </td>
+                                                                            {{else}}
+                                                                              <td class="text-white" id="">{{this.shippingStatus}}
+                                                                            </td>
+                                                                            <td><a
+                                                                                    href="/orders/trackOrder/{{this.productId}}/{{../this._id}}"><button
+                                                                                        class="btn btn-outline-primary-2 ">Track
+                                                                                        Order</button></a>
+                                                                            </td>
+                                                                            {{/if}}
                                                                         </tr>
                                                                         {{/each}}
 
@@ -350,12 +357,12 @@
                                                                 <td class="text-success" id="">₹ {{this.amount}}
                                                                 </td>
                                                                 {{else}}
-                                                                 <td class="text-danger ml-3 ">Debit
+                                                                <td class="text-danger ml-3 ">Debit
                                                                 </td>
                                                                 <td class="text-danger" id="">₹ {{this.amount}}
                                                                 </td>
                                                                 {{/if}}
-     
+
                                                             </tr>
                                                             {{/each}}
 
@@ -996,40 +1003,6 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-
-    function cancelOrder(orderId) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You are about to cancel this product!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, cancel it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                /*.................................................................AJAX..................................................*/
-                $.ajax({
-                    url: '/order/cancel/' + orderId,
-                    method: "get",
-                    success: (order) => {
-                        Swal.fire(
-                            'Cancelled!',
-                            'The Order has been cancelled .',
-                            'success',
-                        ),
-                            /*    document.getElementById(orderId).style.color = "#ff0000"; */
-                            document.getElementById(orderId).innerText = "Cancelled";
-                        document.getElementById("cancel" + orderId).style.display = "none"
-
-
-                    }
-                })
-                /*.................................................................AJAX..................................................*/
-            }
-        })
-
-    }
 
     function showProducts(orderId) {
         let status = document.getElementById('product' + orderId).style.display

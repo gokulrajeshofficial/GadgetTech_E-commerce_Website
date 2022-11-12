@@ -50,6 +50,8 @@ module.exports={
                         PriceOg:1,
                         Price:1,
                         color:1,
+                        offer:1,
+                        oldPrice:1,
                         Category:{ $arrayElemAt : ['$categoryName',0]},
                         Brand:{ $arrayElemAt : ['$brandName',0]},
                     }
@@ -64,6 +66,12 @@ module.exports={
                 brands : brands
             }
             resolve(response);
+        })
+    },
+    getAllProductOffer : ()=>{
+        return new Promise (async(resolve,reject)=>{
+            let products = await db.get().collection('product').find().toArray();
+            resolve(products);
         })
     },
     getAllProducts :()=>{
@@ -97,6 +105,8 @@ module.exports={
                             PriceOg:1,
                             Price:1,
                             color:1,
+                            offer:1,
+                            oldPrice:1,
                             Category:{ $arrayElemAt : ['$categoryName',0]},
                             Brand:{ $arrayElemAt : ['$brandName',0]},
                         }
@@ -139,9 +149,11 @@ module.exports={
                             ShortDes:1,
                             Des:1,
                             Qty:1,
-                            PriceOg:1,
                             Price:1,
                             color:1,
+                            offer:1,
+                            oldPrice:1,
+
                             Category:{ $arrayElemAt : ['$categoryName',0]},
                             Brand:{ $arrayElemAt : ['$brandName',0]},
                         }
@@ -182,6 +194,37 @@ module.exports={
 
             }}).then((response)=>{resolve(response); })
         });
+
+    },
+    addOffer : (proId , offer , proPrice )=>{
+        return new Promise((resolve , reject )=>{
+        
+            offer= parseInt(offer)
+            proPrice= parseInt(proPrice)
+            let newPrice = proPrice - ((parseInt(offer)/100) * proPrice)
+            newPrice= parseInt(newPrice)
+
+            db.get().collection('product').updateOne({_id : objectId(proId)},
+            {
+                $set : {offer : offer , Price : newPrice , oldPrice : proPrice}
+            })
+            resolve(newPrice)
+        })
+
+    },
+    deleteOffer : (proId , oldPrice)=>{
+        return new Promise((resolve,reject)=>{
+            console.log("oldPrice" + oldPrice)
+            oldPrice = parseInt(oldPrice)
+            db.get().collection('product').updateOne({_id : objectId(proId)},
+            {
+                 $set : {  Price : oldPrice},
+                 $unset : {offer : ""  , oldPrice : ""}
+            }).then((data)=>{
+                console.log(data)
+                resolve()
+            })
+        })
 
     }
 }

@@ -450,11 +450,36 @@ router.patch('/updateOrders',(req,res)=>{
   })
 })
 
+router.get('/product/offer',async(req,res)=>{
+  let products = await  productHelper.getAllProductOffer()
+  res.render('admin/offerManagement',{admin : true , products})
+})
+
+router.post('/product/addOffer',(req,res)=>{
+  productHelper.addOffer(req.body.proId , req.body.offer , req.body.proPrice).then((data)=>{
+    res.json(data);
+  })
+})
+router.delete('/product/deleteOffer',(req,res)=>{
+  productHelper.deleteOffer(req.body.proId , req.body.oldPrice).then((data)=>{
+    res.json(data)
+
+  })
+})
+
+router.get('/notifications',async(req,res)=>{ 
+ let orders = await orderHelper.returnApprovalOrders();
+res.render('admin/notifications',{admin : true , orders})
+})
+
 router.get('/coupons',(req,res)=>{
+
+  res.render('admin/coupon',{admin : true ,})
  
 })
 
-router.get('/admin/addCoupons',(req,res)=>{
+router.get('/coupons/add',(req,res)=>{
+  res.render('admin/addCoupon',{admin : true})
 
 })
 

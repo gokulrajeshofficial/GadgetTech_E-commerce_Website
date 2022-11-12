@@ -56,8 +56,8 @@ module.exports = {
             db.get().collection('order').updateOne({ _id: objectId(orderId) },
                 {
                     $set: {
-                        paymentStatus: 'placed',
-                        status: 'Preparing for Dispatch'
+                        paymentStatus: 'Placed',
+                        status: 'Order Placed'
                     }
                 }).then((data) => {
                     console.log(data)

@@ -392,9 +392,9 @@ module.exports.orderPage = async (req, res) => {
 }
 
 module.exports.orderCancel = (req, res) => {
-  console.log(req.params.id);
-  orderHelper.refundWallet(req.session.user._id , req.params.id).then(()=>{
-    orderHelper.cancelOrder(req.params.id).then((data) => {
+  console.log(req.query);
+ orderHelper.refundWallet(req.session.user._id , req.query.orderId , req.query.proId).then(()=>{
+     orderHelper.cancelOrder(req.query.orderId , req.query.proId).then((data) => {
       console.log(data)
       res.json("success") 
     })

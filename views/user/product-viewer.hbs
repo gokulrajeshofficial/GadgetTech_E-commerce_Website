@@ -106,19 +106,30 @@
                                     <div class="product-details product-details-sidebar">
                                         <h1 class="product-title">{{product.Name}}</h1><!-- End .product-title -->
 
-                                        <div class="ratings-container">
+                                        {{!-- <div class="ratings-container">
                                             <div class="ratings">
                                                 <div class="ratings-val" style="width: 80%;"></div>
                                                 <!-- End .ratings-val -->
                                             </div><!-- End .ratings -->
                                             <a class="ratings-text" href="#product-review-link" id="review-link">( 2
                                                 Reviews )</a>
-                                        </div><!-- End .rating-container -->
+                                        </div><!-- End .rating-container --> --}}
+                                        {{#if product.offer}}
+                                        <p class="mb-2 ml-2"><span class="badge badge-light"  style="font-size: medium;">Offer :
+                                                {{product.offer}}% OFF</span></p>
+                                        <div class="product-price">
+                                             ₹ {{product.Price}}
+                                           
+                                        </div><!-- End .product-price -->
+                                        <strike class="text-danger">
+                                            <p class="text-danger"> MRP : ₹ {{product.oldPrice}} </p>
+                                        </strike>
 
+                                        {{else}}
                                         <div class="product-price">
                                             ₹ {{product.Price}}
                                         </div><!-- End .product-price -->
-
+                                        {{/if}}
                                         <div class="product-content">
                                             <p>{{product.ShortDes}}</p>
                                         </div><!-- End .product-content -->
@@ -148,15 +159,15 @@
 
                                         <div class="product-details-action">
                                             <div class="details-action-col">
-                                              
+
                                                 <label for="qty">Qty:</label>
-                                                  {{#if (checkquantity product.Qty) }}
+                                                {{#if (checkquantity product.Qty) }}
                                                 <div class="product-details-quantity">
                                                     <input type="number" id="qty" class="form-control" value="1" min="0"
                                                         onchange="changeQty(event)" max="{{product.Qty}}" step="1"
                                                         data-decimals="0" required>
                                                 </div><!-- End .product-details-quantity -->
-                                                
+
                                                 <button id="addToCart"
                                                     onclick=" call('{{product._id}}','{{product.Name}}')"
                                                     style="height: 5rem " class="btn  btn-outline-primary-2  "><i
@@ -166,7 +177,7 @@
                                                     class="btn btn-block btn-outline-primary-2 text-danger disabled">Out
                                                     of Stock</button>
                                                 {{/if}}
-                                                
+
                                             </div><!-- End .details-action-col -->
 
                                             <div class="details-action-wrapper">
