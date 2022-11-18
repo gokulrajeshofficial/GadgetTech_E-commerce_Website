@@ -131,6 +131,17 @@ Handlebars.registerHelper("checkquantity", (quantity) => {
     return false
   }
 })
+Handlebars.registerHelper("checkDate", (expDate) => {
+  let d = new Date;
+  let thisDate= d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+  console.log(thisDate)
+  if (thisDate <= expDate) 
+  {
+    return true
+  } else {
+    return false
+  }
+})
 
 
 app.use('/', usersRouter);

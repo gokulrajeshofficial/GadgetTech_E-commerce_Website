@@ -25,12 +25,12 @@ module.exports = {
         })
 
     },
-    cancelOrder: (orderId , prodId) => {
+    cancelOrder: (orderId, prodId) => {
         return new Promise((resolve, reject) => {
             db.get().collection('order').updateOne({ _id: objectId(orderId), 'products.productId': objectId(prodId) },
-            {
-                $set: { 'products.$.shippingStatus': 'Cancelled' }
-            }).then((data) => {
+                {
+                    $set: { 'products.$.shippingStatus': 'Cancelled' }
+                }).then((data) => {
                     resolve(data);
                 })
 
@@ -102,10 +102,11 @@ module.exports = {
         })
     },
     changeOrderStatusReturn: (orderId, status, message, prodId) => {
+
         return new Promise((resolve, reject) => {
             db.get().collection('order').updateOne({ _id: objectId(orderId), 'products.productId': objectId(prodId) },
                 {
-                    $set: { 'products.$.shippingStatus': status , 'products.$.message': message}
+                    $set: { 'products.$.shippingStatus': status, 'products.$.message': message }
                 }).then((data) => {
                     console.log(data)
                     resolve();
@@ -113,8 +114,8 @@ module.exports = {
 
         })
     },
-    returnApprovalOrders : ()=>{
-        return new Promise(async(resolve,reject)=>{
+    returnApprovalOrders: () => {
+        return new Promise(async (resolve, reject) => {
 
             let orders = await db.get().collection('order').aggregate([
 
@@ -122,17 +123,21 @@ module.exports = {
                     $unwind: '$products',
                 },
                 {
-                    $match: { 'products.shippingStatus': "Return Requested" }
+                    $match: { $or: [{ 'products.shippingStatus': "Return Requested" }, { 'products.shippingStatus': "Return Approved" }] }
                 }
             ]).toArray()
 
-            console.log(orders)
             resolve(orders)
         })
     },
     getWallet: (userId) => {
         return new Promise(async (resolve, reject) => {
             let wallet = await db.get().collection('wallet').findOne({ userId: objectId(userId) })
+          wallet.transaction = wallet.transaction.reverse()
+          wallet.transaction.forEach((transaction)=>{
+            d = transaction.date
+            transaction.date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear()+ "  " +  d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() 
+        })
             resolve(wallet)
         })
 
@@ -174,7 +179,8 @@ module.exports = {
             order = order[0];
             console.log(order)
             console.log(userId)
-            if (order.payment != "COD") {
+            if (order.payment != "COD") 
+            {
                 let referalData = {
                     amount: order.products.total,
                     date: new Date(),
@@ -191,13 +197,35 @@ module.exports = {
                         console.log(data)
                         resolve(data)
                     })
-            
-            }else{
+
+            } else {
                 console.log("COD ")
-                
+                if (order.products.shippingStatus == 'Return Approved') 
+                {
+                    let referalData = {
+                        amount: order.products.total,
+                        date: new Date(),
+                        transactionId: objectId(orderId)
+                    };
+    
+    
+                    db.get().collection('wallet').updateOne({ userId: objectId(userId) },
+                        {
+                            $inc: { walletTotal: order.products.total },
+                            $push: { transaction: referalData }
+    
+                        }).then((data) => {
+                            console.log(data)
+                            resolve(data)
+                        })
+
+                } else 
+                {
                     resolve()
-                }  
-            
+                }
+
+            }
+
 
         })
 

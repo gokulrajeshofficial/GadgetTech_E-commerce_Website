@@ -96,7 +96,7 @@
                     <div class="row mb-3">
                       <label for="inputText" id="strImgLabel"  class="col-sm-7 col-form-label">The Stored Image</label>
                       <div class="col-sm-11 ">
-                      <img style="width: 15rem;" id="strImg" src="/category-images/{{category._id}}.png">
+                      <img style="width: 15rem;" id="strImg" src="/images/category/{{category.img}}">
                       </div>
                     </div>
 
@@ -105,7 +105,7 @@
                       <label for="inputNumber" class="col-sm-7 col-form-label">Category Image(New)</label>
                       <div class="col-sm-11">
                         <input class="form-control" type="file" onchange="changeImg(event)" name="categoryImg" id="formFile" multiple />
-                      </div>
+                      </div> 
                     </div>
 
                   </div>

@@ -19,7 +19,7 @@ body {
 }
 
 a {
-  color: #4154f1;
+  color: #88b639;
   text-decoration: none;
 }
 
@@ -76,7 +76,7 @@ h6 {
   right: 15px;
   bottom: 15px;
   z-index: 99999;
-  background: #4154f1;
+  background: #88b639;
   width: 40px;
   height: 40px;
   border-radius: 4px;
@@ -310,7 +310,7 @@ h6 {
 
 .accordion-flush .accordion-button:not(.collapsed) {
   box-shadow: none;
-  color: #4154f1;
+  color: #88b639;
 }
 
 .accordion-flush .accordion-body {
@@ -353,18 +353,18 @@ h6 {
 .nav-tabs-bordered .nav-link {
   margin-bottom: -2px;
   border: none;
-  color: #2c384e;
+  color: #c3c3c3;
 }
 
 .nav-tabs-bordered .nav-link:hover,
 .nav-tabs-bordered .nav-link:focus {
-  color: #4154f1;
+  color: #88b639;
 }
 
 .nav-tabs-bordered .nav-link.active {
-  background-color: #fff;
-  color: #4154f1;
-  border-bottom: 2px solid #4154f1;
+  background-color: #353a3f;
+  color: #88b639;
+  border-bottom: 2px solid #88b639;
 }
 
 /*--------------------------------------------------------------
@@ -713,7 +713,7 @@ h6 {
 .sidebar-nav .nav-link i {
   font-size: 16px;
   margin-right: 10px;
-  color: #4154f1;
+  color: #88b639;
 }
 
 .sidebar-nav .nav-link.collapsed {
@@ -731,7 +731,7 @@ h6 {
 }
 
 .sidebar-nav .nav-link:hover i {
-  color: #4154f1;
+  color: #88b639;
 }
 
 .sidebar-nav .nav-link .bi-chevron-down {
@@ -769,11 +769,11 @@ h6 {
 
 .sidebar-nav .nav-content a:hover,
 .sidebar-nav .nav-content a.active {
-  color: #4154f1;
+  color: #88b639;
 }
 
 .sidebar-nav .nav-content a.active i {
-  background-color: #4154f1;
+  background-color: #88b639;
 }
 
 /*--------------------------------------------------------------
@@ -796,7 +796,7 @@ h6 {
 
 .dashboard .filter .icon:hover,
 .dashboard .filter .icon:focus {
-  color: #4154f1;
+  color: #88b639;
 }
 
 .dashboard .filter .dropdown-header {
@@ -840,7 +840,7 @@ h6 {
 }
 
 .dashboard .sales-card .card-icon {
-  color: #4154f1;
+  color: #88b639;
   background: #f6f6fe;
 }
 
@@ -925,7 +925,7 @@ h6 {
 }
 
 .dashboard .news h4 a:hover {
-  color: #4154f1;
+  color: #88b639;
 }
 
 .dashboard .news p {
@@ -1073,7 +1073,7 @@ h6 {
 .faq .basic h6 {
   font-size: 18px;
   font-weight: 600;
-  color: #4154f1;
+  color: #88b639;
 }
 
 .faq .basic p {
@@ -1090,7 +1090,7 @@ h6 {
 .contact .info-box i {
   font-size: 38px;
   line-height: 0;
-  color: #4154f1;
+  color: #88b639;
 }
 
 .contact .info-box h3 {
@@ -1158,7 +1158,7 @@ h6 {
 
 .contact .php-email-form input:focus,
 .contact .php-email-form textarea:focus {
-  border-color: #4154f1;
+  border-color: #88b639;
 }
 
 .contact .php-email-form input {
@@ -1170,7 +1170,7 @@ h6 {
 }
 
 .contact .php-email-form button[type=submit] {
-  background: #4154f1;
+  background: #88b639;
   border: 0;
   padding: 10px 30px;
   color: #fff;
@@ -1212,7 +1212,7 @@ h6 {
 .error-404 h1 {
   font-size: 180px;
   font-weight: 700;
-  color: #4154f1;
+  color: #88b639;
   margin-bottom: 0;
   line-height: 150px;
 }

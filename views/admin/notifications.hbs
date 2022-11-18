@@ -51,47 +51,123 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/admin">Home</a></li>
                     <li class="breadcrumb-item active">Notifications</li>
-                    
+
                 </ol>
             </nav>
         </div><!-- End Page Title --> --}}
 
-    <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
 
-          <div class="card">
-            <div class="card-body">
-              <center><h3 class="mt-3" style="font-weight: 800 ;">Notification</h3></center> 
+                    <div class="">
+                        <div class="">
+                            <center>
+                                <h3 class="mt-3" style="font-weight: 800 ;">Notification</h3>
+                            </center>
 
-              <!-- Default Accordion -->
-              <div class="accordion" id="accordionExample">
-                {{#each orders}}
-                <div class="accordion-item">
-                 <h2 class="accordion-header " id="headingOne">
-                    <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      <strong class="ms-auto"> Return Request - (OrderId - {{}})</strong>
-                    </button>
-                  </h2>
+                            <!-- Default Accordion -->
+                            <div class="accordion " id="accordionExample">
+                                {{#each orders}}
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header " id="headingOne">
 
-                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                      <strong>This is the first item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                          {{#if (checkReturned this.products.shippingStatus)}}
+                                           <button class="accordion-button bg-dark text-success" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne" aria-expanded="true"
+                                            aria-controls="collapseOne">
+                                            <strong class="ms-auto"> Return Approved - (OrderId - {{this._id}})</strong>
+                                        </button>
+
+                                          {{else}}
+                                        <button class="accordion-button bg-dark text-white" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne" aria-expanded="true"
+                                            aria-controls="collapseOne">
+                                            <strong class="ms-auto"> Return Request - (OrderId - {{this._id}})</strong>
+                                        </button>
+
+                                        {{/if}}
+                                    </h2>
+
+                                    <div id="collapseOne" class="accordion-collapse collapse "
+                                        aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body" style="background-color: rgb(83, 83, 83) ;">
+
+                                            <section style="background-color: rgb(114, 114, 114); border-radius: 1rem;">
+                                                            <div class="card shadow-0  rounded-3">
+                                                                <div class="card-body pt-3" style="background-color: rgb(36, 36, 36);" >
+                                                                    <div class="row text-white">
+                                                                        <div class="col-md-12 col-lg-3 col-xl-3 mb-1   mb-lg-0">
+                                                                            <div
+                                                                                class="bg-image hover-zoom ripple rounded ripple-surface">
+                                                                                <img src="/images/product/{{this.products.img.[0]}}"
+                                                                                    class="w-100" />
+                                                                                <a href="#!">
+                                                                                    <div class="hover-overlay">
+                                                                                        <div class="mask"
+                                                                                            style="background-color: rgba(253, 253, 253, 0.15);">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-6 col-lg-6 col-xl-6 pt-2">
+                                                                            <h5>{{this.products.product.Name}}</h5>
+                                                                            <div class="d-flex flex-row">
+                                                                                <div class="text-danger mb-1 me-2">
+                                                                                    <i class="fa fa-star"></i>
+                                                                                    <i class="fa fa-star"></i>
+                                                                                    <i class="fa fa-star"></i>
+                                                                                    <i class="fa fa-star"></i>
+                                                                                </div>
+                                                                                
+                                                                                
+                                                                            </div>
+                                                                            <h6>Price : {{this.products.product.Price}}</h6>
+                                                                            <span>Qty : {{this.products.quantity}}</span>
+                                                                            <p class="text-truncate mt-3 mb-4 mb-md-0">
+                                                                                <strong>Reason for return : </strong>
+                                                                                {{this.products.message}}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div
+                                                                            class="col-md-6 col-lg-3 col-xl-3 pt-4 border-sm-start-none border-start">
+                                                                            <div
+                                                                                class="d-flex flex-row align-items-center mb-1">
+                                                                                <h6 class="mb-1 me-1">Refund :<span class="ms-2" style="font-size: 1.2rem;color: green;">₹ {{this.total}}</span></h6>
+                                                                             
+                                                                            </div>
+                                                                            
+                                                                            <div class="d-flex flex-column mt-4">
+                                                                                {{#if (checkReturned this.products.shippingStatus)}}
+                                                                                <button style="height: 3rem ;"  class="btn btn-success btn-sm"
+                                                                                    type="button" disabled>{{this.products.shippingStatus}}</button>
+                                                                                {{else}}
+                                                                                <button id="btn{{this._id}}"  style="height: 3rem ;" onclick="approveReturn('{{this._id}}','{{this.products.productId}}','{{this.products.message}}',{{this.userId}})" class="btn btn-primary btn-sm"
+                                                                                    type="button">Approve Return</button>
+                                                                                {{/if}}
+                                                                             
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/each}}
+
+                            </div><!-- End Default Accordion Example -->
+
+                        </div>
                     </div>
-                  </div>
+
                 </div>
-                {{/each}}
-                
-              </div><!-- End Default Accordion Example -->
+
 
             </div>
-          </div>
-
-        </div>
-
-
-      </div>
-    </section>
+        </section>
 
     </main>
     <!-- End #main -->
@@ -129,6 +205,21 @@
 
     <script src="/adminassets/js/main.js"></script>
 
-</body>
-
-</html>
+    <script>
+        function approveReturn(orderId , proId , msg , userId)
+        {
+            $.ajax({
+                url : '/admin/returnApproved',
+                type : 'PATCH',
+                data : {orderId , proId , msg , userId},
+                success : (response)=>{
+                   
+                    console.log(response)
+                    document.getElementById('btn'+orderId).innerText = "Return Approved"
+                 
+                     document.getElementById('btn'+orderId).disabled = true
+                    
+                }
+            })
+        }
+    </script>

@@ -53,7 +53,10 @@ module.exports = {
         {
             console.log(brandData)
             await db.get().collection('brand').updateOne({_id:objectId(brandId)},{$set : {
-                brand : brandData.brand}}).then((response)=>{
+                brand : brandData.brand , 
+                img : brandData.img , 
+
+            }}).then((response)=>{
                     resolve(response); 
                 })
         });

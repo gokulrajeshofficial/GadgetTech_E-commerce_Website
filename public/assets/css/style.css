@@ -678,7 +678,7 @@ blockquote.text-white cite span {
     max-width: 100%;
     height: auto
 }
-
+ 
 .header-top {
     font-weight: 300;
     font-size: 1.3rem;
@@ -3130,6 +3130,69 @@ p {
     letter-spacing: 0;
     color: #666
 }
+
+
+
+
+
+
+
+
+
+.autocomplete {
+    position: relative;
+    display: inline-block;
+  
+  }
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #1a1a1a;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+  }
+  
+  .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #b0b0b0; 
+    padding-top: 20px;
+    color: #20cb55;
+  
+  }
+  
+  /*when hovering an item:*/
+  .autocomplete-items div:hover {
+    background-color: #a6c76c; 
+
+  }
+  
+  /*when navigating through the items using the arrow keys:*/
+  .autocomplete-active {
+    background-color: DodgerBlue !important;  
+    color: #a6c76c;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .header-2 {
     background-color: #fff
@@ -6450,10 +6513,10 @@ p {
 }
 
 .icon-boxes-container {
-    background-color: #f7f7f7;
-    padding-top: 2.8rem;
-    padding-bottom: 2.8rem;
-    margin-bottom: 0
+    background-color: #000000;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    margin-bottom: 1rem
 }
 
 .icon-boxes-container.bg-dark .icon-box-icon {

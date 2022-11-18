@@ -19,7 +19,11 @@ module.exports = {
     },
     getAllBanners : ()=>{
         return new Promise(async(resolve,reject)=>{
-            let banners = await db.get().collection('banner').find().toArray();
+            let banners = {}
+             banners.main = await db.get().collection('banner').find({banner : 'Banner Top Main'}).toArray();
+             banners.midLarge = await db.get().collection('banner').find({banner : 'Banner Middle Large'}).toArray();
+             banners.midsmall = await db.get().collection('banner').find({banner : 'Banner Middle small'}).toArray();
+             banners.footer = await db.get().collection('banner').find({banner : 'Banner footer'}).toArray();
             resolve(banners);
         })
     },
@@ -37,10 +41,13 @@ module.exports = {
         {
             console.log(bannerData)
             db.get().collection('banner').updateOne({_id:objectId(bannerId)},{$set : {
+                banner : bannerData.banner,
                 subTitle : bannerData.subTitle ,
                 title1 : bannerData.title1,
                 title2 : bannerData.title2,
-                price : bannerData.price
+                price : bannerData.price,
+                link : bannerData.link,
+                img : bannerData.img
             }}).then((response)=>{
                 console.log(response)
                     resolve(response); 

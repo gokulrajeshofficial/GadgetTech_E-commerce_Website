@@ -8,7 +8,7 @@ module.exports={
         product.Category = objectId(product.Category);
         product.Brand = objectId(product.Brand);
         product.Price = parseInt(product.Price);
-
+ 
         return new Promise((resolve,reject)=>{
         console.log(product)
         db.get().collection('product').insertOne(product).then((data)=>{
@@ -52,6 +52,7 @@ module.exports={
                         color:1,
                         offer:1,
                         oldPrice:1,
+                        img:1,
                         Category:{ $arrayElemAt : ['$categoryName',0]},
                         Brand:{ $arrayElemAt : ['$brandName',0]},
                     }
@@ -105,11 +106,15 @@ module.exports={
                             PriceOg:1,
                             Price:1,
                             color:1,
+                            img:1,
                             offer:1,
                             oldPrice:1,
                             Category:{ $arrayElemAt : ['$categoryName',0]},
                             Brand:{ $arrayElemAt : ['$brandName',0]},
                         }
+                    },
+                    {
+                        $sort : {Name : 1}
                     }
                 ]).toArray()
                 console.log(products);
@@ -151,6 +156,7 @@ module.exports={
                             Qty:1,
                             Price:1,
                             color:1,
+                            img:1,
                             offer:1,
                             oldPrice:1,
 
@@ -159,6 +165,7 @@ module.exports={
                         }
                     }
                 ]).toArray()
+                console.log("***********************************************")
                 console.log(products)
                 resolve(products)
             })
@@ -185,11 +192,11 @@ module.exports={
                 ShortDes: product.ShortDes,
                 Des : product.Des,
                 Qty :product.Qty,
-                PriceOg:product.PriceOg,
                 Price : product.Price,
                 color :product.color,
                 Category :product.Category ,
-                Brand : product.Brand
+                Brand : product.Brand , 
+                img : product.img
 
 
             }}).then((response)=>{resolve(response); })
@@ -224,6 +231,62 @@ module.exports={
                 console.log(data)
                 resolve()
             })
+        })
+
+    },
+    searchSuggestion :(keyword)=>{
+        return new Promise(async(resolve,reject)=>{
+            let search = await db.get().collection('product').find({Name : {$regex : "(?i)"+keyword }}).toArray()
+            resolve(search)
+
+        })
+
+    },
+    searchProduct :(keyword)=>{
+        return new Promise(async(resolve,reject)=>{
+            let search = await db.get().collection('product').aggregate([
+                {
+                    $lookup:{
+                        from:'category',
+                        localField:'Category',
+                        foreignField:'_id',
+                        as:'categoryName'
+
+                    }
+                },
+                {
+                    $lookup:{
+                        from:'brand',
+                        localField:'Brand',
+                        foreignField:'_id',
+                        as:'brandName'
+
+                    }
+                },
+                {
+                    $project:{
+                        Name:1,
+                        ShortDes:1,
+                        Des:1,
+                        Qty:1,
+                        PriceOg:1,
+                        Price:1,
+                        color:1,
+                        img:1,
+                        offer:1,
+                        oldPrice:1,
+                        Category:{ $arrayElemAt : ['$categoryName',0]},
+                        Brand:{ $arrayElemAt : ['$brandName',0]},
+                    }
+                },
+                {
+                    $match : {"Name" : {$regex : new RegExp( keyword , "i")}}
+                }
+
+            ]).toArray()
+            console.log(search)
+            resolve(search)
+
         })
 
     }

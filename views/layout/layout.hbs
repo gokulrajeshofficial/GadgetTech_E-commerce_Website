@@ -2,12 +2,19 @@
     {{#if admin}}
     {{>admin-header}}
     {{else if signin}}
-
+    {{!-- no header for signin page --}}
     {{else}}
     {{>user-header}}
     {{/if}}
     {{{body}}}
+    {{#if admin}}
+     {{!-- no footer for admin --}}
+    {{else if signin}}
+    {{!-- no footer for signin --}}
+    {{else}}
+    {{>user-footer}}
+    {{/if}}
   </body>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script src="/javascripts/script.js"></script>
+  <script defer src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script defer src="/javascripts/script.js"></script>
 </html>

@@ -14,6 +14,7 @@ const addressHelper = require("../helpers/address-helper");
 const orderHelper = require("../helpers/order-helpers");
 const paymentHelper = require("../helpers/payment-helper");
 const wishlistHelper = require("../helpers/wishlist-helper")
+const couponHelper = require('../helpers/coupon-helpers')
 const objectId = require('mongodb').ObjectId;
 
 const dotenv = require('dotenv').config()
@@ -35,6 +36,7 @@ paypal.configure({
 const { userValidation } = require('../controller/validation');
 const { userHomePage, categoryPage, forgetPasswordModal, forgetPasswordModalVerify, forgetPasswordChangePasswordModal, viewProductPage, cartPage, addProductToCart, deleteProductInCart, updateProductQuantityInCart, checkoutPage, placeOrder, razorPayVerifyPayment, orderPage, orderCancel, orderRetryPayment, addressAddRequest, addressDeleteRequest,  addressGetRequest, addressEditRequest, paypalVerifyRequest, transcationFailurePage, transcationSuccessfulPage } = require("../controller/userController");
 const { signInSubmit, signInPage, registerSubmit, logOut, loginOtpPage, loginOtpSendCode, loginOtpVerifyCode } = require("../controller/userSigninController");
+const { Router, response } = require("express");
 
 
 //<---------------------------------------------Home Page------------------------------------->
@@ -72,6 +74,23 @@ router.patch('/forgetPassword/changePassword', forgetPasswordChangePasswordModal
 
 //<----------------------------------------- Category Page -------------------------------------->
 router.get("/category/:id", categoryPage);
+
+//<--------------------------------------Product View Page -------------------------------------->
+router.get("/products", async(req,res)=>{
+  let user = req.session.user;
+  let categories = await categoryHelper.getAllCategory()
+
+  if (req.session.user) {
+    let cartCount = await cartHelper.getCartCount(req.session.user._id)
+    req.session.user.cartCount = cartCount;
+  }
+  productHelper.getAllProducts().then((products) => {
+    let category
+    
+    res.render("user/category-page", { products,categories, user });
+  });
+
+})
 
 //<--------------------------------------Product View Page -------------------------------------->
 router.get("/product/:id", viewProductPage)
@@ -199,13 +218,42 @@ router.post('/orders/returnOrder',userValidation , (req,res)=>{
  let status = "Return Requested"
  orderHelper.changeOrderStatusReturn(req.body.orderId , status , req.body.msg , req.body.proId ).then(()=>{
   res.json(status)
- })
+ }) 
  
 })
 
+router.get('/search',async(req,res)=>{
+let keyword = req.query.q;
+console.log(keyword)
+let products = await productHelper.searchProduct(keyword)
+console.log(products.length)
+if(products.length == 1)
+{
+  let product = products[0]
+  res.render('user/product-viewer', {product})
+}else
+{
+  res.render('user/category-page',{products})
+}
+})
 
+router.post('/search',(req,res)=>{
+  let payload = req.body.payload
+   productHelper.searchSuggestion(payload).then((search)=>{
+    res.json(search)
+   })
+})
 
+router.get('/couponCheck',(req,res)=>{
+  let coupon = req.query.coupon;
+  console.log(coupon)
+ couponHelper.getCoupon(coupon).then((data)=>{
+  res.json(data)
+ }).catch((err)=>{
+  console.log("catch")
+  res.json(err=false)
+ })
 
-
+})
 
 module.exports = router;

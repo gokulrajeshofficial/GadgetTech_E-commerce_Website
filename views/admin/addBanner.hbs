@@ -74,6 +74,18 @@
                                             <p class="text-danger" style="font-size:1.0rem ;">{{err_message}}</p>
                                         </center>
 
+                                        <div class="row mb-3">
+                                            <label for="banner" class="col-sm-7 col-form-label">Choose the Banner</label>
+                                            <div class="col-sm-11">
+                                                <select name="banner" style="width: 100% ;height: 2.5rem;" id="banner" required>
+                                                    <option >Banner Top Main</option>
+                                                    <option >Banner Middle Large</option>
+                                                    <option >Banner Middle small</option>
+                                                    <option >Banner footer</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
 
                                         <div class="row mb-3">
                                             <label for="inputText" class="col-sm-7 col-form-label">Subtitle</label>
@@ -101,6 +113,12 @@
                                             <label for="inputText" class="col-sm-7 col-form-label">Price</label>
                                             <div class="col-sm-11 ">
                                                 <input type="number" name="price" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="inputText" class="col-sm-7 col-form-label">Link</label>
+                                            <div class="col-sm-11 ">
+                                                <input type="text" name="link"  class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -165,7 +183,7 @@
     <script>
         function ChangeFile(event) {
             document.getElementById('strImg').src = URL.createObjectURL(event.target.files[0])
-            document.getElementById('showDiv').style.display="block";
+            document.getElementById('showDiv').style.display = "block";
         }
     </script>
     <!-- Vendor JS Files -->

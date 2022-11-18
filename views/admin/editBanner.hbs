@@ -66,13 +66,25 @@
 
 
                             <!-- General Form Elements -->
-                            <form class="mt-5" action="/admin/editBanner/{{banner._id}}" method="POST" enctype="multipart/form-data">
+                            <form class="mt-5" action="/admin/editBanner/{{banner._id}}" method="POST" >
                                 <div class="row mb-3 d-flex justify-content-around px-3">
 
                                     <div class="col-md-8 ">
                                         {{!-- <center>
                                             <p class="text-danger" style="font-size:1.0rem ;">{{err_message}}</p>
                                         </center> --}}
+                                        <div class="row mb-3">
+                                            <label for="banner" class="col-sm-7 col-form-label">Choose the Banner</label>
+                                            <div class="col-sm-11">
+                                                <select name="banner" style="width: 100% ;height: 2.5rem;" id="banner" required>
+                                                    <option selected>{{banner.banner}}</option>
+                                                    <option >Banner Top Main</option>
+                                                    <option >Banner Middle Large</option>
+                                                    <option >Banner Middle small</option>
+                                                    <option >Banner footer</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
 
                                         <div class="row mb-3">
@@ -103,13 +115,21 @@
                                                 <input type="number" name="price" value="{{banner.price}}" class="form-control" />
                                             </div>
                                         </div>
+
+                                         <div class="row mb-3">
+                                            <label for="inputText" class="col-sm-7 col-form-label">Link</label>
+                                            <div class="col-sm-11 ">
+                                                <input type="text" name="link" value="{{banner.link}}" class="form-control" />
+                                            </div>
+                                        </div>
+
                                         <div class="row mb-3">
                                             <label for="" class="col-sm-7 col-form-label">Banner Image</label>
                                             <div class="col-sm-11">
                                                 <input class="form-control" onchange="ChangeFile(event)" type="file"
                                                     name="bannerImg" id="formFile" />
                                             </div>
-                                        </div>
+                                        </div> 
 
                                         <div class="row mb-1" id="showDiv" >
                                             <label for="" id="strimg" class="col-sm-7 col-form-label">Stored Image</label>

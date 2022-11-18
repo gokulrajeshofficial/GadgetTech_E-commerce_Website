@@ -3,26 +3,55 @@ const multer= require('multer')
 // handle storage using multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/productImages')
+        cb(null, 'public/images/product')
     },
     filename: (req, file, cb) => {
         cb(null, Date.now()+ "-" +file.originalname)
     }
 });
- const upload = multer({ storage: storage });
+ const uploadProduct = multer({ storage: storage });
 
+// Banner storage using multer
+const storage1 = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/images/banner')
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now()+ "-" +file.originalname)
+    }
+});
+ const uploadBanner = multer({ storage: storage1 });
 
-// handle storage using multer
+// Brand storage using multer
 const storage2 = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/images/brand')
     },
     filename: (req, file, cb) => {
-        b(null, Date.now()+ "-" +file.originalname)
+        cb(null, Date.now()+ "-" +file.originalname)
     }
 });
- const upload2 = multer({ storage: storage2 });
+ const uploadBrand = multer({ storage: storage2 });
+
+ // Brand storage using multer
+const storage3 = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/images/category')
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now()+ "-" +file.originalname)
+    }
+});
+ const uploadCategory = multer({ storage: storage3 });
+ 
+
+
+
+
+
  module.exports= {
-    upload,
-    upload2
+    uploadProduct,
+    uploadBanner,
+    uploadBrand,
+    uploadCategory
 };

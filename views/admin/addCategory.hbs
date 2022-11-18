@@ -62,29 +62,32 @@
               <center>
                 <h5 class="card-title" style="font-size:1.5rem ;">Add Category</h5>
               </center>
-                    {{!-- <div class="row mb-3">
-                      <label class="col-sm-7 col-form-label"> Brand of the Product</label>
-                      <div class="col-sm-11">
+              {{!-- <div class="row mb-3">
+                <label class="col-sm-7 col-form-label"> Brand of the Product</label>
+                <div class="col-sm-11">
 
-                        <div class="form-floating mb-3">
-                          <select class="form-select" id="floatingSelect" name="Brand" aria-label="Floating label select example">
-                            <option selected>Select the Brand</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                          </select>
-                          <label for="floatingSelect">Company / Brand</label>
-                        </div>
-                      </div>
-                    </div> --}}
+                  <div class="form-floating mb-3">
+                    <select class="form-select" id="floatingSelect" name="Brand"
+                      aria-label="Floating label select example">
+                      <option selected>Select the Brand</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
+                    <label for="floatingSelect">Company / Brand</label>
+                  </div>
+                </div>
+              </div> --}}
 
 
               <!-- General Form Elements -->
-              <form class="mt-5" action="/admin/add-category" method="POST" enctype="multipart/form-data">
+              <form class="mt-5" id="addCategoryForm" action="/admin/add-category" method="post" enctype="multipart/form-data">
                 <div class="row mb-3 d-flex justify-content-around px-3">
 
                   <div class="col-md-8 ">
-                    <center><p class="text-danger" style="font-size:1.0rem ;">{{err_message}}</p></center>
+                    <center>
+                      <p class="text-danger" style="font-size:1.0rem ;">{{err_message}}</p>
+                    </center>
                     <div class="row mb-3">
                       <label for="inputText" class="col-sm-7 col-form-label">New Category</label>
                       <div class="col-sm-11 ">
@@ -94,10 +97,10 @@
 
 
 
-                    <div class="row mb-3">
+                   <div class="row mb-3">
                       <label for="inputNumber" class="col-sm-7 col-form-label">Category Image</label>
                       <div class="col-sm-11">
-                        <input class="form-control" type="file" name="categoryImg" id="formFile" multiple />
+                        <input class="form-control" type="file" name="categoryImg" id="formFile" />
                       </div>
                     </div>
 
@@ -132,14 +135,6 @@
       &copy; Copyright
       <strong><span>NiceAdmin</span></strong>. All Rights Reserved
     </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-      Designed by
-      <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
   </footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
@@ -157,6 +152,34 @@
 
   <!-- Template Main JS File -->
   <script src="/adminassets/js/main.js"></script>
+  {{!-- <script>
+
+    $('#addCategoryForm').submit((e) => {
+        e.preventDefault();
+      console.log($('#addCategoryForm').serialize())
+    
+      $.ajax({
+        url: '/admin/add-category',
+        method: 'post',
+        data: $('#addCategoryForm').serialize(),
+        success: (response) => {
+          console.log(response)
+
+          Swal.fire(
+            'Good job!',
+            'You clicked the button!',
+            'success'
+          ).then(()=>{
+           // location.reload()
+
+          })
+
+        }
+
+      })
+    })
+
+  </script> --}}
 
 </body>
 

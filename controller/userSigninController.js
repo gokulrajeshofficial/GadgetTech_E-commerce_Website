@@ -67,6 +67,7 @@ module.exports.signInPage = (req, res, next) => {
   }
 
   module.exports.loginOtpSendCode = (req, res) => {
+  
     console.log("The Phone number is : " + req.body.phonenumber);
     userHelper.getPhoneNumber(req.body.phonenumber).then((response) => {
       req.session.user = response.user;
@@ -102,6 +103,7 @@ module.exports.signInPage = (req, res, next) => {
         res.json({ message, status: false })
       }
     })
+
   }
 
   module.exports.loginOtpVerifyCode  = (req, res) => {

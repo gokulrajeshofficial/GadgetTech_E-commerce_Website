@@ -12,6 +12,8 @@ const addressHelper = require("../helpers/address-helper");
 const orderHelper = require("../helpers/order-helpers");
 const paymentHelper = require("../helpers/payment-helper");
 const wishlistHelper = require("../helpers/wishlist-helper")
+const couponHelper = require('../helpers/coupon-helpers')
+
 const objectId = require('mongodb').ObjectId;
 
 
@@ -60,19 +62,22 @@ module.exports.userHomePage = (req, res, next) => {
 
 module.exports.categoryPage = async (req, res) => {
   let user = req.session.user;
+  let categories = await categoryHelper.getAllCategory()
+
   if (req.session.user) {
     let cartCount = await cartHelper.getCartCount(req.session.user._id)
     req.session.user.cartCount = cartCount;
   }
   productHelper.categoryProducts(req.params.id).then((products) => {
-    let category = {
-      _id: objectId(products[0].Category._id),
-      category: products[0].Category.category,
-    };
-
-    console.log(req.session.user);
-    console.log(category);
-    res.render("user/category-page", { products, category, user });
+    let category
+    if(products.length)
+    {
+      category = {
+        _id: objectId(products[0].Category._id),
+        category: products[0].Category.category,
+      };
+    }
+    res.render("user/category-page", { products,categories, category, user });
   });
 }
 
@@ -146,11 +151,12 @@ module.exports.forgetPasswordChangePasswordModal = (req, res) => {
   })
 }
 
-module.exports.viewProductPage = (req, res) => {
+module.exports.viewProductPage = async(req, res) => {
+  let categories = await categoryHelper.getAllCategory()
   productHelper.getProduct(req.params.id).then((response) => {
     product = response.product;
     let user = req.session.user;
-    res.render("user/product-viewer", { product, user });
+    res.render("user/product-viewer", { product, user ,categories });
   });
 }
 
@@ -244,19 +250,27 @@ module.exports.checkoutPage = (req, res) => {
 }
 
 module.exports.placeOrder = async (req, res) => {
-  console.log(req.body)
+  
   let data = req.body;
+  data.userId = req.session.user._id;
   cartTotal = await cartHelper.totalCartPrice(data.userId);
   let wallet = await orderHelper.getWallet(data.userId)
+  
+  if(data.coupon)
+  {
+    cartTotal.total = data.couponAmount
+  }
   data.orderTotal = cartTotal.total;
 
 
   if (data.walletCheck) {
     data.total = parseInt(cartTotal.total) - parseInt(wallet.walletTotal)
     if (data.total <= 0) {
-      wallet.walletTotal = wallet.walletTotal - cartTotal.total;
-      wallet.debit = -(wallet.walletTotal - cartTotal.total);
+     wallet.walletTotal = wallet.walletTotal - cartTotal.total;
+      wallet.debit = - cartTotal.total;
       data.total = 0
+      console.log("NO Money is payed ")
+      console.log(wallet.debit)
     } else {
       wallet.debit = - parseInt(wallet.walletTotal)
       wallet.walletTotal = 0
@@ -265,7 +279,7 @@ module.exports.placeOrder = async (req, res) => {
     data.total = parseInt(cartTotal.total)
   }
 
-
+  console.log("------------------------+++++++++++++++++++++++++-----------------------------")
   console.log(data.total);
   data.orderTime = new Date();
   let d = new Date()

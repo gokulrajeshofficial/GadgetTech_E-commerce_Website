@@ -40,6 +40,39 @@ function call(proId, proName) {
 }
 
 
+function searchData(e)
+{
+    const searchResults = document.getElementById('searchResults')
+fetch('/search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({payload : e.value}),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      let countries = []
+     
+      data.forEach((item,index)=>{
+
+            countries[index] = item.Name
+       
+      })
+      
+autocomplete(document.getElementById("myInput"), countries);
+  
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+    
+}
+
+
+
+
 function addtoWishlist(proId, proName) {
     console.log("addtoWishlist")
     $.ajax({
@@ -102,7 +135,7 @@ function razorpayPayment(order) {
         }
     };
     var rzp1 = new Razorpay(options);
-    rzp1.open();
+    rzp1.open(); 
 }
 function verifyPayment(payment, order) {
     $.ajax({
@@ -208,4 +241,6 @@ $('#editAddress').submit((e) => {
         }
     })
 })
+
+
 

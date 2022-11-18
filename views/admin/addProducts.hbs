@@ -25,7 +25,7 @@
   <link href="/adminassets/vendor/quill/quill.bubble.css" rel="stylesheet" />
   <link href="/adminassets/vendor/remixicon/remixicon.css" rel="stylesheet" />
   <link href="/adminassets/vendor/simple-datatables/style.css" rel="stylesheet" />
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.css">
   <!-- Template Main CSS File -->
   <link href="/adminassets/css/style.css" rel="stylesheet" />
 
@@ -55,14 +55,14 @@
 
     <section class="section ">
       <div class="row d-flex  justify-content-center">
-        <div class="col-lg-11 "> 
+        <div class="col-lg-11 ">
 
           <div class="card">
             <div class="card-body ">
-              <div class="row " >
-              <center>
-                <h5 class="card-title " style="">Add Products</h5>
-              </center>
+              <div class="row ">
+                <center>
+                  <h5 class="card-title " style="">Add Products</h5>
+                </center>
               </div>
 
               <!-- General Form Elements -->
@@ -97,17 +97,17 @@
                         <input type="number" name="Qty" class="form-control" />
                       </div>
                     </div>
-                    <div class="row mb-3">
+                    {{!-- <div class="row mb-3">
                       <label for="inputNumber" class="col-sm-7 col-form-label">Original Price</label>
                       <div class="col-sm-11">
-                        <input type="number" name="PriceOg" class="form-control" required/>
+                        <input type="number" name="PriceOg" class="form-control" required />
                       </div>
-                    </div>
+                    </div> --}}
 
                     <div class="row mb-3">
                       <label for="inputNumber" class="col-sm-7 col-form-label">Price</label>
                       <div class="col-sm-11">
-                        <input type="number" name="Price" class="form-control" required/>
+                        <input type="number" name="Price" class="form-control" required />
                       </div>
                     </div>
 
@@ -138,10 +138,10 @@
                     <div class="row mb-3">
                       <label class="col-sm-7 col-form-label">Select the category of the product</label>
                       <div class="col-sm-11">
-                        <select class="form-select" name="Category"  aria-label="Default select example">
-                         
+                        <select class="form-select" name="Category" aria-label="Default select example">
+
                           <option selected>Choose the category</option>
-                           {{#each categories}}
+                          {{#each categories}}
                           <option value="{{this._id}}">{{this.category}}</option>
                           {{/each}}
                         </select>
@@ -153,7 +153,8 @@
                       <div class="col-sm-11">
 
                         <div class="form-floating mb-3">
-                          <select class="form-select" id="floatingSelect" name="Brand" aria-label="Floating label select example">
+                          <select class="form-select" id="floatingSelect" name="Brand"
+                            aria-label="Floating label select example">
                             <option selected>Select the Brand</option>
                             {{#each brands}}
                             <option value="{{this._id}}">{{this.brand}}</option>
@@ -169,15 +170,36 @@
                     <div class="row mb-3">
                       <label for="inputNumber" class="col-sm-7 col-form-label">File Upload</label>
                       <div class="col-sm-11">
-                        <input class="form-control" onchange="changeImg(event)" type="file" name="Img" id="formFile" multiple />
+                        <input class="form-control" onchange="changeImg(event)" type="file" data-bs-toggle="modal"
+                data-bs-target="#exampleModal" name="Img" id="formFile"
+                          multiple />
                       </div>
                     </div>
 
-                     <div class="row mb-3" id="showdiv" style="display:none ;">
-                      <label for="inputText" id="strImgLabel"  class="col-sm-7 col-form-label">The Stored Emblem</label>
-                      <div class="col-sm-11 ">
-                      <img style="width: 400px;" id="strImg" src="/product-images/{{brand._id}}.png">
+                    <div class="row mb-3" id="showdiv" style="display:none ;">
+                      <label for="inputText" id="strImgLabel" class="col-sm-7 col-form-label">The Uploaded Image</label>
+                    <div class="row">
+                     <div class="col-sm-4 ">
+                        <img style="width: 150px;" id="strImg0">
                       </div>
+
+                      <div class="col-sm-4 ">
+                        <img style="width: 150px;" id="strImg1">
+                      </div>
+
+                      <div class="col-sm-4 ">
+                        <img style="width: 150px;" id="strImg2">
+                      </div>
+
+                      <div class="col-sm-4 ">
+                        <img style="width: 150px;" id="strImg3">
+                      </div>
+
+                      <div class="col-sm-4 ">
+                        <img style="width: 150px;" id="strImg4">
+                      </div>
+                      </div>
+                
                     </div>
 
 
@@ -239,15 +261,33 @@
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
       class="bi bi-arrow-up-short"></i></a>
-<script>
-    function changeImg(event)
-    {
-      document.getElementById("showdiv").style.display = "block";
-        document.getElementById('strImg').src=URL.createObjectURL(event.target.files[0])
-        var name = "The Newly Uploaded Picture"
-        document.getElementById('strImgLabel').innerHTML  = name;
-    }
-</script>
+
+
+
+
+
+      <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row" id="test">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
   <!-- Vendor JS Files -->
   <script src="/adminassets/vendor/apexcharts/apexcharts.min.js"></script>
   <script src="/adminassets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -260,6 +300,118 @@
 
   <!-- Template Main JS File -->
   <script src="/adminassets/js/main.js"></script>
+
+ <script>
+    function changeImg(event) {
+      document.getElementById("showdiv").style.display = "block";
+      console.log(event.target.files)
+      for (let i = 0; i < 5; i++) {
+        document.getElementById('strImg' + i).style.display = "none";
+      }
+      for (let i = 0; i < event.target.files.length; i++) {
+        document.getElementById('strImg' + i).src = URL.createObjectURL(event.target.files[i])
+         document.getElementById('strImg' + i).style.display = "block";
+      }
+
+    }
+  </script>
+
+
+
+
+  
+{{!-- ----------------------------------------------------cropping------------------------------------------------------------- --}}
+  <script>
+    const input = document.getElementById('formFile')
+    const test = document.getElementById('test')
+    input.addEventListener('change', () => {
+        // Getting image file object from the input variable
+        const img_data = []
+       // const imagebox = []
+       // const crop_btn = []
+       // const confirm_btn = []
+        const url = []
+        const length= input.files.length
+        for (i = 0; i < length; i++) {
+            test.innerHTML += `<div class="col-4"><div id="image-box${i}" class="image-container" style="height: 350px; width: 350px;"> </div>
+    <button class="btn btn-outline-info" id="crop-btn${i}" style="width: 100%; margin-top: 10px; display: block;" type="button">Crop</button> </div>`
+        }
+        for (i = 0; i < length; i++) {
+            img_data[i] = input.files[i]
+        }
+        
+        img_data.forEach((image_data, i) => {
+            
+            url[i] = URL.createObjectURL(image_data)
+        })
+        // createObjectURL() static method creates a DOMString containing a URL representing the object given in the parameter.
+        // The new object URL represents the specified File object or Blob object.
+        url.forEach((url,i)=>{
+            document.getElementById('image-box'+i).innerHTML = `<img src="${url}" id="image${i}" style="width:100%;">`
+        })
+        
+        // Creating a image tag inside imagebox which will hold the cropping view image(uploaded file) to it using the url created before.
+
+        // Storing that cropping view image in a variable
+  
+
+        // Displaying the image box
+        //for(i=0;i<length;i++){
+      //      document.getElementById('image-box'+i).style.display= 'block'
+      //       document.getElementById('crop-btn'+i).style.display= 'block'
+      //  }
+       
+
+        for(i=0;i<length;i++){
+            cropper(img_data[i],document.getElementById('image'+i),i,document.getElementById('crop-btn'+i),document.getElementById('image-box'+i))
+        }
+
+        
+
+        // Creating a croper object with the cropping view image
+        // The new Cropper() method will do all the magic and diplay the cropping view and adding cropping functionality on the website
+        // For more settings, check out their official documentation at https://github.com/fengyuanchen/cropperjs
+        let container = new DataTransfer();
+        let fileInputElement = document.getElementById('formFile');
+
+
+
+        function cropper(img_data, image, index, crop_btn, imagebox) {
+
+            const cropper = new Cropper(image, {
+                autoCropArea: 1,
+                viewMode: 1,
+                scalable: false,
+                zoomable: false,
+                movable: false,
+                minCropBoxWidth: 50,
+                minCropBoxHeight: 50,
+            })
+
+            // When crop button is clicked this event will get triggered
+            crop_btn.addEventListener('click', () => {
+                // This method coverts the selected cropped image on the cropper canvas into a blob object
+                cropper.getCroppedCanvas().toBlob((blob) => {
+
+                    // Gets the original image data
+                    // Make a new cropped image file using that blob object, image_data.name will make the new file name same as original image
+                    let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+                    // Create a new container
+                    // Add the cropped image file to the container
+                    container.items.add(file);
+
+                    fileInputElement.files = container.files
+                    // Replace the original image file with the new cropped image file
+                  // Hide the cropper box
+                    imagebox.style.display = 'none'
+                    // Hide the crop button
+                    crop_btn.style.display = 'none'
+                });
+            }); 
+        }
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.js"></script>
 
 </body>
 
