@@ -1,7 +1,7 @@
 <div class="page-wrapper">
 
     <main class="main">
-        <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        <div class="page-header text-center" style="background-image: url('/assets/images/page-header-bg.jpg')">
             <div class="container">
                 <h1 class="page-title">My Account<span>Shop</span></h1>
             </div><!-- End .container -->
@@ -17,6 +17,7 @@
         </nav><!-- End .breadcrumb-nav -->
 
         <div class="page-content">
+            
             <div class="dashboard">
                 <div class="container-fluid">
                     <div class="row">
@@ -32,7 +33,7 @@
                                         aria-selected="false">Orders</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-wallet"
+                                    <a class="nav-link" id="tab-wallet-link" data-toggle="tab" href="#tab-wallet"
                                         role="tab" aria-controls="tab-downloads" aria-selected="false">My Wallet</a>
                                 </li>
                                 <li class="nav-item">
@@ -104,7 +105,7 @@
 
                                                         <h5 class="form-text mt-3">Referral Code </h5>
 
-                                                        <center><input type="text" value={{user.refferal}} id="myInput"
+                                                        <center><input type="text" value={{user.refferal}} id="refCode"
                                                                 disabled>
                                                             <button class="btn btn-outline-success"
                                                                 onclick="myFunction()">Copy Referral Code</button>
@@ -735,20 +736,56 @@
         </div><!-- End .modal-content -->
     </div><!-- End .modal-dialog -->
 </div><!-- End .modal -->
+{{!-- -------------------------------------------------------------------------window on load ----------------------------------------- --}}
+<script>
+    window.onload = ()=>{
+    let url = window.location.href
+    console.log(url)
+    let origin = location.origin;
+    console.log(origin + '/dashboard')
+    if(url == (origin + '/dashboard/account'))
+    {
+        document.getElementById('tab-dashboard-link').click()
+    }
+    else if(url == (origin + '/dashboard/orders'))
+    {
+        document.getElementById('tab-orders-link').click()
+    }
+    else if(url == (origin + '/dashboard/wallet')) 
+    {
+        document.getElementById('tab-wallet-link').click()
+    }
+    
+    }
+    
+</script>
+<script>
+        function myFunction() {
 
+        var copyText = document.getElementById("refCode")
+        copyText.select();
+       copyText.setSelectionRange(0, 99999); // For mobile devices
 
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+        Swal.fire({
+            icon: 'success',
+            title: 'Copied to Clipboard',
+        })
 
+    }
+</script>
 
 
 <!-- Plugins JS File -->
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/jquery.hoverIntent.min.js"></script>
-<script src="assets/js/jquery.waypoints.min.js"></script>
-<script src="assets/js/superfish.min.js"></script>
-<script src="assets/js/owl.carousel.min.js"></script>
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/jquery.hoverIntent.min.js"></script>
+<script src="/assets/js/jquery.waypoints.min.js"></script>
+<script src="/assets/js/superfish.min.js"></script>
+<script src="/assets/js/owl.carousel.min.js"></script>
 <!-- Main JS File -->
-<script src="assets/js/main.js"></script>
+<script src="/assets/js/main.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
@@ -906,20 +943,5 @@
         else {
             document.getElementById('transactions').style.display = 'none'
         }
-    }
-
-    function myFunction() {
-
-        var copyText = document.getElementById("myInput");
-        copyText.select();
-        copyText.setSelectionRange(0, 99999); // For mobile devices
-
-        // Copy the text inside the text field
-        navigator.clipboard.writeText(copyText.value);
-        Swal.fire({
-            icon: 'success',
-            title: 'Copied to Clipboard',
-        })
-
     }
 </script>

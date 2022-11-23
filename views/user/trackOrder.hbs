@@ -325,7 +325,7 @@
 
                                                     {{else}}
                                                     <button
-                                                        onclick="cancelOrder('{{order._id}}','{{order.products.productId}}')"
+                                                        onclick="cancelOrder('{{order._id}}','{{order.products.productId}}','{{order.products.quantity}}')"
                                                         class="btn btn-outline-primary-2" id="cancel{{order._id}}">
                                                         Cancel</button>
                                                     {{/if}}
@@ -458,7 +458,7 @@
 <script src="/assets/js/main.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function cancelOrder(orderId, proId) {
+    function cancelOrder(orderId, proId , qty) {
         Swal.fire({
             title: 'Are you sure?',
             text: "You are about to cancel this product!",
@@ -473,7 +473,7 @@
                 $.ajax({
                     url: '/order/cancel',
                     method: "get",
-                    data: { orderId, proId },
+                    data: { orderId, proId , qty },
                     success: (order) => {
                         Swal.fire(
                             'Cancelled!',

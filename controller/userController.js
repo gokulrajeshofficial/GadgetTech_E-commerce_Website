@@ -13,6 +13,7 @@ const orderHelper = require("../helpers/order-helpers");
 const paymentHelper = require("../helpers/payment-helper");
 const wishlistHelper = require("../helpers/wishlist-helper")
 const couponHelper = require('../helpers/coupon-helpers')
+const brandHelper = require('../helpers/brand-helper')
 
 const objectId = require('mongodb').ObjectId;
 
@@ -44,15 +45,15 @@ module.exports.userHomePage = (req, res, next) => {
   bannerHelper.getAllBanners().then((banners) => {
     categoryHelper.getAllCategory().then((categories) => {
       productHelper.getAllProducts().then(async (products) => {
-
+        let brands = await brandHelper.getAllBrand()
         if (req.session.user) {
           let cartCount = await cartHelper.getCartCount(req.session.user._id)
           req.session.user.cartCount = cartCount;
           console.log(req.session.user);
           let user = req.session.user;
-          res.render("user/home", { user, banners, categories, products });
+          res.render("user/home", { user, banners, categories, products , brands });
         } else {
-          res.render("user/home", { banners, categories, products });
+          res.render("user/home", { banners, categories, products , brands });
         }
       });
     });
@@ -62,7 +63,7 @@ module.exports.userHomePage = (req, res, next) => {
 
 module.exports.categoryPage = async (req, res) => {
   let user = req.session.user;
-  let categories = await categoryHelper.getAllCategory()
+
 
   if (req.session.user) {
     let cartCount = await cartHelper.getCartCount(req.session.user._id)
@@ -77,7 +78,7 @@ module.exports.categoryPage = async (req, res) => {
         category: products[0].Category.category,
       };
     }
-    res.render("user/category-page", { products,categories, category, user });
+    res.render("user/category-page", { products, category, user });
   });
 }
 
@@ -111,6 +112,11 @@ module.exports.forgetPasswordModal = (req, res) => {
     }
   })
 }
+
+module.exports.category = async(req,res,next)=>{
+  res.locals.categories= await categoryHelper.getAllCategory()
+  next()
+ }
 
 module.exports.forgetPasswordModalVerify = (req, res) => {
   let phoneNumber = req.params.id
@@ -152,11 +158,10 @@ module.exports.forgetPasswordChangePasswordModal = (req, res) => {
 }
 
 module.exports.viewProductPage = async(req, res) => {
-  let categories = await categoryHelper.getAllCategory()
   productHelper.getProduct(req.params.id).then((response) => {
     product = response.product;
     let user = req.session.user;
-    res.render("user/product-viewer", { product, user ,categories });
+    res.render("user/product-viewer", { product, user  });
   });
 }
 
@@ -239,11 +244,12 @@ module.exports.checkoutPage = (req, res) => {
       cartHelper.totalCartPrice(userId).then(async (cartTotal) => {
         let addresses = await addressHelper.getAddresses(userId);
         let wallet = await orderHelper.getWallet(userId)
-        res.render('user/checkout', { user, cartProducts, cartTotal, addresses, wallet });
+        let coupons = await couponHelper.getAllCoupon()
+        res.render('user/checkout', { user, cartProducts, cartTotal, addresses, wallet , coupons });
       })
     }
     else {
-      res.redirect('/orders');
+      res.redirect('/dashboard/orders');
     }
 
   })
@@ -258,9 +264,12 @@ module.exports.placeOrder = async (req, res) => {
   
   if(data.coupon)
   {
-    cartTotal.total = data.couponAmount
+    cartTotal.total = parseInt(data.couponAmount);
+    await couponHelper.updateUserCoupon( data.userId , data.coupon )
+    data.coupon = await couponHelper.getCoupon(data.coupon)
+    
   }
-  data.orderTotal = cartTotal.total;
+  data.orderTotal = cartTotal.total; 
 
 
   if (data.walletCheck) {
@@ -279,8 +288,6 @@ module.exports.placeOrder = async (req, res) => {
     data.total = parseInt(cartTotal.total)
   }
 
-  console.log("------------------------+++++++++++++++++++++++++-----------------------------")
-  console.log(data.total);
   data.orderTime = new Date();
   let d = new Date()
   data.date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
@@ -299,12 +306,12 @@ module.exports.placeOrder = async (req, res) => {
   else {
     data.paymentStatus = "Pending";
     data.status = "Payment Pending"
-  }
+  } 
   data.products.forEach((product)=>{
     product.shippingStatus = "Preparing for Dispatch";
   })
   console.log(data)
-  orderHelper.addOrder(data).then((orderId) => {
+  orderHelper.addOrder(data).then(async(orderId) => {
 
     if (data.payment == 'COD') {
       cartHelper.removeAllProducts(req.session.user._id).then(async (msg) => {
@@ -408,7 +415,7 @@ module.exports.orderPage = async (req, res) => {
 module.exports.orderCancel = (req, res) => {
   console.log(req.query);
  orderHelper.refundWallet(req.session.user._id , req.query.orderId , req.query.proId).then(()=>{
-     orderHelper.cancelOrder(req.query.orderId , req.query.proId).then((data) => {
+     orderHelper.cancelOrder(req.query.orderId , req.query.proId , req.query.qty).then((data) => {
       console.log(data)
       res.json("success") 
     })

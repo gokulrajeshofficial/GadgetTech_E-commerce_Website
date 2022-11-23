@@ -68,9 +68,10 @@ module.exports = {
     },
     generatePayPal: (orderId, total) => {
         return new Promise(async(resolve, reject) => {
+            total = parseInt(total)
             let currencyConverter = new CC({from:"INR", to:"USD", amount: total })
             total = await currencyConverter.convert()
-
+            
             console.log(total)
             const create_payment_json = {
                 "intent": "sale",

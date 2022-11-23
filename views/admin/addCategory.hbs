@@ -81,7 +81,8 @@
 
 
               <!-- General Form Elements -->
-              <form class="mt-5" id="addCategoryForm" action="/admin/add-category" method="post" enctype="multipart/form-data">
+              <form class="mt-5" id="addCategoryForm" action="/admin/add-category" method="post"
+                enctype="multipart/form-data">
                 <div class="row mb-3 d-flex justify-content-around px-3">
 
                   <div class="col-md-8 ">
@@ -95,12 +96,19 @@
                       </div>
                     </div>
 
+                    
 
-
-                   <div class="row mb-3">
+                    <div class="row mb-3">
                       <label for="inputNumber" class="col-sm-7 col-form-label">Category Image</label>
                       <div class="col-sm-11">
-                        <input class="form-control" type="file" name="categoryImg" id="formFile" />
+                        <input class="form-control" type="file" onchange="ChangeFile(event)" name="categoryImg"
+                          id="formFile" />
+                      </div>
+                    </div>
+                    <div class="row mb-1" id="showDiv" style="display: none;">
+                      <label for="" class="col-sm-7 col-form-label">Uploaded Image</label>
+                      <div class="col-sm-11">
+                        <img id="strImg" src="" alt="" class="w-100">
                       </div>
                     </div>
 
@@ -108,7 +116,6 @@
 
                   {{!-- 2nd column end --}}
                 </div>
-
                 <center>
                   <div class="row mb-3">
 
@@ -152,12 +159,21 @@
 
   <!-- Template Main JS File -->
   <script src="/adminassets/js/main.js"></script>
-  {{!-- <script>
+  <script>
+    function ChangeFile(event) {
+      console.log("hello")
+      document.getElementById('strImg').src = URL.createObjectURL(event.target.files[0])
+      document.getElementById('showDiv').style.display = "block";
+    }
+  </script>
+
+  {{!--
+  <script>
 
     $('#addCategoryForm').submit((e) => {
-        e.preventDefault();
+      e.preventDefault();
       console.log($('#addCategoryForm').serialize())
-    
+
       $.ajax({
         url: '/admin/add-category',
         method: 'post',
@@ -169,8 +185,8 @@
             'Good job!',
             'You clicked the button!',
             'success'
-          ).then(()=>{
-           // location.reload()
+          ).then(() => {
+            // location.reload()
 
           })
 

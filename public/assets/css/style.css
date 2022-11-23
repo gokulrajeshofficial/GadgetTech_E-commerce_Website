@@ -5825,7 +5825,7 @@ p {
 }
 
 .footer .widget-title {
-    color: #333333;
+    color: #b3b3b3;
     font-weight: 500;
     font-size: 1.6rem;
     letter-spacing: -.01em;
@@ -11467,11 +11467,13 @@ button:focus {
     align-items: center;
     justify-content: center;
     min-height: 48px
+
 }
 
 .brand img {
     width: auto !important;
-    max-width: 100% !important
+    max-width: 100% !important;
+    max-height: 10rem;
 }
 
 .brand:focus {
@@ -20035,4 +20037,49 @@ button:focus {
     content: '\f7e3'
 }
 
+.lds-ring {
+
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	width: 80px;
+	height: 80px;
+}
+
+.lds-ring div {
+	position: fixed;
+	width: 80px;
+	top: 40%;
+	left: 50%;
+	height: 80px;
+	border: 8px solid #fff;
+	border-radius: 50%;
+	animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+	border-color: rgb(252, 252, 252) transparent transparent transparent;
+}
+
+.lds-ring div:nth-child(1) {
+	animation-delay: -0.45s;
+}
+
+.lds-ring div:nth-child(2) {
+	animation-delay: -0.3s;
+}
+
+.lds-ring div:nth-child(3) {
+	animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
 /*# sourceMappingURL=style.css.map */

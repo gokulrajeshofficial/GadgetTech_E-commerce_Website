@@ -11,7 +11,7 @@ module.exports = {
             {
                 db.get().collection('category').insertOne(data).then((data) => {
                     response = {
-                        message : "Category Added successfully",
+                        message : "Category Added successfully", 
                         data : data.insertedId
                     }
                     resolve(response.data)
@@ -31,6 +31,19 @@ module.exports = {
             let category = await db.get().collection('category').findOne({_id : objectId(categoryId)})
             console.log(category)
             resolve(category);
+        })
+    },
+    checkCategoryName : (categoryName)=>{
+        return new Promise(async(resolve , reject)=>{
+            let category = await db.get().collection('category').findOne({category : categoryName})
+            if(category)
+            {
+                reject()
+            }else{
+                resolve()
+            }
+
+
         })
     },
     getAllCategory : ()=>{

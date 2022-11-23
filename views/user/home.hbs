@@ -37,7 +37,7 @@
         <div class="row d-flex justify-content-center ">
             <div class="container-fluid mt-5 ">
                 <h2 class="title text-center mb-5 ">Explore Popular Categories</h2><!-- End .title -->
-                     
+
 
                 <div class="cat-blocks-container ">
                     <div class="row d-flex justify-content-center">
@@ -102,7 +102,8 @@
                             </span>
 
                             <div class="icon-box-content">
-                                <h3 class="icon-box-title text-white">Get 20% Off 1 Item</h3><!-- End .icon-box-title -->
+                                <h3 class="icon-box-title text-white">Get 20% Off 1 Item</h3>
+                                <!-- End .icon-box-title -->
                                 <p>When you sign up</p>
                             </div><!-- End .icon-box-content -->
                         </div><!-- End .icon-box -->
@@ -124,94 +125,101 @@
             </div><!-- End .container -->
         </div><!-- End .icon-boxes-container -->
 
-    
+
 
 
         <div class="container-fluid mt-4">
             <h2 class="title text-center mb-5 ">Premium Products</h2><!-- End .title -->
-                <div class="row">
-                    {{#each banners.midLarge}}
-                    <div class="col-lg-6">
-                        <div class="banner banner-big banner-overlay">
-                            <a href="#">
-                                <img src="/images/banner/{{this.img.[0]}}" style="height: 42rem ;" alt="Banner">
-                            </a>
+            <div class="row">
+                {{#each banners.midLarge}}
+                <div class="col-lg-6">
+                    <div class="banner banner-big banner-overlay">
+                        <a href="#">
+                            <img src="/images/banner/{{this.img.[0]}}" style="height: 42rem ;" alt="Banner">
+                        </a>
 
-                            <div class="banner-content banner-content-center">
-                                <h3 class="banner-subtitle text-white"><a href="#">{{this.subTitle}}</a></h3><!-- End .banner-subtitle -->
-                                <h2 class="banner-title text-white"><a href="#">{{this.title1}}</a></h2><!-- End .banner-title -->
-                                <a href="#" class="btn underline"><span>{{this.title2}}</span></a>
-                            </div><!-- End .banner-content -->
-                        </div><!-- End .banner -->
-                    </div><!-- End .col-lg-6 -->
-                    {{/each}}
+                        <div class="banner-content banner-content-center">
+                            <h3 class="banner-subtitle text-white"><a href="#">{{this.subTitle}}</a></h3>
+                            <!-- End .banner-subtitle -->
+                            <h2 class="banner-title text-white"><a href="#">{{this.title1}}</a></h2>
+                            <!-- End .banner-title -->
+                            <a href="#" class="btn underline"><span>{{this.title2}}</span></a>
+                        </div><!-- End .banner-content -->
+                    </div><!-- End .banner -->
+                </div><!-- End .col-lg-6 -->
+                {{/each}}
 
-                    {{!-- <div class="col-lg-6">
-                        <div class="banner banner-big banner-overlay">
-                            <a href="#">
-                                <img src="assets/images/demos/demo-7/banners/banner-2.jpg" alt="Banner">
-                            </a>
+                {{!-- <div class="col-lg-6">
+                    <div class="banner banner-big banner-overlay">
+                        <a href="#">
+                            <img src="assets/images/demos/demo-7/banners/banner-2.jpg" alt="Banner">
+                        </a>
 
-                            <div class="banner-content banner-content-center">
-                                <h3 class="banner-subtitle text-white"><a href="#">New Collection</a></h3><!-- End .banner-subtitle -->
-                                <h2 class="banner-title text-white"><a href="#">Shop Men's</a></h2><!-- End .banner-title -->
-                                <a href="#" class="btn underline"><span>Discover Now</span></a>
-                            </div><!-- End .banner-content -->
-                        </div><!-- End .banner -->
-                    </div><!-- End .col-lg-6 --> --}}
-                </div><!-- End .row -->
+                        <div class="banner-content banner-content-center">
+                            <h3 class="banner-subtitle text-white"><a href="#">New Collection</a></h3>
+                            <!-- End .banner-subtitle -->
+                            <h2 class="banner-title text-white"><a href="#">Shop Men's</a></h2>
+                            <!-- End .banner-title -->
+                            <a href="#" class="btn underline"><span>Discover Now</span></a>
+                        </div><!-- End .banner-content -->
+                    </div><!-- End .banner -->
+                </div><!-- End .col-lg-6 --> --}}
+            </div><!-- End .row -->
 
-                <div class="row justify-content-center">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="banner banner-overlay text-white">
-                            <a href="#">
-                                <img src="assets/images/demos/demo-7/banners/banner-3.jpg" alt="Banner">
-                            </a>
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="banner banner-overlay text-white">
+                        <a href="#">
+                            <img src="assets/images/demos/demo-7/banners/banner-3.jpg" alt="Banner">
+                        </a>
 
-                            <div class="banner-content banner-content-right">
-                                <h4 class="banner-subtitle"><a href="#">Flip Flop</a></h4><!-- End .banner-subtitle -->
-                                <h3 class="banner-title"><a href="#">Summer<br>sale -70% off</a></h3><!-- End .banner-title -->
-                                <a href="#" class="btn underline btn-outline-white-3 banner-link">Shop Now</a>
-                            </div><!-- End .banner-content -->
-                        </div><!-- End .banner -->
-                    </div><!-- End .col-lg-4 -->
+                        <div class="banner-content banner-content-right">
+                            <h4 class="banner-subtitle"><a href="#">Flip Flop</a></h4><!-- End .banner-subtitle -->
+                            <h3 class="banner-title"><a href="#">Summer<br>sale -70% off</a></h3>
+                            <!-- End .banner-title -->
+                            <a href="#" class="btn underline btn-outline-white-3 banner-link">Shop Now</a>
+                        </div><!-- End .banner-content -->
+                    </div><!-- End .banner -->
+                </div><!-- End .col-lg-4 -->
 
-                    <div class="col-md-6 col-lg-4">
-                        <div class="banner banner-overlay color-grey">
-                            <a href="#">
-                                <img src="assets/images/demos/demo-7/banners/banner-4.jpg" alt="Banner">
-                            </a>
+                <div class="col-md-6 col-lg-4">
+                    <div class="banner banner-overlay color-grey">
+                        <a href="#">
+                            <img src="assets/images/demos/demo-7/banners/banner-4.jpg" alt="Banner">
+                        </a>
 
-                            <div class="banner-content">
-                                <h4 class="banner-subtitle"><a href="#">Accessories</a></h4><!-- End .banner-subtitle -->
-                                <h3 class="banner-title"><a href="#">2019 Winter<br>up to 50% off</a></h3><!-- End .banner-title -->
-                                <a href="#" class="btn underline banner-link">Shop Now</a>
-                            </div><!-- End .banner-content -->
-                        </div><!-- End .banner -->
-                    </div><!-- End .col-lg-4 -->
+                        <div class="banner-content">
+                            <h4 class="banner-subtitle"><a href="#">Accessories</a></h4><!-- End .banner-subtitle -->
+                            <h3 class="banner-title"><a href="#">2019 Winter<br>up to 50% off</a></h3>
+                            <!-- End .banner-title -->
+                            <a href="#" class="btn underline banner-link">Shop Now</a>
+                        </div><!-- End .banner-content -->
+                    </div><!-- End .banner -->
+                </div><!-- End .col-lg-4 -->
 
-                    <div class="col-md-6 col-lg-4">
-                        <div class="banner banner-overlay text-white">
-                            <a href="#">
-                                <img src="assets/images/demos/demo-7/banners/banner-5.jpg" alt="Banner">
-                            </a>
+                <div class="col-md-6 col-lg-4">
+                    <div class="banner banner-overlay text-white">
+                        <a href="#">
+                            <img src="assets/images/demos/demo-7/banners/banner-5.jpg" alt="Banner">
+                        </a>
 
-                            <div class="banner-content banner-content-right mr">
-                                <h4 class="banner-subtitle"><a href="#">New in</a></h4><!-- End .banner-subtitle -->
-                                <h3 class="banner-title"><a href="#">Women’s<br>sportswear</a></h3><!-- End .banner-title -->
-                                <a href="#" class="btn underline btn-outline-white-3 banner-link">Shop Now</a>
-                            </div><!-- End .banner-content -->
-                        </div><!-- End .banner -->
-                    </div><!-- End .col-lg-4 -->
-                </div><!-- End .row -->
-            </div><!-- End .container-fluid -->
+                        <div class="banner-content banner-content-right mr">
+                            <h4 class="banner-subtitle"><a href="#">New in</a></h4><!-- End .banner-subtitle -->
+                            <h3 class="banner-title"><a href="#">Women’s<br>sportswear</a></h3>
+                            <!-- End .banner-title -->
+                            <a href="#" class="btn underline btn-outline-white-3 banner-link">Shop Now</a>
+                        </div><!-- End .banner-content -->
+                    </div><!-- End .banner -->
+                </div><!-- End .col-lg-4 -->
+            </div><!-- End .row -->
+        </div><!-- End .container-fluid -->
 
         <div class="mb-3"></div><!-- End .mb-6 -->
 
-          <h2 class="title text-center mb-5 mt-5 pt-3">Exclusive Laptop Category</h2><!-- End .title -->
+        <h2 class="title text-center mb-5 mt-5 pt-3">Exclusive Laptop Category</h2><!-- End .title -->
 
-    
-                <div class="container-fluid">
+
+        <div class="container-fluid">
             <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
                 data-owl-options='{
                                     "nav": false, 
@@ -237,23 +245,25 @@
                                         }
                                     }
                                 }'>
-               {{#each products}}
-                {{#if (categoryPremium this.Category)}} 
-                <div class="product " >
+                {{#each products}}
+                {{#if (categoryPremium this.Category)}}
+                <div class="product ">
                     <figure class="product-media ">
                         <span class="product-label label-sale">Sale</span>
-                        <a href="/product/{{this._id}}" >
+                        <a href="/product/{{this._id}}">
                             <img src="/images/product/{{this.img.[0]}}" style="height: 20rem" alt="Product image"
                                 class="product-image  ">
                         </a>
 
                         <div class="product-action-vertical">
-                            <a onclick="addtoWishlist('{{this._id}}','{{this.Name}}')" class="btn-product-icon btn-wishlist btn-expandable text-success"><span>add to
+                            <a onclick="addtoWishlist('{{this._id}}','{{this.Name}}')"
+                                class="btn-product-icon btn-wishlist btn-expandable text-success"><span>add to
                                     wishlist</span></a>
                         </div><!-- End .product-action-vertical -->
 
                         <div class="product-action">
-                            <a  onclick=" call('{{this._id}}','{{this.Name}}')"  class="btn-product btn-cart  " title="Add to cart"><span style="color:#a6c76c ;">Add to cart</span></a>
+                            <a onclick=" call('{{this._id}}','{{this.Name}}')" class="btn-product btn-cart  "
+                                title="Add to cart"><span style="color:#a6c76c ;">Add to cart</span></a>
                         </div><!-- End .product-action -->
                     </figure><!-- End .product-media -->
 
@@ -280,21 +290,20 @@
 
             </div><!-- End .owl-carousel -->
         </div>
-        
+
 
 
         <div class="container">
             <ul class="nav nav-pills nav-border-anim nav-big justify-content-center mb-3" role="tablist">
-                  <li class="nav-item">
-                    <a class="nav-link active" id="products-sale-link" data-toggle="tab" href="#products-sale-tab" role="tab"
-                        aria-controls="products-sale-tab" aria-selected="false">On Sale</a>
+                <li class="nav-item">
+                    <a class="nav-link active" id="products-sale-link" data-toggle="tab" href="#products-sale-tab"
+                        role="tab" aria-controls="products-sale-tab" aria-selected="false">On Sale</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " id="products-featured-link" data-toggle="tab"
-                        href="#products-featured-tab" role="tab" aria-controls="products-featured-tab"
-                        aria-selected="true">Featured</a>
+                    <a class="nav-link " id="products-featured-link" data-toggle="tab" href="#products-featured-tab"
+                        role="tab" aria-controls="products-featured-tab" aria-selected="true">Featured</a>
                 </li>
-              
+
                 <li class="nav-item">
                     <a class="nav-link" id="products-top-link" data-toggle="tab" href="#products-top-tab" role="tab"
                         aria-controls="products-top-tab" aria-selected="false">Top Rated</a>
@@ -334,7 +343,7 @@
                                     }
                                 }
                             }'>
-                        
+
                     </div><!-- End .owl-carousel -->
                 </div><!-- .End .tab-pane -->
                 <div class="tab-pane p-0 fade show active" id="products-sale-tab" role="tabpanel"
@@ -405,7 +414,7 @@
                         </div><!-- End .product -->
                         {{/each}}
 
-                        
+
                     </div><!-- End .owl-carousel -->
                 </div><!-- .End .tab-pane -->
                 <div class="tab-pane p-0 fade" id="products-top-tab" role="tabpanel"
@@ -542,9 +551,53 @@
             </div><!-- End .tab-content -->
         </div><!-- End .container-fluid -->
 
+
+        <div class="row d-flex justify-content-center mt-5 pt-3" style="background-color: black;">
+            <div>
+            <h2 class="title text-center mb-2 ">Brands</h2><!-- End .title -->
+<hr class="mt-1 ">
+            </div>
+            
+            <div class="container-fluid mb-5">
+                
+                <div class="owl-carousel mt-3 mb-3 owl-simple" data-toggle="owl" data-owl-options='{
+                            "nav": false, 
+                            "dots": false,
+                            "margin": 30,
+                            "loop": false,
+                            "responsive": {
+                                "0": {
+                                    "items":2
+                                },
+                                "420": {
+                                    "items":3
+                                },
+                                "600": {
+                                    "items":4
+                                },
+                                "900": {
+                                    "items":5
+                                },
+                                "1024": {
+                                    "items":6
+                                }
+                            }
+                        }'>
+                    {{#each brands}}
+                    <a href="#" class="brand">
+                        <img src="/images/brand/{{this.img.[0]}}" style="" alt="Brand Name">
+                    </a>
+                    {{/each}}
+
+                    
+                </div><!-- End .owl-carousel -->
+
+            </div>
+        </div>
+
         <div class="mb-5"></div><!-- End .mb-5 -->
 
-        <div class="bg-light deal-container pt-5 pb-3 mb-5">
+        {{!-- <div class=" deal-container pt-5 pb-3 mb-5">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9">
@@ -592,7 +645,7 @@
                     </div><!-- End .col-lg-3 -->
                 </div><!-- End .row -->
             </div><!-- End .container -->
-        </div><!-- End .bg-light -->
+        </div><!-- End .bg-light --> --}}
 
         <div class="mb-6"></div><!-- End .mb-6 -->
 
@@ -1335,11 +1388,11 @@
             <hr class="mt-1 mb-6">
         </div><!-- End .container -->
 
-   
+
     </main><!-- End .main -->
 
     <footer class="footer footer-2">
-        
+
 
         <div class="footer-newsletter bg-image" style="background-image: url(/assets/images/backgrounds/bg-2.jpg)">
             <div class="container">

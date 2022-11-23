@@ -97,5 +97,51 @@ module.exports = {
             })
 
         })
-    }
+    },
+    topSellingProducts : ()=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection('order').aggregate([
+                {
+                    $unwind : "$products"
+                },
+                {
+                    $group : { _id : "$products.productId", "count" : {$sum : "$products.quantity"}}
+                },
+                {
+                    $sort : {"count" : -1 }
+                },
+                {
+                    $limit : 9
+                },
+                {
+                    $lookup : {
+                        from : 'product',
+                        localField : '_id',
+                        foreignField : '_id',
+                        as : 'product'
+                    }
+                },
+                { 
+                    $project: { 
+                        count: 1, 
+                        product: { $arrayElemAt: [ "$product", 0 ] },
+                    } 
+                },
+                { 
+                    $project: { 
+                        count: 1, 
+                        product: 1,
+                        total: { $multiply: [ "$product.Price", "$count" ] } 
+                    } 
+                }
+              
+            ]).toArray().then((products)=>{
+                console.log(products)
+                resolve(products)
+            })
+
+        })
+    },
+    
+
 }

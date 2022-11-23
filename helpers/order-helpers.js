@@ -7,6 +7,13 @@ module.exports = {
     addOrder: (data) => {
         return new Promise((resolve, reject) => {
             db.get().collection('order').insertOne(data).then((response) => {
+                data.products.forEach(async(element)=>{
+                    let quantity = parseInt(-(element.quantity))
+                    await db.get().collection('product').updateOne({_id : element.productId},
+                        {
+                            $inc : {Qty : quantity}
+                        })
+                })
                 resolve(response.insertedId);
             })
 
@@ -25,13 +32,19 @@ module.exports = {
         })
 
     },
-    cancelOrder: (orderId, prodId) => {
+    cancelOrder: (orderId, prodId ,qty) => {
         return new Promise((resolve, reject) => {
             db.get().collection('order').updateOne({ _id: objectId(orderId), 'products.productId': objectId(prodId) },
                 {
                     $set: { 'products.$.shippingStatus': 'Cancelled' }
-                }).then((data) => {
-                    resolve(data);
+                }).then(async(data) => {
+                    qty = parseInt(qty)
+                          db.get().collection('product').updateOne({_id : objectId(prodId)},
+                            {
+                                $inc : {Qty : qty}
+                            }).then(()=>{
+                                resolve(data);
+                            })
                 })
 
         })
@@ -133,11 +146,15 @@ module.exports = {
     getWallet: (userId) => {
         return new Promise(async (resolve, reject) => {
             let wallet = await db.get().collection('wallet').findOne({ userId: objectId(userId) })
-          wallet.transaction = wallet.transaction.reverse()
-          wallet.transaction.forEach((transaction)=>{
-            d = transaction.date
-            transaction.date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear()+ "  " +  d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() 
-        })
+            if(wallet.transaction)
+            {
+                wallet.transaction = wallet.transaction.reverse()
+                wallet.transaction.forEach((transaction)=>{
+                  d = transaction.date
+                  transaction.date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear()+ "  " +  d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() 
+              })
+            }
+         
             resolve(wallet)
         })
 

@@ -87,10 +87,10 @@ function addtoWishlist(proId, proName) {
                     icon: 'info',
                     title: 'You are Not Signed IN',
                     text: 'To Add the Product to your wishlist . Please Signin to your Account! ',
-                    footer: 'Redirecting in 3 Seconds'
+                    footer: 'Redirecting in 2 Seconds'
                 })
 
-                setTimeout(() => { window.location.href = '/signin'; }, 1000)
+                setTimeout(() => { window.location.href = '/signin'; }, 2000)
 
             }
             else {
@@ -160,7 +160,7 @@ function verifyPayment(payment, order) {
                     title: 'Payment Failed!...',
                     text: 'Your Order payment is pending!',
                 })
-                setTimeout(() => { location.href = "/orders" }, 2000)
+                setTimeout(() => { location.href = "/dashboard/orders" }, 2000)
             }
 
         }

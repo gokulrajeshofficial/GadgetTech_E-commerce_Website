@@ -74,9 +74,9 @@
                             <tr style=" text-align: center;">
                                 <th scope="row">{{inc @index}}</th>
                                 <td>{{this.category}}</td>
-                                <td><img style="width: 60px; height :55 px" src="/images/category/{{this.img.[0]}}"></td>
+                                <td><img style="width: 60px; height : 50px" src="/images/category/{{this.img.[0]}}"></td>
                                 <td>
-                                    <a href="/admin/editCategory/{{this._id}}" class="btn btn-primary">Edit Category</a>
+                                    <a href="/admin/editCategory/{{this._id}}" class="btn btn-primary">Edit</a>
                                     <a href="/admin/deleteCategory/{{this._id}}"
                                         onclick="return confirm('You are about to delete {{this.category}} category ?')"
                                         class="btn btn-danger">Delete</a>

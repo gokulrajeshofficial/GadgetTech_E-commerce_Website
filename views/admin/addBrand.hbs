@@ -81,7 +81,14 @@
                     <div class="row mb-3">
                       <label for="inputNumber" class="col-sm-7 col-form-label">Brand Image</label>
                       <div class="col-sm-11">
-                        <input class="form-control" type="file" name="brandImg" id="formFile" multiple />
+                        <input class="form-control" type="file" onchange="ChangeFile(event)" name="brandImg" id="formFile" multiple />
+                      </div>
+                    </div>
+
+                    <div class="row mb-1" id="showDiv" style="display: none;">
+                      <label for="" class="col-sm-7 col-form-label">Uploaded Image</label>
+                      <div class="col-sm-11">
+                        <img id="strImg" src="" alt="" class="w-100">
                       </div>
                     </div>
 
@@ -141,7 +148,13 @@
 
   <!-- Template Main JS File -->
   <script src="/adminassets/js/main.js"></script>
-
+   <script>
+    function ChangeFile(event) {
+      console.log("hello")
+      document.getElementById('strImg').src = URL.createObjectURL(event.target.files[0])
+      document.getElementById('showDiv').style.display = "block";
+    }
+  </script>
 </body>
 
 </html>

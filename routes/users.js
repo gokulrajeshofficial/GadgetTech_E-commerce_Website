@@ -34,16 +34,16 @@ paypal.configure({
 
 //<---------------------------------------------Importing Contollers------------------------------------->
 const { userValidation } = require('../controller/validation');
-const { userHomePage, categoryPage, forgetPasswordModal, forgetPasswordModalVerify, forgetPasswordChangePasswordModal, viewProductPage, cartPage, addProductToCart, deleteProductInCart, updateProductQuantityInCart, checkoutPage, placeOrder, razorPayVerifyPayment, orderPage, orderCancel, orderRetryPayment, addressAddRequest, addressDeleteRequest,  addressGetRequest, addressEditRequest, paypalVerifyRequest, transcationFailurePage, transcationSuccessfulPage } = require("../controller/userController");
+const { userHomePage, categoryPage, forgetPasswordModal, forgetPasswordModalVerify, forgetPasswordChangePasswordModal, viewProductPage, cartPage, addProductToCart, deleteProductInCart, updateProductQuantityInCart, checkoutPage, placeOrder, razorPayVerifyPayment, orderPage, orderCancel, orderRetryPayment, addressAddRequest, addressDeleteRequest,  addressGetRequest, addressEditRequest, paypalVerifyRequest, transcationFailurePage, transcationSuccessfulPage, category } = require("../controller/userController");
 const { signInSubmit, signInPage, registerSubmit, logOut, loginOtpPage, loginOtpSendCode, loginOtpVerifyCode } = require("../controller/userSigninController");
 const { Router, response } = require("express");
 
 
 //<---------------------------------------------Home Page------------------------------------->
-router.get("/", userHomePage);
+router.get("/",category, userHomePage);
 
 //<---------------------------------------------Sigin Page------------------------------------->
-router.get("/signin", signInPage);
+router.get("/signin",category, signInPage);
 
 //<-------------------------------------------Sigin Submit------------------------------------->
 router.post("/login", signInSubmit);
@@ -73,10 +73,10 @@ router.post('/forgetPassword/verifyOtp/:id', forgetPasswordModalVerify)
 router.patch('/forgetPassword/changePassword', forgetPasswordChangePasswordModal)
 
 //<----------------------------------------- Category Page -------------------------------------->
-router.get("/category/:id", categoryPage);
+router.get("/category/:id" ,category, categoryPage);
 
 //<--------------------------------------Product View Page -------------------------------------->
-router.get("/products", async(req,res)=>{
+router.get("/products",category, async(req,res)=>{
   let user = req.session.user;
   let categories = await categoryHelper.getAllCategory()
 
@@ -93,10 +93,10 @@ router.get("/products", async(req,res)=>{
 })
 
 //<--------------------------------------Product View Page -------------------------------------->
-router.get("/product/:id", viewProductPage)
+router.get("/product/:id",category, viewProductPage)
 
 //<-----------------------------------------Cart Page ---------------------------------------->
-router.get("/cart", userValidation, cartPage);
+router.get("/cart", userValidation,category, cartPage);
 
 //<--------------------------------Product Add to Cart ---------------------------------------->
 router.post("/add-to-cart/:id", addProductToCart);
@@ -117,7 +117,7 @@ router.post('/placeOrder', userValidation, placeOrder)
 router.post('/verify-payment', razorPayVerifyPayment)
 
 //<-------------------------------------------Order Page---------------------------------------------->
-router.get('/orders', userValidation, orderPage)
+router.get('/dashboard/:option', userValidation, orderPage)
 
 //<------------------------------------------Order Cancel---------------------------------------------->
 router.get('/order/cancel', orderCancel)
@@ -247,11 +247,11 @@ router.post('/search',(req,res)=>{
 router.get('/couponCheck',(req,res)=>{
   let coupon = req.query.coupon;
   console.log(coupon)
- couponHelper.getCoupon(coupon).then((data)=>{
+ couponHelper.getCoupon(coupon ,req.session.user._id).then((data)=>{
   res.json(data)
  }).catch((err)=>{
   console.log("catch")
-  res.json(err=false)
+  res.json(err)
  })
 
 })

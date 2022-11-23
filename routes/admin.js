@@ -37,7 +37,8 @@ router.get("/", validation, async (req, res) => {
   let dailysales = await salesHelper.dailySalesReport()
   let monthlysales = await salesHelper.monthlySalesReport()
   let yearlysales = await salesHelper.yearlySalesReport()
-  res.render("admin/home", { admin: true, dailysales, monthlysales, yearlysales });
+  let topSellingProducts = await salesHelper.topSellingProducts()
+  res.render("admin/home", { admin: true, dailysales, monthlysales, yearlysales , topSellingProducts });
 });
 
 router.post("/", function (req, res, next) {
@@ -199,6 +200,7 @@ router.get('/add-category', (req, res) => {
 router.post('/add-category', uploadCategory.array('categoryImg'), (req, res) => {
   console.log(req.body);
   console.log(req.files);
+    
   const files = req.files
   const fileName = files.map((file) => {
     return file.filename
@@ -207,10 +209,18 @@ router.post('/add-category', uploadCategory.array('categoryImg'), (req, res) => 
   const category = req.body;
   category.img = fileName
 
-  categoryHelper.addCategory(category).then((id) => {
-    res.redirect('/admin/category')
+  categoryHelper.addCategory(category).then((response) => {
+    if(response.message)
+    {
+      err_message = response.message;
+      res.redirect('/admin/add-category')
+    }else
+    {
+      res.redirect('/admin/category')
+    }
+  
   })
-});
+  })
 
 router.get('/category', (req, res) => {
   categoryHelper.getAllCategory().then((categories) => {
@@ -283,10 +293,16 @@ router.post('/add-brand', uploadBrand.array('brandImg'), (req, res) => {
   const brand = req.body;
   brand.img = fileName
 
-  brandHelper.addBrand(brand).then((id) => {
-    console.log(id);
+  brandHelper.addBrand(brand).then((response) => {
+    console.log(response);
+    if(response.message)
+    {
+      err_message = response.message
+      res.redirect('/admin/add-brand')
+    }else{
+      res.redirect('/admin/brand')
+    }
 
-    res.redirect('/admin/brand')
   })
 });
 

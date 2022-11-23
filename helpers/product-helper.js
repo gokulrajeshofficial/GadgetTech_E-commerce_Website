@@ -8,6 +8,7 @@ module.exports={
         product.Category = objectId(product.Category);
         product.Brand = objectId(product.Brand);
         product.Price = parseInt(product.Price);
+        product.Qty = parseInt(product.Qty)
  
         return new Promise((resolve,reject)=>{
         console.log(product)
@@ -183,6 +184,7 @@ module.exports={
         product.Category = objectId(product.Category);
         product.Brand = objectId(product.Brand);
         product.Price = parseInt(product.Price);
+        product.Qty = parseInt(product.Qty)
         console.log(product)
         return new Promise(async(resolve,reject)=>
         {

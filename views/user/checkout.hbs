@@ -1,9 +1,8 @@
 <head>
     <link rel="stylesheet" href="/stylesheets/checkoutStyle.css">
-
 </head>
 <script async src="https://use.fontawesome.com/b4564248e6.js"></script>
-<div class="page-wrapper">
+<div class="page-wrapper" >
 
     <main class="main">
         <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
@@ -11,6 +10,7 @@
                 <h1 class="page-title">Checkout<span>Shop</span></h1>
             </div><!-- End .container -->
         </div><!-- End .page-header -->
+
         <nav aria-label="breadcrumb" class="breadcrumb-nav">
             <div class="container">
                 <ol class="breadcrumb">
@@ -22,23 +22,28 @@
         </nav><!-- End .breadcrumb-nav -->
 
         <div class="page-content">
+ 
             <div class="checkout">
                 <div class="container px-0 ">
 
                     <div class="">
                         <div class="cart-discount">
                             <form id="couponForm">
-                                <label>COUPON</label>
+                                <a style="cursor: pointer;" data-toggle="modal" data-target="#couponModal">
+                                    <p class="mb-2" style="color: #fff ;">Want to find a coupon ?</p>
+                                </a>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="coupon" placeholder="coupon code">
+                                    <input type="text" class="form-control" id="couponInput" name="coupon" placeholder="coupon code">
                                     <div class="">
                                         <button class="btn btn-outline-primary-2" type="submit"><i
                                                 class="icon-long-arrow-right"></i></button>
                                     </div><!-- .End .input-group-append -->
+
                                 </div><!-- End .input-group -->
                             </form>
+                            <p id="couponMsg" class=""></p>
                         </div><!-- End .cart-discount -->
-                        <p style="color: #fff ;">Want to find a coupon ?</p>
+
 
                     </div><!-- End .cart-bottom -->
 
@@ -50,7 +55,7 @@
 
                             <div class="col-lg-8">
                                 <input type="text" id="couponCheck" name="coupon" hidden>
-                                <input  id="couponCheckAmount" name="couponAmount" hidden>
+                                <input id="couponCheckAmount" name="couponAmount" hidden>
                                 <h4 class="text-center text-white my-5">Saved Addresses</h4>
 
                                 <div class="row">
@@ -171,12 +176,20 @@
                                     </div><!-- End .accordion -->
 
                                     <input value="{{cartTotal.total}}" name="total" hidden>
-
+                                    {{#if addresses}}
                                     <button id="submitForm" type="submit"
                                         class="btn btn-outline-primary-2 btn-order btn-block">
                                         <span class="btn-text">Place Order</span>
                                         <span class="btn-hover-text">Proceed to Checkout</span>
                                     </button>
+                                    {{else}}
+                                    <button data-target="#signin-modal" data-toggle="modal"
+                                        class="btn btn-outline-primary-2 btn-order btn-block">
+                                        <span class="btn-text">Place Order</span>
+                                        <span class="btn-hover-text">Add an Address</span>
+                                    </button>
+
+                                    {{/if }}
                                 </div><!-- End .summary -->
                             </aside><!-- End .col-lg-3 -->
                         </div><!-- End .row -->
@@ -185,6 +198,7 @@
 
                 </div><!-- End .container -->
             </div><!-- End .checkout -->
+           
         </div><!-- End .page-content -->
     </main><!-- End .main -->
 
@@ -288,6 +302,59 @@
 <!-- Plugins JS File -->
 
 
+<div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered " role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class=" text-center" id="exampleModalLongTitle">Available Coupon list</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body py-3">
+
+                {{#each coupons}}
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-10 mb-2">
+                        <label class="card">
+                            <input name="address" onclick="couponFunction('{{this.couponName}}')" class="radio" type="radio" value="{{this._id}}">
+                            <div class="p-3 plan-coupon">
+                                <span class="text-center">
+                                    <h5 class="mb-2">Coupon Code :&nbsp;&nbsp; <span
+                                            style="color: #a6c76c">{{this.couponName}} </span></h5>
+                                </span>
+
+
+                                <p class="text-center">Get <span
+                                        style="color: #a6c76c ; font-size: large;">{{this.couponPer}}%</span> Off Upto
+                                    <span style="color: #6c9ec7 ; font-size:  larger;">{{this.couponLimit}}</span>
+                                </p>
+                                <p class="text-center text-danger" style="font-size: medium;">Expiry Date :
+                                    {{this.couponDate}}</p>
+
+
+                            </div>
+
+
+
+                    </div>
+
+                    </label>
+
+                </div>
+
+
+
+
+                {{/each}}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/jquery.hoverIntent.min.js"></script>
@@ -327,13 +394,14 @@
     ////////////////////////////////////////////////////////////////////////////Place Order////////////////////////////////////////////////////////////// 
     $('#placeOrder').submit((e) => {
         e.preventDefault();
-
+        document.getElementById('loadingSpinner').style.display = "block"
         document.getElementById('submitForm').setAttribute("disabled", "disabled");
         $.ajax({
             url: '/placeOrder',
             method: 'post',
             data: $("#placeOrder").serialize(),
             success: (order) => {
+                document.getElementById('loadingSpinner').style.display = "none"
                 console.log(order)
                 if (order == 'success') {
                     Swal.fire(
@@ -341,7 +409,7 @@
                         'Your Order has been placed Successfully',
                         'success'
                     )
-                    setTimeout(() => { location.href = "/orders" }, 1000)
+                    setTimeout(() => { location.href = "/dashboard/orders" }, 1000)
                 }
                 else if (order.payment == 'razorPay') {
                     if (order.response) {
@@ -384,9 +452,8 @@
     })
 
     function walletCheckFunction(event, walletTotal, cartTotal) {
-        let couponAmount= document.getElementById('couponCheckAmount').value;
-        if(couponAmount)
-        {
+        let couponAmount = document.getElementById('couponCheckAmount').value;
+        if (couponAmount) {
             cartTotal = parseInt(couponAmount);
         }
 
@@ -410,16 +477,22 @@
     }
 
 </script>
+
 <script>
     $('#couponForm').submit((e) => {
         e.preventDefault()
+        document.getElementById('couponCheck').value = null;
+        document.getElementById('couponCheckAmount').value = null;
         $.ajax({
             url: '/couponCheck',
             method: 'get',
             data: $('#couponForm').serialize(),
-            success: (response) => {
-                console.log(response)
-                if (response) {
+            success: (responseData) => {
+                console.log(responseData)
+                if (responseData.status) {
+                    response = responseData.coupon;
+                    document.getElementById('couponMsg').style.color = '#a6c76c';
+                    document.getElementById('couponMsg').innerText = "✓ " + responseData.msg
                     Swal.fire(
                         'Coupon Applied!',
                         'Coupon has been applied to the products!',
@@ -428,30 +501,36 @@
 
                     document.getElementById('couponPercentageDiv').style.display = 'block';
                     document.getElementById('couponPercentage').innerText = response.couponPer + '% Applied';
-                    let cartTotal = {{ cartTotal.total}};
-                        let total = cartTotal - ((parseInt(response.couponPer) / 100) * cartTotal)
-                        let diff = cartTotal - total;
-                        if (diff > response.couponLimit) {
-                            console.log('Limiter applied')
-                            total = cartTotal - parseInt(response.couponLimit)
-                        }
-                        total = Math.ceil(total)
-                        document.getElementById('actualTotalAmount').innerText = "₹ " + total;
-                        document.getElementById('couponCheck').value = response.couponName;
-                        document.getElementById('couponCheckAmount').value = total;
-                                    
-                        } else {
+                    let cartTotal = ({{ cartTotal.total }});
+                    let total = cartTotal - ((parseInt(response.couponPer) / 100) * cartTotal)
+                    let diff = cartTotal - total;
+                    if (diff > response.couponLimit) {
+                        console.log('Limiter applied')
+                        total = cartTotal - parseInt(response.couponLimit)
+                    }
+                    total = Math.ceil(total)
+                    document.getElementById('actualTotalAmount').innerText = "₹ " + total;
+                    document.getElementById('couponCheck').value = response.couponName;
+                    document.getElementById('couponCheckAmount').value = total;
+                                                    
+                    } else {
+                        document.getElementById('couponMsg').style.color = '#FF0000';
+                        document.getElementById('couponMsg').innerText = responseData.msg;
 
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Coupon Invalid',
-                                text: 'The entered Coupon is Invalid!',
-                            })
-
-                        }
+                    }
 
             }
         })
 
     })
+
+</script>
+<script>
+  function  couponFunction(coupon)
+  {
+    document.getElementById('couponInput').value = coupon
+    $('#couponModal').modal('hide')
+     document.getElementById('couponPercentageDiv').style.display = 'none';
+
+  }
 </script>

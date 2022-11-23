@@ -65,6 +65,22 @@ module.exports = {
                      
                     db.get().collection('userdetails').insertOne(userData).then(async(data) => {
                         await db.get().collection('wallet').insertOne({userId : objectId(data.insertedId)})
+                        if(referralUser)
+                        {
+                            let referalData = {
+                                amount : 50 , 
+                                date : new Date(),
+                                transactionId : objectId(referralUser._id)
+                            };
+                            await db.get().collection('wallet').updateOne({userId : objectId(data.insertedId)},
+                            {
+                                $inc : {walletTotal : 50},
+                                $push : {transaction : referalData}
+    
+                            })
+
+                        }
+
                         let response =
                         {
                             status: true,
