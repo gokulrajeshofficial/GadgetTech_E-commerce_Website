@@ -25,6 +25,7 @@ const client = require("twilio")(
 );
 
 const paypal = require('paypal-rest-sdk');
+const salesHelper = require("../helpers/sales-helper");
 
 paypal.configure({
   'mode': 'sandbox', //sandbox or live
@@ -46,14 +47,15 @@ module.exports.userHomePage = (req, res, next) => {
     categoryHelper.getAllCategory().then((categories) => {
       productHelper.getAllProducts().then(async (products) => {
         let brands = await brandHelper.getAllBrand()
+        let topSellingProducts = await salesHelper.topSellingProducts()
         if (req.session.user) {
           let cartCount = await cartHelper.getCartCount(req.session.user._id)
           req.session.user.cartCount = cartCount;
           console.log(req.session.user);
           let user = req.session.user;
-          res.render("user/home", { user, banners, categories, products , brands });
+          res.render("user/home", { user, banners, categories, products , brands , topSellingProducts });
         } else {
-          res.render("user/home", { banners, categories, products , brands });
+          res.render("user/home", { banners, categories, products , brands , topSellingProducts});
         }
       });
     });
