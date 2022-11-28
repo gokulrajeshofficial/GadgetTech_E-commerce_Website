@@ -34,7 +34,7 @@ paypal.configure({
 
 //<---------------------------------------------Importing Contollers------------------------------------->
 const { userValidation } = require('../controller/validation');
-const { userHomePage, categoryPage, forgetPasswordModal, forgetPasswordModalVerify, forgetPasswordChangePasswordModal, viewProductPage, cartPage, addProductToCart, deleteProductInCart, updateProductQuantityInCart, checkoutPage, placeOrder, razorPayVerifyPayment, orderPage, orderCancel, orderRetryPayment, addressAddRequest, addressDeleteRequest,  addressGetRequest, addressEditRequest, paypalVerifyRequest, transcationFailurePage, transcationSuccessfulPage, category } = require("../controller/userController");
+const { userHomePage, categoryPage, forgetPasswordModal, forgetPasswordModalVerify, forgetPasswordChangePasswordModal, viewProductPage, cartPage, addProductToCart, deleteProductInCart, updateProductQuantityInCart, checkoutPage, placeOrder, razorPayVerifyPayment, orderPage, orderCancel, orderRetryPayment, addressAddRequest, addressDeleteRequest,  addressGetRequest, addressEditRequest, paypalVerifyRequest, transcationFailurePage, transcationSuccessfulPage, category, allProductsPage, editUserDetails } = require("../controller/userController");
 const { signInSubmit, signInPage, registerSubmit, logOut, loginOtpPage, loginOtpSendCode, loginOtpVerifyCode } = require("../controller/userSigninController");
 const { Router, response } = require("express");
 
@@ -75,22 +75,8 @@ router.patch('/forgetPassword/changePassword', forgetPasswordChangePasswordModal
 //<----------------------------------------- Category Page -------------------------------------->
 router.get("/category/:id" ,category, categoryPage);
 
-//<--------------------------------------Product View Page -------------------------------------->
-router.get("/products",category, async(req,res)=>{
-  let user = req.session.user;
-  let categories = await categoryHelper.getAllCategory()
-
-  if (req.session.user) {
-    let cartCount = await cartHelper.getCartCount(req.session.user._id)
-    req.session.user.cartCount = cartCount;
-  }
-  productHelper.getAllProducts().then((products) => {
-    let category
-    
-    res.render("user/category-page", { products,categories, user });
-  });
-
-})
+//<--------------------------------------All Product Page -------------------------------------->
+router.get("/products",category, allProductsPage)
 
 //<--------------------------------------Product View Page -------------------------------------->
 router.get("/product/:id",category, viewProductPage)
@@ -134,7 +120,7 @@ router.post('/addAddress', addressAddRequest)
 router.delete('/deleteAddress/:id', addressDeleteRequest)
 
 router.get('/getAddress/:id', addressGetRequest)
-
+ 
 router.put('/editAddress', addressEditRequest)
 
 //____________________________________________paypal_____________________________________________________
@@ -148,18 +134,7 @@ router.get('/order-pending/:id', transcationFailurePage)
 
 
 //______________________________________________________________User ________________________________________________________________
-router.put('/userDetails/edit', (req, res) => {
-  let userId = req.session.user._id;
-  let userData = req.body;
-  req.session.user.fname = userData.fname;
-  req.session.user.lname = userData.lname;
-  req.session.user.about = userData.about;
-  req.session.user.img = userData.img;
-
-  userHelper.updateUser(userData, userId).then((data) => {
-    res.json("success")
-  })
-})
+router.put('/userDetails/edit', editUserDetails)
 
 router.patch('/changePassword', (req, res) => {
   console.log(req.body);

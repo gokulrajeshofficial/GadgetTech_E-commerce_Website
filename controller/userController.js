@@ -84,6 +84,23 @@ module.exports.categoryPage = async (req, res) => {
   });
 }
 
+
+module.exports.allProductsPage = async(req,res)=>{
+  let user = req.session.user;
+  let categories = await categoryHelper.getAllCategory()
+
+  if (req.session.user) {
+    let cartCount = await cartHelper.getCartCount(req.session.user._id)
+    req.session.user.cartCount = cartCount;
+  }
+  productHelper.getAllProducts().then((products) => {
+    let category
+    
+    res.render("user/category-page", { products,categories, user });
+  });
+
+}
+
 module.exports.forgetPasswordModal = (req, res) => {
   userHelper.getPhoneNumber(req.body.phoneNumber).then((response) => {
     if (response.status) {
@@ -112,6 +129,20 @@ module.exports.forgetPasswordModal = (req, res) => {
       console.log(response.message)
       res.json(response)
     }
+  })
+}
+
+
+module.exports.editUserDetails = (req, res) => {
+  let userId = req.session.user._id;
+  let userData = req.body;
+  req.session.user.fname = userData.fname;
+  req.session.user.lname = userData.lname;
+  req.session.user.about = userData.about;
+  req.session.user.img = userData.img;
+
+  userHelper.updateUser(userData, userId).then((data) => {
+    res.json("success")
   })
 }
 
