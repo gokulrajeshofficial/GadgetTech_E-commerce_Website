@@ -9441,7 +9441,14 @@ p {
     display: block;
     max-width: none;
     width: 100%;
-    height: auto
+    height: 38rem
+}
+
+@media (max-width: 600px) {
+    #BannerImg {
+        height: 220px;
+    }
+    
 }
 
 .banner.banner-menu img {
@@ -9482,7 +9489,7 @@ p {
 }
 
 .banner-title a {
-    color: inherit
+    color: #fff
 }
 
 .banner-title a:hover,
@@ -9504,7 +9511,7 @@ p {
 }
 
 .banner-subtitle a {
-    color: inherit
+    color: #fff
 }
 
 .banner-subtitle a:hover,
@@ -9561,6 +9568,7 @@ p {
     .banner-big .banner-title {
         font-size: 4rem
     }
+
 }
 
 @media screen and (min-width: 992px) {

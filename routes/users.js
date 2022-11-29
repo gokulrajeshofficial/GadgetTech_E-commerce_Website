@@ -34,7 +34,7 @@ paypal.configure({
 
 //<---------------------------------------------Importing Contollers------------------------------------->
 const { userValidation } = require('../controller/validation');
-const { userHomePage, categoryPage, forgetPasswordModal, forgetPasswordModalVerify, forgetPasswordChangePasswordModal, viewProductPage, cartPage, addProductToCart, deleteProductInCart, updateProductQuantityInCart, checkoutPage, placeOrder, razorPayVerifyPayment, orderPage, orderCancel, orderRetryPayment, addressAddRequest, addressDeleteRequest,  addressGetRequest, addressEditRequest, paypalVerifyRequest, transcationFailurePage, transcationSuccessfulPage, category, allProductsPage, editUserDetails } = require("../controller/userController");
+const { userHomePage, categoryPage, forgetPasswordModal, forgetPasswordModalVerify, forgetPasswordChangePasswordModal, viewProductPage, cartPage, addProductToCart, deleteProductInCart, updateProductQuantityInCart, checkoutPage, placeOrder, razorPayVerifyPayment, orderPage, orderCancel, orderRetryPayment, addressAddRequest, addressDeleteRequest,  addressGetRequest, addressEditRequest, paypalVerifyRequest, transcationFailurePage, transcationSuccessfulPage, category, allProductsPage, editUserDetails,  changePasswordRequest } = require("../controller/userController");
 const { signInSubmit, signInPage, registerSubmit, logOut, loginOtpPage, loginOtpSendCode, loginOtpVerifyCode } = require("../controller/userSigninController");
 const { Router, response } = require("express");
 
@@ -111,10 +111,7 @@ router.get('/order/cancel', orderCancel)
 //<------------------------------------------Order Retry Payment---------------------------------------------->
 router.post('/retryPayment', orderRetryPayment)
 
-
-
-
-//______________________________________________________________ Address ___________________________________________________
+//<------------------------------------------Add Address---------------------------------------------->
 router.post('/addAddress', addressAddRequest)
 
 router.delete('/deleteAddress/:id', addressDeleteRequest)
@@ -136,14 +133,7 @@ router.get('/order-pending/:id', transcationFailurePage)
 //______________________________________________________________User ________________________________________________________________
 router.put('/userDetails/edit', editUserDetails)
 
-router.patch('/changePassword', (req, res) => {
-  console.log(req.body);
-  let passwordData = req.body;
-  let userId = req.session.user._id;
-  userHelper.changePassword(userId, passwordData).then((data) => {
-    res.json(data)
-  })
-})
+router.patch('/changePassword', changePasswordRequest)
 
 //______________________________________________________________________Wishlist _____________________________________________________
 

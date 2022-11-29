@@ -50,9 +50,7 @@ module.exports = {
         return new Promise(async(resolve,reject)=>{
             let categories = await db.get().collection('category').find().toArray();
             
-                resolve(categories);
-       
-           
+                resolve(categories); 
         })
     },
     deleteCategory : (categoryData)=>

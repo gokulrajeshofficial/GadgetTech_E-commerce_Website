@@ -66,7 +66,7 @@
 
 
                             <!-- General Form Elements -->
-                            <form class="mt-5" action="/admin/editBanner/{{banner._id}}" method="POST" >
+                            <form class="mt-5" action="/admin/editBanner/{{banner._id}}" method="POST" enctype="multipart/form-data">
                                 <div class="row mb-3 d-flex justify-content-around px-3">
 
                                     <div class="col-md-8 ">
@@ -134,7 +134,7 @@
                                         <div class="row mb-1" id="showDiv" >
                                             <label for="" id="strimg" class="col-sm-7 col-form-label">Stored Image</label>
                                             <div class="col-sm-11">
-                                                <img id="strImg" src="/banner-images/{{banner._id}}.png" alt="" class="w-100 ">
+                                                <img id="strImg" src="/images/banner/{{banner.img.[0]}}" alt="" class="w-100 ">
                                             </div>
                                         </div>
 

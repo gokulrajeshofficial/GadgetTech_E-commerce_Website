@@ -50,7 +50,7 @@ module.exports.userHomePage = (req, res, next) => {
         let topSellingProducts = await salesHelper.topSellingProducts()
         if (req.session.user) {
           let cartCount = await cartHelper.getCartCount(req.session.user._id)
-          req.session.user.cartCount = cartCount;
+          req.session.user.cartCount = cartCount;  
           console.log(req.session.user);
           let user = req.session.user;
           res.render("user/home", { user, banners, categories, products , brands , topSellingProducts });
@@ -64,15 +64,23 @@ module.exports.userHomePage = (req, res, next) => {
 
 
 module.exports.categoryPage = async (req, res) => {
-  let user = req.session.user;
+   let user = req.session.user;
+   let page = {};
+   page.total = await productHelper.categoryProductsCount(req.params.id)
 
+  page.perPage = 2 ;
+  page.pages = Math.ceil(page.total /page.perPage );
+
+  page.pageNumber =(req.query.page == null) ? 1 : req.query.page;
+  page.startFrom = (page.pageNumber - 1)*page.perPage;
+  console.log(page)
 
   if (req.session.user) {
     let cartCount = await cartHelper.getCartCount(req.session.user._id)
     req.session.user.cartCount = cartCount;
   }
-  productHelper.categoryProducts(req.params.id).then((products) => {
-    let category
+  productHelper.categoryProducts(req.params.id , page).then((products) => {
+
     if(products.length)
     {
       category = {
@@ -94,7 +102,6 @@ module.exports.allProductsPage = async(req,res)=>{
     req.session.user.cartCount = cartCount;
   }
   productHelper.getAllProducts().then((products) => {
-    let category
     
     res.render("user/category-page", { products,categories, user });
   });
@@ -551,4 +558,13 @@ module.exports.transcationSuccessfulPage = (req, res) => {
 module.exports.transcationFailurePage = (req, res) => {
   orderId = req.params.id;
   res.render('user/order-failed', { signin: true, orderId })
+}
+
+module.exports.changePasswordRequest = (req, res) => {
+  console.log(req.body);
+  let passwordData = req.body;
+  let userId = req.session.user._id;
+  userHelper.changePassword(userId, passwordData).then((data) => {
+    res.json(data)
+  })
 }

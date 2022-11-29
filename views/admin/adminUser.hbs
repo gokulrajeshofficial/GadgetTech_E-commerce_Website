@@ -99,13 +99,13 @@
                     
                       
                       <div class="form-check form-switch ">
-                      <input  class="form-check-input " type="checkbox" id="customer_status{{this._id}}" onchange="change_status('{{this._id}}')"  >
-                      <label class="form-check-label" for="flexSwitchCheckChecked" id="status1{{this._id}}">Active</label>
+                      <input  class="form-check-input "  type="checkbox" id="customer_status{{this._id}}" onchange="change_status('{{this._id}}')"  >
+                      <label class="form-check-label " style="color: #88b639 ;" for="flexSwitchCheckChecked" id="status1{{this._id}}">Active</label>
                       </div>
                     {{else}}
                       <div class="form-check form-switch">
                       <input  class="form-check-input" type="checkbox" id="customer_status{{this._id}}" onchange="change_status('{{this._id}}')" checked >
-                      <label class="form-check-label" id="status1{{this._id}}">Blocked</label>
+                      <label class="form-check-label " style="color: red " id="status1{{this._id}}">Blocked</label>
                       </div>
                     {{/if}}
             
@@ -126,10 +126,12 @@
                 {
                   console.log('checked')
                   status = 'Blocked';
+                  document.getElementById('status1'+customer_id).style.color = 'red'
                 }
                 else{
                   console.log('unchecked')
                   status = 'Active'
+                   document.getElementById('status1'+customer_id).style.color = '#88b639'
                 }
                  document.getElementById('status1'+customer_id).innerHTML = status;
                 $.ajax({

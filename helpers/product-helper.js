@@ -123,12 +123,18 @@ module.exports={
         })
 
     },
-    categoryProducts :(categoryId)=>{
+    categoryProducts :(categoryId , page)=>{
             return new Promise(async(resolve,reject)=>{
                 let products = await db.get().collection('product').aggregate([
                     {
                         $match : { Category : objectId(categoryId)}
     
+                    },
+                    {
+                         $skip : page.startFrom 
+                    },
+                    {
+                        $limit : page.perPage
                     },
                     {
                        
@@ -171,6 +177,15 @@ module.exports={
                 resolve(products)
             })
     },
+    categoryProductsCount :(categoryId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let count = await db.get().collection('product').find({ Category : objectId(categoryId)}
+            ).toArray()
+            console.log(count.length)
+            resolve(count.length)
+          
+        })
+},
      deleteProduct : (productId)=>
     {
         return new Promise((resolve,reject)=>

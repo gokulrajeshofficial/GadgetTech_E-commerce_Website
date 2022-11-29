@@ -1,515 +1,140 @@
 var express = require("express");
 var router = express.Router();
-var userHelper = require("../helpers/user-helper");
-var productHelper = require("../helpers/product-helper");
-var categoryHelper = require('../helpers/category-helper')
-var brandHelper = require('../helpers/brand-helper')
-var bannerHelper = require('../helpers/banner-helper')
-const orderHelper = require('../helpers/order-helpers')
-const couponHelper = require('../helpers/coupon-helpers')
-const salesHelper = require('../helpers/sales-helper')
+
 const { uploadProduct, uploadBanner, uploadBrand, uploadCategory } = require('../public/javascripts/multer');
-const { updateBanner } = require("../helpers/banner-helper");
 
 
-
-let err_message = "";
-
-
-
-const admincredentials = {
-  username: "admin",
-  password: "admin",
-};
-/////////////////////////////////////////////////////////////// Validation ///////////////////////////////////////////////////////////////
-
-function validation(req, res, next) {
-  if (req.session.adminloggedIn == true) {
-    next();
-  } else {
-    res.redirect("/admin/signin");
-  }
-}
-
-////////////////////////////////////////////////////////////////// Home /////////////////////////////////////////////////////////////////
-
-router.get("/", validation, async (req, res) => {
-  let dailysales = await salesHelper.dailySalesReport()
-  let monthlysales = await salesHelper.monthlySalesReport()
-  let yearlysales = await salesHelper.yearlySalesReport()
-  let topSellingProducts = await salesHelper.topSellingProducts()
-  res.render("admin/home", { admin: true, dailysales, monthlysales, yearlysales , topSellingProducts });
-});
-
-router.post("/", function (req, res, next) {
-  console.log(req.body);
-  if (
-    admincredentials.username == req.body.username &&
-    admincredentials.password == req.body.password
-  ) {
-    req.session.adminloggedIn = true;
-    res.redirect("/admin");
-  } else {
-    err_message = "Username or Password is wrong";
-    res.redirect("/admin/signin");
-  }
-});
+const {  adminDashboardPage, signInRequest, signInPage, logout, salesReportPage, userListPage, userStatusChange, adminPoductListPage, addProductPage, addProductRequest, deleteProductRequest, editProductPage, editProductRequest, addCategoryPage, addCategoryRequest, categoryList, deleteCategoryRequest, editCategoryRequest, editCategoryPage, addBrandPage, addBrandRequest, brandListPage, deleteBrandRequest, editBrandPage, editBrandRequest, bannerPage, addBannerRequest, addBannerPage, deleteBannerRequest, editBannerPage, editBannerRequest, adminOrderList, updateOrderRequest, adminOfferPage, addOfferRequest, deleteOfferRequest, returnNotifications, returnApproval, couponList, addCouponPage, addCouponRequest, deleteCouponRequest,  } = require("../controller/adminController");
+const { adminValidation } = require("../controller/validation");
 
 
+//<------------------------------------------------------------ Home ----------------------------------------------------------------->
+router.get("/", adminValidation ,adminDashboardPage);
+
+//<---------------------------------------------------Admin Signin Request ----------------------------------------------------------->
+router.post("/", signInRequest);
+
+//<---------------------------------------------------Admin Signin Page ----------------------------------------------------------->
+router.get("/signin", signInPage);
+
+//<-------------------------------------------------Admin Logout Request ----------------------------------------------------------->
+router.get("/logout", logout)
+
+//<---------------------------------------------------Admin Sales Report Page ----------------------------------------------------------->
+router.get('/salesReport',adminValidation, salesReportPage)
+
+//<---------------------------------------------------Admin User List Page----------------------------------------------------------->
+router.get("/users",adminValidation, userListPage);
+
+//<---------------------------------------------------Admin User block/unblock ----------------------------------------------------------->
+router.post("/change_status",adminValidation, userStatusChange);
+
+//<---------------------------------------------------Admin Product Page ----------------------------------------------------------->
+router.get("/products",adminValidation, adminPoductListPage);
+
+//<-----------------------------------------------Admin Add Product Page -------------------------------------------------------->
+router.get("/product/add", adminValidation , addProductPage);
+
+//<----------------------------------------------Admin Add product Request ----------------------------------------------------------->
+router.post("/product/add", uploadProduct.array('Img'), addProductRequest);
 
 
+//<-----------------------------------------------Admin Delete Product Request ----------------------------------------------------------->
+router.delete("/product/delete/:id", deleteProductRequest);
 
+//<---------------------------------------------------Admin Edit Product Page ----------------------------------------------------------->
 
-/////////////////////////////////////////////////////////////////// signin //////////////////////////////////////////////////////////////
+router.get("/product/edit/:id",adminValidation, editProductPage);
+//<--------------------------------------------------Admin Edit Product Request -------------------------------------------------------->
 
-router.get("/signin", (req, res, next) => {
-  res.render("admin/adminlogin", { signin: true, err_message });
-  err_message = "";
-});
+router.post("/product/edit/:id", uploadProduct.array('Img'), editProductRequest);
 
-router.get("/logout", (req, res, next) => {
-  req.session.adminloggedIn = false;
-  res.redirect("/admin/signin");
-});
-/////////////////////////////////////////////////////////////Report//////////////////////////////////////////////////
+//<---------------------------------------------------Admin Add Category Page ----------------------------------------------------------->
+router.get('/add-category',adminValidation, addCategoryPage);
 
-router.get('/salesReport', async (req, res, next) => {
-  let DailySalesforDownload = await salesHelper.dailySalesReport()
-  let MonthlySalesforDownload = await salesHelper.monthlySalesReport();
-  let YearlySalesforDownload = await salesHelper.yearlySalesReport();
-  res.render("admin/salesReport", { admin: true, DailySalesforDownload, MonthlySalesforDownload, YearlySalesforDownload });
-})
+//<------------------------------------------------Admin Add Category Request----------------------------------------------------------->
+router.post('/add-category', uploadCategory.array('categoryImg'), addCategoryRequest)
 
-/////////////////////////////////////////////////////////////users/////////////////////////////////////////////////
+//<---------------------------------------------------Admin CategoryList Page ----------------------------------------------------------->
+router.get('/category',adminValidation, categoryList)
 
-router.get("/users", (req, res, next) => {
-  console.log("Getting all the users data");
-  userHelper.getAllUsers().then((users) => {
-    console.log(users);
-    res.render("admin/adminUser", { admin: true, users });
-  });
-});
+//<----------------------------------------------Admin Delete category ----------------------------------------------------------->
+router.delete('/deleteCategory/:id', deleteCategoryRequest)
 
-router.post("/change_status", (req, res) => {
-  console.log(req.body);
-  let userId = req.body.customer_id;
-  let status = req.body.status;
+//<----------------------------------------------Admin Edit Category Page ------------------------------------------------------>
+router.get('/editCategory/:id',adminValidation, editCategoryPage);
 
-  userHelper.userStatus(userId, status).then((response) => {
-    console.log(response);
-    res.json(response);
-  });
-});
+//<---------------------------------------------Admin Edit Category Request -------------------------------------------------------->
+router.post('/editCategory/:id', uploadCategory.array('categoryImg'), editCategoryRequest)
 
-//////////////////////////////////////////////////////////////product//////////////////////////////////////////////////
+//<-----------------------------------------------Admin Add Brand Page ------------------------------------------------------->
+router.get('/add-brand',adminValidation, addBrandPage);
 
-router.get("/products", (req, res) => {
-  productHelper.getAllProducts().then((products) => {
-    res.render("admin/products", { admin: true, products });
-  });
-});
+//<-----------------------------------------------Admin Add Brand Request ---------------------------------------------------->
+router.post('/add-brand', uploadBrand.array('brandImg'), addBrandRequest);
 
-router.get("/product/add", (req, res) => {
+//<-------------------------------------------------Admin Brand List ---------------------------------------------------->
+router.get('/brand',adminValidation, brandListPage)
 
-  categoryHelper.getAllCategory().then((categories) => {
-    brandHelper.getAllBrand().then((brands) => {
-      res.render("admin/addProducts", { admin: true, categories, brands });
-    })
-  })
-});
+//<-------------------------------------------------Admin Brand Delete ------------------------------------------------------>
+router.get('/deleteBrand/:id', deleteBrandRequest)
 
-router.post("/product/add", uploadProduct.array('Img'), (req, res) => {
-  console.log(req.body);
-  console.log(req.files);
-  const files = req.files
-  const fileName = files.map((file) => {
-    return file.filename
-  })
+//<-------------------------------------------------Admin Edit Brand Page ------------------------------------------------------>
+router.get('/editBrand/:id',adminValidation, editBrandPage);
 
-  const product = req.body;
-  product.img = fileName
+//<------------------------------------------------Admin Edit Brand Request ----------------------------------------------------->
+router.post('/editBrand/:id', uploadBrand.array('brandImg'), editBrandRequest)
 
-  productHelper.addProduct(product).then((id) => {
-    console.log(id);
+//<---------------------------------------------------Admin Banner Page ------------------------------------------------------->
+router.get('/banner',adminValidation, bannerPage);
 
-    res.redirect('/admin/product/add');
-    // let image = req.files.Img
-    // image.mv('./public/product-images/' + id + '.png', (err, done) => {
-    //   if (!err) {
-    //     res.redirect('/admin/product/add');
-    //   } else {
-    //     console.log(err)
-    //   }
-    // })
-  });
-});
+//<---------------------------------------------------Admin Add Banner Page ------------------------------------------------------>
+router.get('/add-banner',adminValidation, addBannerPage)
 
+//<------------------------------------------------Admin Add Banner Request -------------------------------------------------------->
+router.post('/add-banner', uploadBanner.array('bannerImg'), addBannerRequest);
 
-router.get("/product/delete/:id", (req, res) => {
-  console.log(req.params.id)
-  productHelper.deleteProduct(req.params.id).then((response) => {
-    res.redirect('/admin/products')
-  })
-});
-
-router.get("/product/edit/:id", (req, res) => {
-  console.log(req.params.id)
-  productHelper.getProduct(req.params.id).then((response) => {
-    let product = response.product;
-    let categories = response.categories;
-    let brands = response.brands;
-    res.render("admin/editProduct", { admin: true, product, categories, brands })
-  })
-});
-
-router.post("/product/edit/:id", uploadProduct.array('Img'), (req, res) => {
-  id = req.params.id
-  console.log(req.params.id)
-  console.log(req.body)
-
-  productHelper.getProduct(id).then((products) => {
-    if (req.files != 0) {
-      const files = req.files;
-      console.log(files)
-      const fileName = files.map((file) => {
-        return file.filename
-      })
-
-      var product = req.body
-      product.img = fileName
-    } else {
-      var product = req.body
-      product.img = products.img
-    }
-
-    productHelper.updateProduct(product, req.params.id).then((response) => {
-      res.redirect('/admin/products')
-
-    })
-  })
-
-});
-
-/////////////////////////////////////////////////////////Category ////////////////////////////////////////////////////////////////
-
-router.get('/add-category', (req, res) => {
-  res.render('admin/addCategory', { admin: true, err_message })
-  err_message = "";
-});
-
-router.post('/add-category', uploadCategory.array('categoryImg'), (req, res) => {
-  console.log(req.body);
-  console.log(req.files);
-    
-  const files = req.files
-  const fileName = files.map((file) => {
-    return file.filename
-  })
-
-  const category = req.body;
-  category.img = fileName
-
-  categoryHelper.addCategory(category).then((response) => {
-    if(response.message)
-    {
-      err_message = response.message;
-      res.redirect('/admin/add-category')
-    }else
-    {
-      res.redirect('/admin/category')
-    }
+//<---------------------------------------------------Admin Delete Banner ----------------------------------------------------------->
+router.get('/deleteBanner/:id', deleteBannerRequest )
   
-  })
-  })
+//<---------------------------------------------------Admin Edit Banner Page ------------------------------------------------------>
+router.get('/editBanner/:id',adminValidation,editBannerPage); 
 
-router.get('/category', (req, res) => {
-  categoryHelper.getAllCategory().then((categories) => {
-    console.log(categories)
-    res.render('admin/categoryList', { admin: true, categories })
-  })
-})
+//<-------------------------------------------------Admin Edit BAnner Request -------------------------------------------------------->
+router.post('/editBanner/:id',uploadBanner.array('bannerImg'), editBannerRequest)
 
-router.get('/deleteCategory/:id', (req, res) => {
-  let categoryId = req.params.id
-  console.log('The ID is :' + categoryId)
-  categoryHelper.deleteCategory(categoryId).then((response) => {
-    console.log(response)
-    res.redirect('/admin/category')
-  })
-})
+//<---------------------------------------------------Admin Order Page ----------------------------------------------------------->
+router.get('/orders',adminValidation, adminOrderList)  
 
-router.get('/editCategory/:id', (req, res) => {
-  let userId = req.params.id
-  console.log(userId);
-  categoryHelper.getCategory(userId).then((category) => {
-    res.render('admin/editCategory', { admin: true, category })
-  })
-});
+//<-------------------------------------------Admin Order Status Update Request --------------------------------------------------->
+router.patch('/updateOrders', updateOrderRequest)
 
-router.post('/editCategory/:id', uploadCategory.array('categoryImg'), (req, res) => {
-  console.log("Reached Post method")
-  console.log(req.body)
-  console.log(req.params.id)
-  id = req.params.id
+//<---------------------------------------------------Admin Offer Page --------------------------------------------------------->
+router.get('/product/offer',adminValidation, adminOfferPage)
 
-  categoryHelper.getCategory(id).then((categories) => {
-    if (req.files != 0) {
-      const files = req.files;
-      console.log(files)
-      const fileName = files.map((file) => {
-        return file.filename
-      })
+//<----------------------------------------------Admin Add Offer Request ------------------------------------------------------>
+router.post('/product/addOffer', addOfferRequest)
 
-      var category = req.body
-      category.img = fileName
-    } else {
-      var category = req.body
-      category.img = categories.img
-    }
+//<-----------------------------------------------Admin delete Offer Page ------------------------------------------------------->
+router.delete('/product/deleteOffer',adminValidation, deleteOfferRequest)
 
-    categoryHelper.updateCategory(category, req.params.id).then((response) => {
+//<-------------------------------------------Admin Return Approval List Page ---------------------------------------------------->
+router.get('/notifications',adminValidation, returnNotifications)
 
-      res.redirect('/admin/category')
+//<--------------------------------------------Admin Return Approve Request --------------------------------------------------->
+router.patch('/returnApproved', returnApproval)
 
-    });
+//<---------------------------------------------------Admin Coupon List Page --------------------------------------------------------->
+router.get('/coupons',adminValidation, couponList)
 
-  })
-})
-//////////////////////////////////////////////////////////////Brand/////////////////////////////////////////////////////////
+//<---------------------------------------------------Admin Coupon add Page -------------------------------------------------------->
+router.get('/coupons/add',adminValidation, addCouponPage)
 
-router.get('/add-brand', (req, res) => {
-  res.render('admin/addBrand', { admin: true, err_message })
-  err_message = "";
-});
+//<---------------------------------------------------Admin Coupon Add REQUEST --------------------------------------------------------->
+router.post('/coupons/add',adminValidation, addCouponRequest)
 
-router.post('/add-brand', uploadBrand.array('brandImg'), (req, res) => {
-  console.log(req.body);
-  console.log(req.files);
-  const files = req.files
-  const fileName = files.map((file) => {
-    return file.filename
-  })
-
-  const brand = req.body;
-  brand.img = fileName
-
-  brandHelper.addBrand(brand).then((response) => {
-    console.log(response);
-    if(response.message)
-    {
-      err_message = response.message
-      res.redirect('/admin/add-brand')
-    }else{
-      res.redirect('/admin/brand')
-    }
-
-  })
-});
-
-router.get('/brand', (req, res) => {
-  brandHelper.getAllBrand().then((brands) => {
-    console.log(brands)
-    res.render('admin/brandList', { admin: true, brands })
-  })
-})
-
-router.get('/deleteBrand/:id', (req, res) => {
-  let brandId = req.params.id
-  console.log('The ID is :' + brandId)
-  brandHelper.deleteBrand(brandId).then((response) => {
-    console.log(response)
-    res.redirect('/admin/brand')
-  })
-})
-
-router.get('/editBrand/:id', (req, res) => {
-  let brandId = req.params.id
-  console.log(brandId);
-  brandHelper.getBrand(brandId).then((brand) => {
-    res.render('admin/editBrand', { admin: true, brand })
-  })
-});
-
-router.post('/editBrand/:id', uploadBrand.array('brandImg'), (req, res) => {
-  console.log("Reached Post method")
-  console.log(req.body)
-  console.log(req.params.id)
-  id = req.params.id
-
-  brandHelper.getBrand(id).then((brands) => {
-    if (req.files != 0) {
-      const files = req.files;
-      console.log(files)
-      const fileName = files.map((file) => {
-        return file.filename
-      })
-
-      var brand = req.body
-      brand.img = fileName
-    } else {
-      var brand = req.body
-      brand.img = brands.img
-    }
-    brandHelper.updateBrand(brand , req.params.id).then((response) => {
-
-      res.redirect('/admin/brand');
-    });
-
-  })
-})
-//////////////////////////////////////////////////////////Banner////////////////////////////////////////////////////////////
-
-router.get('/banner', (req, res) => {
-  bannerHelper.getAllBanners().then((banners) => {
-
-    res.render('admin/bannerList', { admin: true, banners })
-  })
-});
-router.get('/add-banner', (req, res) => {
-  res.render('admin/addBanner', { admin: true })
-})
-
-router.post('/add-banner', uploadBanner.array('bannerImg'), (req, res) => {
-  const files = req.files
-  const fileName = files.map((file) => {
-    return file.filename
-  })
-
-  const brand = req.body;
-  brand.img = fileName
-
-  bannerHelper.addBanner(brand).then((id) => {
-    res.redirect('/admin/banner')
-  })
-
-});
-
-router.get('/deleteBanner/:id', (req, res) => {
-  let bannerId = req.params.id
-  console.log('The ID is :' + bannerId)
-  bannerHelper.deleteBanner(bannerId).then((response) => {
-    console.log(response);
-    res.redirect('/admin/banner');
-  })
-})
-
-router.get('/editBanner/:id',(req, res) => {
-  let bannerId = req.params.id
-  console.log(bannerId);
-
-  bannerHelper.getBanner(bannerId).then((banner) => {
-    res.render('admin/editBanner', { admin: true, banner })
-  })
-});
-
-router.post('/editBanner/:id',uploadBanner.array('bannerImg'), (req, res) => {
-  console.log("Reached Post method")
-  console.log(req.body)
-  console.log(req.params.id)
-  id = req.params.id
-  bannerHelper.getBanner(id).then((banners) => {
-    if (req.files != 0) {
-      const files = req.files;
-      console.log(files)
-      const fileName = files.map((file) => {
-        return file.filename
-      })
-
-      var banner = req.body
-      banner.img = fileName
-    } else {
-      var banner = req.body
-      banner.img = banners.img
-    }
-  bannerHelper.updateBanner(banner, req.params.id).then((response) => {
-    res.redirect('/admin/Banner');
-  });
-})
-
-})
-///////////////////////////////////////////////////////////////////Order////////////////////////////////////////////////////////////////
-
-router.get('/orders', async (req, res) => {
-  let orders = await orderHelper.getAllOrders();
-  res.render('admin/orderManagement', { admin: true, orders })
-})
-
-router.patch('/updateOrders', (req, res) => {
-  let orderId = req.body.orderId;
-  let status = req.body.status;
-  let prodId = req.body.prodId;
-  console.log(req.body)
-  orderHelper.changeOrderStatus(orderId, status, prodId).then(() => {
-    res.json("success");
-  })
-})
-
-router.get('/product/offer', async (req, res) => {
-  let products = await productHelper.getAllProductOffer()
-  res.render('admin/offerManagement', { admin: true, products })
-})
-
-router.post('/product/addOffer', (req, res) => {
-  productHelper.addOffer(req.body.proId, req.body.offer, req.body.proPrice).then((data) => {
-    res.json(data);
-  })
-})
-router.delete('/product/deleteOffer', (req, res) => {
-  productHelper.deleteOffer(req.body.proId, req.body.oldPrice).then((data) => {
-    res.json(data)
-
-  })
-})
-
-router.get('/notifications', async (req, res) => {
-  console.log("***************************************")
-  let orders = await orderHelper.returnApprovalOrders()
-  console.log(orders)
-  res.render('admin/notifications', { admin: true, orders })
-})
-
-router.patch('/returnApproved', async (req, res) => {
-
-  console.log(req.body)
-  let status = "Return Approved";
-
-  await orderHelper.changeOrderStatusReturn(req.body.orderId, status, req.body.msg, req.body.proId)
-  await orderHelper.refundWallet(req.body.userId, req.body.orderId, req.body.proId)
-  res.json(status)
-})
-
-router.get('/coupons', (req, res) => {
-  couponHelper.getAllCoupon().then((coupons)=>{
-    console.log(coupons)
-    res.render('admin/coupon', { admin: true, coupons })
-  })
-})
-
-router.get('/coupons/add', (req, res) => {
-
-  res.render('admin/addCoupon', { admin: true })
-
-})
-
-router.post('/coupons/add', (req, res) => {
- console.log(req.body)
- couponHelper.addCoupon(req.body).then(((response)=>{
-  if(response)
-  {
-    res.json({status : true})
-  }else{
-    res.json({status : false})
-  }
- }))
-})
-
-router.delete('/coupons/delete/:id',(req, res) => {
-
-  couponHelper.deleteCoupon(req.params.id).then(()=>{
-    res.json("success")
-  })
-  
-})
+//<---------------------------------------------------Admin Delete Coupon  ----------------------------------------------------------->
+router.delete('/coupons/delete/:id', adminValidation , deleteCouponRequest)
 
 
 
