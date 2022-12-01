@@ -9119,7 +9119,7 @@ p {
 
 .product.product-11 a:hover,
 .product.product-11 a:focus {
-    color: #cc9966
+    color: #9acf3e
 }
 
 .product.product-11 .btn-product-icon {
@@ -9130,8 +9130,8 @@ p {
 .product.product-11 .btn-product-icon:hover,
 .product.product-11 .btn-product-icon:focus {
     color: #fff;
-    background-color: #cc9966;
-    border-color: #cc9966
+    background-color: #9acf3e;
+    border-color: #9acf3e
 }
 
 .product.product-11 .product-price {
@@ -9161,14 +9161,15 @@ p {
 }
 
 .product.product-11 .btn-product span {
-    font-size: 1.4rem
+    font-size: 1.4rem;
+    color: #9acf3e;
 }
 
 .product.product-11 .btn-product:hover,
 .product.product-11 .btn-product:focus {
     color: #fff;
-    border-color: #cc9966;
-    background-color: #cc9966
+    border-color: #9acf3e;
+    background-color: #9acf3e
 }
 
 .product.product-11 .btn-product:hover span,
@@ -10886,7 +10887,8 @@ small.form-text {
     color: #706f6c;
     border-radius: .3rem;
     background-color: transparent;
-    border: .1rem solid transparent
+    border: .1rem solid transparent ; 
+    cursor: pointer;
 }
 
 .page-link i {

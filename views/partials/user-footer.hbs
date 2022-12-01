@@ -27,11 +27,10 @@
                             <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
 
                             <ul class="widget-list">
-                                <li><a href="about.html">About Molla</a></li>
+                                <li><a href="/about">About GadgetTech</a></li>
                                 <li><a href="#">How to shop on Molla</a></li>
-                                <li><a href="#">FAQ</a></li>
                                 <li><a href="contact.html">Contact us</a></li>
-                                <li><a href="login.html">Log in</a></li>
+                                <li><a href="/signin">Log in</a></li>
                             </ul><!-- End .widget-list -->
                         </div><!-- End .widget -->
                     </div><!-- End .col-sm-6 col-lg-3 -->
@@ -48,7 +47,7 @@
                                 <li><a href="#">Terms and conditions</a></li>
                                 <li><a href="#">Privacy Policy</a></li>
                             </ul><!-- End .widget-list -->
-                        </div><!-- End .widget -->
+                        </div><!-- End .widget --> 
                     </div><!-- End .col-sm-6 col-lg-3 -->
 
                     <div class="col-sm-6 col-lg-3">
@@ -56,10 +55,10 @@
                             <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
 
                             <ul class="widget-list">
-                                <li><a href="#">Sign In</a></li>
-                                <li><a href="cart.html">View Cart</a></li>
-                                <li><a href="#">My Wishlist</a></li>
-                                <li><a href="#">Track My Order</a></li>
+                                <li><a href="/signin">Sign In</a></li>
+                                <li><a href="/cart">View Cart</a></li>
+                                <li><a href="/wishlist">My Wishlist</a></li>
+                                <li><a href="/dashboard/orders">Track My Order</a></li>
                                 <li><a href="#">Help</a></li>
                             </ul><!-- End .widget-list -->
                         </div><!-- End .widget -->
@@ -70,7 +69,7 @@
 
         <div class="footer-bottom">
             <div class="container">
-                <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
+                <p class="footer-copyright">Copyright © 2022 GadgetTech . All Rights Reserved.</p>
                 <!-- End .footer-copyright -->
                 <figure class="footer-payments">
                     <img src="/assets/images/payments.png" alt="Payment methods" width="272" height="20">
@@ -88,10 +87,10 @@
     <div class="mobile-menu-wrapper">
         <span class="mobile-menu-close"><i class="icon-close"></i></span>
 
-        <form action="#" method="get" class="mobile-search">
+        <form action="/search"  method="get" class="mobile-search">
             <label for="mobile-search" class="sr-only">Search</label>
-            <input type="search" class="form-control" name="mobile-search" id="mobile-search"
-                placeholder="Search product ..." required>
+            <input type="search" class="form-control" name="q" id="mobile-search"
+                placeholder="Search product ..." autocomplete="off" required>
             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
         </form>
 
@@ -115,57 +114,26 @@
                             <a href="/">Home</a>
                         </li>
                         <li>
-                            <a href="category.html">Shop</a>
+                            <a href="/products">Products</a>
                            
                         </li>
                         <li>
-                            <a href="product.html" class="sf-with-ul">Product</a>
+                            <a href="#" class="sf-with-ul">Brands</a>
+                            <ul>
+                                    {{#each brands}}
+                                    <li>
+                                        <a href="/brand/{{this._id}}" class="sf-with-ul">{{this.brand}}</a>
+
+                                    </li>
+                                    {{/each}}                                     
+                            </ul>
                            
                         </li>
-                        <li>
-                            <a href="#">Pages</a>
-                            <ul>
-                                <li>
-                                    <a href="about.html">About</a>
-
-                                    <ul>
-                                        <li><a href="about.html">About 01</a></li>
-                                        <li><a href="about-2.html">About 02</a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="contact.html">Contact</a>
-
-                                    <ul>
-                                        <li><a href="contact.html">Contact 01</a></li>
-                                        <li><a href="contact-2.html">Contact 02</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="login.html">Login</a></li>
-                                <li><a href="faq.html">FAQs</a></li>
-                                <li><a href="404.html">Error 404</a></li>
-                                <li><a href="coming-soon.html">Coming Soon</a></li>
-                            </ul>
+                          <li>
+                                <a href="/about" class="">About</a>
                         </li>
-                    
                         <li>
-                            <a href="elements-list.html">Elements</a>
-                            <ul>
-                                <li><a href="elements-products.html">Products</a></li>
-                                <li><a href="elements-typography.html">Typography</a></li>
-                                <li><a href="elements-titles.html">Titles</a></li>
-                                <li><a href="elements-banners.html">Banners</a></li>
-                                <li><a href="elements-product-category.html">Product Category</a></li>
-                                <li><a href="elements-video-banners.html">Video Banners</a></li>
-                                <li><a href="elements-buttons.html">Buttons</a></li>
-                                <li><a href="elements-accordions.html">Accordions</a></li>
-                                <li><a href="elements-tabs.html">Tabs</a></li>
-                                <li><a href="elements-testimonials.html">Testimonials</a></li>
-                                <li><a href="elements-blog-posts.html">Blog Posts</a></li>
-                                <li><a href="elements-portfolio.html">Portfolio</a></li>
-                                <li><a href="elements-cta.html">Call to Action</a></li>
-                                <li><a href="elements-icon-boxes.html">Icon Boxes</a></li>
-                            </ul>
+                                <a href="#" class="">Contact us</a>
                         </li>
                     </ul>
                 </nav><!-- End .mobile-nav -->

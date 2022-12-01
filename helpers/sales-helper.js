@@ -136,9 +136,10 @@ module.exports = {
                 }
               
             ]).toArray().then((products)=>{
+                console.log("*************************//////////////////////////////////")
                 console.log(products)
                 resolve(products)
-            })
+            })  
 
         })
     },

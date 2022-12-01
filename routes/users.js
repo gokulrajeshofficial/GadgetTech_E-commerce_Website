@@ -1,42 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const session = require("express-session");
-
-
-const userHelper = require("../helpers/user-helper");
-const productHelper = require("../helpers/product-helper");
-const bannerHelper = require("../helpers/banner-helper");
-const categoryHelper = require("../helpers/category-helper");
-const { validateRequestWithBody } = require("twilio/lib/webhooks/webhooks");
-const cartHelper = require("../helpers/cart-helper");
-const addressHelper = require("../helpers/address-helper");
-const orderHelper = require("../helpers/order-helpers");
-const paymentHelper = require("../helpers/payment-helper");
-const wishlistHelper = require("../helpers/wishlist-helper")
-const couponHelper = require('../helpers/coupon-helpers')
-const objectId = require('mongodb').ObjectId;
-
-const dotenv = require('dotenv').config()
-const client = require("twilio")(
-  process.env.TWILIO_SECRET_SID_ID,
-  process.env.TWILIO_SECRET_KEY
-);
-
-const paypal = require('paypal-rest-sdk');
-
-paypal.configure({
-  'mode': 'sandbox', //sandbox or live
-  'client_id': process.env.PAYPAL_CLIENT_ID, 
-  'client_secret': process.env.PAYPAL_CLIENT_SECRET
-});
-
 
 //<---------------------------------------------Importing Contollers------------------------------------->
 const { userValidation } = require('../controller/validation');
-const { userHomePage, categoryPage, forgetPasswordModal, forgetPasswordModalVerify, forgetPasswordChangePasswordModal, viewProductPage, cartPage, addProductToCart, deleteProductInCart, updateProductQuantityInCart, checkoutPage, placeOrder, razorPayVerifyPayment, orderPage, orderCancel, orderRetryPayment, addressAddRequest, addressDeleteRequest,  addressGetRequest, addressEditRequest, paypalVerifyRequest, transcationFailurePage, transcationSuccessfulPage, category, allProductsPage, editUserDetails,  changePasswordRequest } = require("../controller/userController");
+const { userHomePage, categoryPage, forgetPasswordModal, forgetPasswordModalVerify, forgetPasswordChangePasswordModal, viewProductPage, cartPage, addProductToCart, deleteProductInCart, updateProductQuantityInCart, checkoutPage, placeOrder, razorPayVerifyPayment, orderPage, orderCancel, orderRetryPayment, addressAddRequest, addressDeleteRequest,  addressGetRequest, addressEditRequest, paypalVerifyRequest, transcationFailurePage, transcationSuccessfulPage, category, allProductsPage, editUserDetails,  changePasswordRequest, brandPage, addtoWishlistRequest, deleteWishlistRequest, trackOrderPage, returnUserRequest, searchPage, searchRequest, couponCheckRequest, wishlistPage } = require("../controller/userController");
 const { signInSubmit, signInPage, registerSubmit, logOut, loginOtpPage, loginOtpSendCode, loginOtpVerifyCode } = require("../controller/userSigninController");
-const { Router, response } = require("express");
+
 
 
 //<---------------------------------------------Home Page------------------------------------->
@@ -75,6 +45,9 @@ router.patch('/forgetPassword/changePassword', forgetPasswordChangePasswordModal
 //<----------------------------------------- Category Page -------------------------------------->
 router.get("/category/:id" ,category, categoryPage);
 
+//<----------------------------------------- Brand Page -------------------------------------->
+router.get("/brand/:id" ,category, brandPage);
+
 //<--------------------------------------All Product Page -------------------------------------->
 router.get("/products",category, allProductsPage)
 
@@ -93,8 +66,17 @@ router.get("/cart/delete/:id", userValidation, deleteProductInCart);
 //<--------------------------------Product quanity update from  Cart ---------------------------------------->
 router.post('/cart/quantityUpdate', updateProductQuantityInCart)
 
+//<----------------------------------------Wishlist Page---------------------------------------------->
+router.get('/wishlist', userValidation,category, wishlistPage)
+
+//<--------------------------------------Add to wishlist ---------------------------------------------->
+router.post("/add-to-wishlist", addtoWishlistRequest);
+
+//<-----------------------------------Delete Product from Wishlist----------------------------------------->
+router.delete('/wishlist/delete/:id', deleteWishlistRequest)
+
 //<----------------------------------------Checkout Page ------------------------------------------->
-router.get('/checkout', userValidation, checkoutPage)
+router.get('/checkout', userValidation,category, checkoutPage)
 
 //<-------------------------------------Place Order Request ------------------------------------------->
 router.post('/placeOrder', userValidation, placeOrder)
@@ -103,7 +85,7 @@ router.post('/placeOrder', userValidation, placeOrder)
 router.post('/verify-payment', razorPayVerifyPayment)
 
 //<-------------------------------------------Order Page---------------------------------------------->
-router.get('/dashboard/:option', userValidation, orderPage)
+router.get('/dashboard/:option', userValidation,category, orderPage)
 
 //<------------------------------------------Order Cancel---------------------------------------------->
 router.get('/order/cancel', orderCancel)
@@ -114,111 +96,44 @@ router.post('/retryPayment', orderRetryPayment)
 //<------------------------------------------Add Address---------------------------------------------->
 router.post('/addAddress', addressAddRequest)
 
+//<------------------------------------------Delete Address---------------------------------------------->
 router.delete('/deleteAddress/:id', addressDeleteRequest)
 
+//<------------------------------------------Get Address ---------------------------------------------->
 router.get('/getAddress/:id', addressGetRequest)
  
+//<------------------------------------------Edit Address---------------------------------------------->
 router.put('/editAddress', addressEditRequest)
 
-//____________________________________________paypal_____________________________________________________
-
-
+//<---------------------------------------Paypal Verifying payment Success ---------------------------------------->
 router.get('/paypal/success/:id', paypalVerifyRequest);
 
+//<---------------------------------------Transcation Sucessful Page------------------------------------------>
 router.get('/order-confirmed/:id', transcationSuccessfulPage)
 
+//<----------------------------------------Transcation Failed Page---------------------------------------------->
 router.get('/order-pending/:id', transcationFailurePage)
 
-
-//______________________________________________________________User ________________________________________________________________
+//<----------------------------------------Edit User Details---------------------------------------------->
 router.put('/userDetails/edit', editUserDetails)
 
+//<----------------------------------------Change Password---------------------------------------------->
 router.patch('/changePassword', changePasswordRequest)
 
-//______________________________________________________________________Wishlist _____________________________________________________
 
-router.get('/wishlist', userValidation, async (req, res) => {
-  let user = req.session.user;
+//<-----------------------------------Track Order Page----------------------------------------->
+router.get('/orders/trackOrder/:proId/:orderId',userValidation,category, trackOrderPage)
 
-  let wishlist = await wishlistHelper.getWishlist(req.session.user._id)
-  console.log(wishlist);
-  res.render('user/wishList', { user, wishlist })
-})
+//<----------------------------------- Return Request----------------------------------------->
+router.post('/orders/returnOrder',userValidation , returnUserRequest)
 
+//<-------------------------------------Search Page----------------------------------------->
+router.get('/search',category,searchPage)
 
-router.post("/add-to-wishlist", (req, res) => {
-  let proId = req.body.proId;
+//<-------------------------------------Search Request----------------------------------------->
+router.post('/search',searchRequest)
 
-  if (req.session.user) {
-    console.log("directed");
-    wishlistHelper.addToWishlist(proId, req.session.user._id).then((data) => {
-      console.log(data);
-      let response = "";
-      res.json(response);
-    });
-  } else {
-    console.log("redirect");
-    let response = "redirect";
-    res.json(response);
-  }
-});
-
-router.delete('/wishlist/delete/:id', (req, res) => {
-  let proId = req.params.id;
-  let userId = req.session.user._id;
-  console.log(userId);
-  wishlistHelper.deleteWishlistProduct(userId, proId).then((data) => {
-    res.json("deleted")
-  })
-})
-
-router.get('/orders/trackOrder/:proId/:orderId',userValidation, async(req,res)=>{
-  let user = req.session.user
-  let order = await orderHelper.getProductOrder(req.params.orderId , req.params.proId)
-res.render('user/trackOrder',{user , order})
-})
-
-router.post('/orders/returnOrder',userValidation , (req,res)=>{
- console.log(req.body)
- let status = "Return Requested"
- orderHelper.changeOrderStatusReturn(req.body.orderId , status , req.body.msg , req.body.proId ).then(()=>{
-  res.json(status)
- }) 
- 
-})
-
-router.get('/search',async(req,res)=>{
-let keyword = req.query.q;
-console.log(keyword)
-let products = await productHelper.searchProduct(keyword)
-console.log(products.length)
-if(products.length == 1)
-{
-  let product = products[0]
-  res.render('user/product-viewer', {product})
-}else
-{
-  res.render('user/category-page',{products})
-}
-})
-
-router.post('/search',(req,res)=>{
-  let payload = req.body.payload
-   productHelper.searchSuggestion(payload).then((search)=>{
-    res.json(search)
-   })
-})
-
-router.get('/couponCheck',(req,res)=>{
-  let coupon = req.query.coupon;
-  console.log(coupon)
- couponHelper.getCoupon(coupon ,req.session.user._id).then((data)=>{
-  res.json(data)
- }).catch((err)=>{
-  console.log("catch")
-  res.json(err)
- })
-
-})
+//<-------------------------------------Coupon Check----------------------------------------->
+router.get('/couponCheck',couponCheckRequest)
 
 module.exports = router;

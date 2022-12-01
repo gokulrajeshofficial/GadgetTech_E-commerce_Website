@@ -34,13 +34,9 @@ paypal.configure({
 });
 
 
-let error1 = "";
-let status = "";
-let usertransfer;
-
 //<-----------------------------Declarations------------------------------------------------------------>
 
-
+ 
 
 module.exports.userHomePage = (req, res, next) => {
   bannerHelper.getAllBanners().then((banners) => {
@@ -68,10 +64,10 @@ module.exports.categoryPage = async (req, res) => {
    let page = {};
    page.total = await productHelper.categoryProductsCount(req.params.id)
 
-  page.perPage = 2 ;
+  page.perPage = 3 ;
   page.pages = Math.ceil(page.total /page.perPage );
 
-  page.pageNumber =(req.query.page == null) ? 1 : req.query.page;
+  page.pageNumber =(req.query.page == null) ? 1 : parseInt(req.query.page);
   page.startFrom = (page.pageNumber - 1)*page.perPage;
   console.log(page)
 
@@ -79,24 +75,45 @@ module.exports.categoryPage = async (req, res) => {
     let cartCount = await cartHelper.getCartCount(req.session.user._id)
     req.session.user.cartCount = cartCount;
   }
-  productHelper.categoryProducts(req.params.id , page).then((products) => {
-
-    if(products.length)
-    {
-      category = {
-        _id: objectId(products[0].Category._id),
-        category: products[0].Category.category,
-      };
-    }
-    res.render("user/category-page", { products, category, user });
+  productHelper.categoryProducts(req.params.id , page).then(async(products) => {
+    page.perPage = products.length
+   let category = await categoryHelper.getCategory(req.params.id)
+    res.render("user/category-page", { products, category, user ,page});
   });
 }
 
 
+module.exports.brandPage  = async(req,res)=>{
+
+  let user = req.session.user;
+  let page = {};
+  
+  page.total = await productHelper.brandProductsCount(req.params.id)
+
+ page.perPage = 3 ;
+ page.pages = Math.ceil(page.total /page.perPage );
+
+ page.pageNumber =(req.query.page == null) ? 1 : req.query.page;
+ page.startFrom = (page.pageNumber - 1)*page.perPage;
+
+
+ if (req.session.user) {
+   let cartCount = await cartHelper.getCartCount(req.session.user._id)
+   req.session.user.cartCount = cartCount;
+ }
+ let products = await productHelper.brandProducts(req.params.id , page)
+ page.perPage = products.length
+ console.log(products)
+  let brand = await brandHelper.getBrand(req.params.id)
+  res.render("user/category-page", { products, brand, user , page});
+}
+
+
+
 module.exports.allProductsPage = async(req,res)=>{
   let user = req.session.user;
-  let categories = await categoryHelper.getAllCategory()
-
+  let categories = await categoryHelper.getAllCategory() 
+ 
   if (req.session.user) {
     let cartCount = await cartHelper.getCartCount(req.session.user._id)
     req.session.user.cartCount = cartCount;
@@ -155,6 +172,7 @@ module.exports.editUserDetails = (req, res) => {
 
 module.exports.category = async(req,res,next)=>{
   res.locals.categories= await categoryHelper.getAllCategory()
+  res.locals.brands= await brandHelper.getAllBrand()
   next()
  }
 
@@ -559,7 +577,7 @@ module.exports.transcationFailurePage = (req, res) => {
   orderId = req.params.id;
   res.render('user/order-failed', { signin: true, orderId })
 }
-
+ 
 module.exports.changePasswordRequest = (req, res) => {
   console.log(req.body);
   let passwordData = req.body;
@@ -568,3 +586,83 @@ module.exports.changePasswordRequest = (req, res) => {
     res.json(data)
   })
 }
+
+module.exports.wishlistPage = async (req, res) => {
+  let user = req.session.user;
+
+  let wishlist = await wishlistHelper.getWishlist(req.session.user._id)
+  console.log(wishlist);
+  res.render('user/wishList', { user, wishlist })
+}
+
+module.exports.addtoWishlistRequest = (req, res) => {
+  let proId = req.body.proId;
+
+  if (req.session.user) {
+    console.log("directed");
+    wishlistHelper.addToWishlist(proId, req.session.user._id).then((data) => {
+      console.log(data);
+      let response = "";
+      res.json(response);
+    });
+  } else {
+    console.log("redirect");
+    let response = "redirect";
+    res.json(response);
+  }
+}
+module.exports.deleteWishlistRequest = (req, res) => {
+  let proId = req.params.id;
+  let userId = req.session.user._id;
+  console.log(userId);
+  wishlistHelper.deleteWishlistProduct(userId, proId).then((data) => {
+    res.json("deleted")
+  })
+}
+
+module.exports.trackOrderPage = async(req,res)=>{
+  let user = req.session.user
+  let order = await orderHelper.getProductOrder(req.params.orderId , req.params.proId)
+res.render('user/trackOrder',{user , order})
+}
+
+module.exports.returnUserRequest = (req,res)=>{
+  console.log(req.body)
+  let status = "Return Requested"
+  orderHelper.changeOrderStatusReturn(req.body.orderId , status , req.body.msg , req.body.proId ).then(()=>{
+   res.json(status)
+  }) 
+ }
+
+ module.exports.searchPage = async(req,res)=>{
+  let keyword = req.query.q;
+  console.log(keyword)
+  let products = await productHelper.searchProduct(keyword)
+  console.log(products.length)
+  if(products.length == 1)
+  {
+    let product = products[0]
+    res.render('user/product-viewer', {product})
+  }else
+  {
+    res.render('user/category-page',{products})
+  }
+  }
+
+  module.exports.searchRequest =(req,res)=>{
+    let payload = req.body.payload
+     productHelper.searchSuggestion(payload).then((search)=>{
+      res.json(search)
+     })
+  }
+
+  module.exports.couponCheckRequest  = (req,res)=>{
+    let coupon = req.query.coupon;
+    console.log(coupon)
+   couponHelper.getCoupon(coupon ,req.session.user._id).then((data)=>{
+    res.json(data)
+   }).catch((err)=>{
+    console.log("catch")
+    res.json(err)
+   })
+  }

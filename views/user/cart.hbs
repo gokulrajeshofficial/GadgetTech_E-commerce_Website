@@ -173,11 +173,15 @@
                         document.getElementById(proId).style.display = "none";
                         console.log(response)
                         document.getElementById('total-cart').innerHTML = "₹" + response.cartTotal
-                         document.getElementById('cartCountHeader').innerText = response.cartCount
+                         document.getElementById('cartCountHeader').innerText = response.cartCount;
+                        
 
                     }
                 })
                 /*.................................................................AJAX..................................................*/
+            }else
+            {
+                location.reload()
             }
         })
     }
@@ -187,7 +191,9 @@
         var quantity = event.target.value
         console.log(quantity);
         if (quantity == 0) {
-            deleteCart(proId)
+             deleteCart(proId)
+            
+            
         } else {
 
 

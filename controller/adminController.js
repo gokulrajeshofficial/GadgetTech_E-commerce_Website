@@ -402,6 +402,7 @@ module.exports.addOfferRequest = (req, res) => {
 
 module.exports.deleteOfferRequest  = (req, res) => {
   productHelper.deleteOffer(req.body.proId, req.body.oldPrice).then((data) => {
+    console.log("**************************////////////////")
     res.json(data)
   })
 }

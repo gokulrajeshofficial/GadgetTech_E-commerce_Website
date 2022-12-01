@@ -41,6 +41,20 @@ db.connect((err) => {
 Handlebars.registerHelper("inc", function (value, options) {
   return parseInt(value) + 1;
 });
+Handlebars.registerHelper("dcs", function (value, options) {
+  return parseInt(value) - 1;
+});
+
+Handlebars.registerHelper("checkPageEnd", function (pages , currentPage, options) {
+  if(pages == currentPage)
+  {
+    return true
+  }else{
+    return false
+  }
+  
+});
+
 Handlebars.registerHelper("checkStatus", function (value, options) {
   if (value == 'Payment Pending') 
   { return true; }
@@ -142,6 +156,14 @@ Handlebars.registerHelper("checkDate", (expDate) => {
     return false
   }
 })
+
+
+Handlebars.registerHelper('for', function(from, to, incr, block) {
+  var accum = '';
+  for(var i = from; i < to; i += incr)
+      accum += block.fn(i);
+  return accum;
+});
 
 
 app.use('/', usersRouter);

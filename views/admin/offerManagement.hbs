@@ -152,10 +152,7 @@
                     </div>
 
                 </div>
-                {{!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div> --}}
+               
             </div>
         </div>
     </div><!-- End Vertically centered Modal-->
@@ -177,26 +174,18 @@
 
     <script src="/adminassets/js/main.js"></script>
     
-    <script type="text/javascript" charset="utf8"
-        src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" charset="utf8"
-        src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('#offerTable').DataTable();
-        });
-    </script>
 
 
     <script>
 
-        function addOffer(proId , proPrice) {
+     function addOffer(proId , proPrice) {
             console.log('clicked')
             console.log
             $('#offer-modal').modal('show')
-            $('#offerForm').submit((e) => {
+           $('#offerForm').submit((e) => {
                 e.preventDefault();
+                console.log("reached")
                 let offer = document.getElementById('offerId').value
                 $.ajax({
                     url: '/admin/product/addOffer',
@@ -218,8 +207,8 @@
                     type: 'DELETE',
                     data: { proId , oldPrice},
                     success: (response) => {
-                      
-                        //location.reload()
+                      console.log(response)
+                        location.reload()
                     }
                 })
         }
