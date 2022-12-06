@@ -66,11 +66,10 @@ module.exports.categoryPage = async (req, res) => {
 
   page.perPage = 3 ;
   page.pages = Math.ceil(page.total /page.perPage );
-
   page.pageNumber =(req.query.page == null) ? 1 : parseInt(req.query.page);
   page.startFrom = (page.pageNumber - 1)*page.perPage;
   console.log(page)
-
+  
   if (req.session.user) {
     let cartCount = await cartHelper.getCartCount(req.session.user._id)
     req.session.user.cartCount = cartCount;

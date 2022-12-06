@@ -211,7 +211,7 @@
 									</a>
 								</li>
 								{{else}}
-								{{#if page.pageNumber}}
+								{{#unless page.pages}}
 								   <li class="page-item disabled" >
 									<a class="page-link page-link-next"  aria-label="Next">
 										Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
@@ -223,7 +223,7 @@
 										Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
 									</a>
 								</li>
-								{{/if}}
+								{{/unless}}
 								{{/if}}
 							</ul>
 						</nav>
@@ -349,7 +349,7 @@
 function pagination(pageNo)
 {
 	var currentUrl = location.pathname;
-	location.href = currentUrl+'?page='+pageNo
+	location.href = currentUrl+'?page='+pageNo ; 
 }
 
 </script>
@@ -362,7 +362,7 @@ function pagination(pageNo)
 	})
 </script>
 
-<script>
+{{!-- <script>
 	filter = document.querySelectorAll('.filterBrand')
 	storedProducts = document.querySelectorAll('.filterProduct')
 
@@ -373,4 +373,4 @@ function pagination(pageNo)
 
 		})
 	}
-</script>
+</script> --}}

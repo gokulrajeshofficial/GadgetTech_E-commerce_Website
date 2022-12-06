@@ -46,6 +46,7 @@ Handlebars.registerHelper("dcs", function (value, options) {
 });
 
 Handlebars.registerHelper("checkPageEnd", function (pages , currentPage, options) {
+  console.log(pages , currentPage)
   if(pages == currentPage)
   {
     return true
