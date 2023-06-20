@@ -3,11 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "node ./bin/www",
+    "dev" : "nodemon ./bin/www"
   },
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcrypt": "^5.1.0",
     "bootstrap-toggle": "^2.2.2",
+    "brcypt": "^1.0.1",
     "cookie-parser": "~1.4.4",
     "crypto": "^1.0.1",
     "currency-converter-lt": "^2.0.0-beta.0",

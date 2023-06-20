@@ -31,7 +31,7 @@
     <link href="/adminassets/css/style.css" rel="stylesheet" />
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    {{!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> --}}
 
     <!-- =======================================================
   * Template Name: NiceAdmin - v2.4.0
@@ -100,8 +100,8 @@
                                                                         <div class="col-md-12 col-lg-3 col-xl-3 mb-1   mb-lg-0">
                                                                             <div
                                                                                 class="bg-image hover-zoom ripple rounded ripple-surface">
-                                                                                <img src="/images/product/{{this.products.img.[0]}}"
-                                                                                    class="w-100" />
+                                                                                <img src="/images/product/{{this.products.product.img.[0]}}"
+                                                                                     style="max-height: 200px;"/>
                                                                                 <a href="#!">
                                                                                     <div class="hover-overlay">
                                                                                         <div class="mask"
@@ -143,7 +143,7 @@
                                                                                 <button style="height: 3rem ;"  class="btn btn-success btn-sm"
                                                                                     type="button" disabled>{{this.products.shippingStatus}}</button>
                                                                                 {{else}}
-                                                                                <button id="btn{{this._id}}"  style="height: 3rem ;" onclick="approveReturn('{{this._id}}','{{this.products.productId}}','{{this.products.message}}',{{this.userId}})" class="btn btn-primary btn-sm"
+                                                                                <button id="btn{{this._id}}"  style="height: 3rem ;" onclick="approveReturnAdmin('{{this._id}}','{{this.products.productId}}','{{this.products.message}}','{{this.userId}}')" class="btn btn-primary btn-sm"
                                                                                     type="button">Approve Return</button>
                                                                                 {{/if}}
                                                                              
@@ -206,8 +206,9 @@
     <script src="/adminassets/js/main.js"></script>
 
     <script>
-        function approveReturn(orderId , proId , msg , userId)
+        function approveReturnAdmin(orderId , proId , msg , userId)
         {
+            console.log("hello")
             $.ajax({
                 url : '/admin/returnApproved',
                 type : 'PATCH',
